@@ -20,6 +20,8 @@ export const metadata = {
     'AdventureTravels — premium reismerk voor actieve sportreizen. Overdag sport, \'s avonds verzorgd verblijf.',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout(props: { children: React.ReactNode }) {
   const { children } = props
 
