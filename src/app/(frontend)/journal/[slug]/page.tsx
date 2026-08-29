@@ -95,7 +95,7 @@ export default async function JournalArticlePage({ params }: PageProps) {
         <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 md:grid-cols-[1fr_320px]">
           <div className="max-w-2xl font-body text-base font-light leading-relaxed text-muted [&_blockquote]:my-6 [&_blockquote]:border-l-2 [&_blockquote]:border-compass [&_blockquote]:pl-5 [&_blockquote]:font-body [&_blockquote]:italic [&_blockquote]:text-departure [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:font-body [&_h2]:text-2xl [&_h2]:font-medium [&_h2]:tracking-[-0.01em] [&_h2]:text-departure [&_p]:mb-4">
             {entry.excerpt && <p className="mb-6 text-lg text-departure">{entry.excerpt}</p>}
-            <RichText data={entry.body} converters={journalConverters} />
+            <RichText data={entry.body as any} converters={journalConverters} />
           </div>
 
           <div className="flex h-fit flex-col gap-6 md:sticky md:top-24">
