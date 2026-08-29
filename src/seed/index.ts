@@ -199,7 +199,7 @@ const run = async () => {
   process.exit(0)
 }
 
-run().catch((error) => {
+await run().catch((error) => {
   console.error(error)
   process.exit(1)
 })
