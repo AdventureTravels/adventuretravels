@@ -50,7 +50,7 @@ function quote(value: string) {
   }
 }
 
-function richText(...nodes: Array<ReturnType<typeof paragraph | typeof heading2 | typeof quote>>) {
+function richText(...nodes: Array<ReturnType<typeof paragraph | typeof heading2 | typeof quote>>) : any {
   return {
     root: {
       type: 'root',
