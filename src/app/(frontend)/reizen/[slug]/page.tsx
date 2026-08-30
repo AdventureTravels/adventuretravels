@@ -137,7 +137,7 @@ export default async function ReisDetailPage({ params }: PageProps) {
         <aside className="flex flex-col gap-5 md:sticky md:top-8">
           <div className="flex flex-col gap-6 bg-white p-8 shadow-lg">
             <div>
-              <div className="font-display text-2xl leading-none text-departure">
+              <div className="font-body text-2xl font-medium leading-none text-departure">
                 &euro;{trip.price}{' '}
                 <span className="font-body text-sm font-light text-muted">
                   {trip.priceUnit ?? 'p.p.'}

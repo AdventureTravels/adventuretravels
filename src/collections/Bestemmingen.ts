@@ -48,5 +48,17 @@ export const Bestemmingen: CollectionConfig = {
       relationTo: 'sporten',
       hasMany: true,
     },
+    {
+      name: 'gallery',
+      type: 'array',
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+        },
+      ],
+    },
   ],
 }

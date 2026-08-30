@@ -3,7 +3,8 @@ import { FilterBlock } from '@/components/FilterBlock'
 import { Footer } from '@/components/Footer'
 import { JournalCard } from '@/components/JournalCard'
 import { Nav } from '@/components/Nav'
-import { TripCard } from '@/components/TripCard'
+import { StickySearchBar } from '@/components/StickySearchBar'
+import { TripSlider } from '@/components/TripSlider'
 import { TrustStrip } from '@/components/TrustStrip'
 import {
   AvontuurIcon,
@@ -26,17 +27,38 @@ const sportCategories = [
   { name: 'Wakeboarden', href: '/sporten/wakeboarden' },
 ]
 
+const programItems = [
+  {
+    number: '01',
+    title: 'Dag voor dag, per reis',
+    text: 'Van vertrektijd op het water tot het adres waar je die avond eet.',
+  },
+  {
+    number: '02',
+    title: 'Niveau en conditie',
+    text: 'Per dag hoeveel sets, hoeveel tijd op de kabel en wat je moet kunnen.',
+  },
+  {
+    number: '03',
+    title: 'Volledige prijsopbouw',
+    text: 'Wat inbegrepen is, wat optioneel is en wat je ter plaatse betaalt.',
+  },
+]
+
 const reviews = [
   {
     name: 'Sanne V.',
+    rating: 5,
     text: 'Een week vol adrenaline en goede sfeer. De begeleiding was top en het niveau werd precies goed ingeschat.',
   },
   {
     name: 'Tom B.',
+    rating: 5,
     text: 'Alles tot in de puntjes geregeld. Kwam als beginner en ging naar huis met een backside 180.',
   },
   {
     name: 'Iris & Daan',
+    rating: 4,
     text: 'Perfecte mix van sport en ontspanning. We boeken zeker nog een keer.',
   },
 ]
@@ -72,6 +94,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <StickySearchBar />
+
       <section className="bg-compass px-6 py-6 md:px-10">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between">
           <p className="font-display text-sm uppercase tracking-[0.14em] text-canvas">
@@ -100,11 +124,7 @@ export default async function HomePage() {
         </div>
 
         {featuredTrips.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {featuredTrips.map((trip) => (
-              <TripCard key={trip.slug} trip={trip} />
-            ))}
-          </div>
+          <TripSlider trips={featuredTrips} />
         ) : (
           <div className="border border-line bg-card px-8 py-16 text-center">
             <p className="font-body text-base font-light text-muted">
@@ -180,9 +200,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="bg-departure px-6 py-20 text-canvas md:px-10">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 md:grid-cols-2 md:items-center">
-          <div className="flex flex-col gap-6">
+      <section className="bg-departure text-canvas md:px-10">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-1 md:grid-cols-2">
+          <div className="flex flex-col gap-6 px-6 py-16 md:py-20">
             <span className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-canvas/70">
               Nog twijfels?
             </span>
@@ -192,27 +212,49 @@ export default async function HomePage() {
             <p className="max-w-md font-body text-base font-light leading-relaxed text-canvas/80">
               Bekijk het dagprogramma, de accommodatie en alle praktische details in één overzicht.
             </p>
+            <div>
+              <Button href="/contact" variant="outline-light">
+                Vraag programma aan
+              </Button>
+            </div>
           </div>
-          <div>
-            <Button href="/contact" variant="outline-light">
-              Vraag programma aan
-            </Button>
+          <div className="flex flex-col gap-6 border-t border-canvas/20 px-6 py-16 md:border-l md:border-t-0 md:py-20 md:pl-14">
+            {programItems.map((item) => (
+              <div key={item.number} className="flex gap-4">
+                <span className="font-display text-xs text-compass">{item.number}</span>
+                <div>
+                  <div className="font-body text-base font-medium">{item.title}</div>
+                  <p className="mt-1 font-body text-sm font-light leading-relaxed text-canvas/70">
+                    {item.text}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       <section className="mx-auto max-w-[1400px] px-6 py-20 md:px-10">
-        <div className="mb-10 flex flex-col gap-4">
-          <span className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-accent-label">
-            Ervaringen
-          </span>
-          <h2 className="max-w-xl font-body text-3xl font-medium leading-tight text-departure md:text-[38px] md:leading-[1.2] md:tracking-[-0.02em]">
-            Wat reizigers zeggen
-          </h2>
+        <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-4">
+            <span className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-accent-label">
+              4,8 gemiddeld &middot; 412 beoordelingen
+            </span>
+            <h2 className="max-w-xl font-body text-3xl font-medium leading-tight text-departure md:text-[38px] md:leading-[1.2] md:tracking-[-0.02em]">
+              Wat reizigers zeggen
+            </h2>
+          </div>
+          <Button href="/reizen" variant="outline">
+            Alle beoordelingen
+          </Button>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {reviews.map((review) => (
             <div key={review.name} className="flex flex-col gap-4 border border-line bg-card p-6">
+              <span className="font-body text-xs font-medium tracking-[0.14em] text-compass">
+                {'★'.repeat(review.rating)}
+                {'☆'.repeat(5 - review.rating)}
+              </span>
               <p className="font-body text-sm font-light leading-relaxed text-departure">
                 &ldquo;{review.text}&rdquo;
               </p>

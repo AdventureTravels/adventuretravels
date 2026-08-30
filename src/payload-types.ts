@@ -299,6 +299,12 @@ export interface Bestemmingen {
   flightTime?: string | null;
   bestPeriod?: string | null;
   sports?: (number | Sporten)[] | null;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -580,6 +586,12 @@ export interface BestemmingenSelect<T extends boolean = true> {
   flightTime?: T;
   bestPeriod?: T;
   sports?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

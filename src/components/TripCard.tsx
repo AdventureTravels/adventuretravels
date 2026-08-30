@@ -62,7 +62,7 @@ export function TripCard({ trip }: { trip: TripCardData }) {
 
         <div className="mt-auto flex items-center justify-between border-t border-line pt-4">
           <div className="flex flex-col">
-            <span className="font-display text-lg leading-none text-departure">
+            <span className="font-body text-lg font-medium leading-none text-departure">
               &euro;{trip.price}
             </span>
             <span className="font-body text-[11px] font-light text-muted">

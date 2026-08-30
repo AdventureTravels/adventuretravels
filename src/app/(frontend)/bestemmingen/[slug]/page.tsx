@@ -112,6 +112,22 @@ export default async function BestemmingDetailPage({ params }: PageProps) {
         )}
       </div>
 
+      {bestemming.gallery && bestemming.gallery.length > 0 && (
+        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 py-16 md:grid-cols-2 md:px-10 md:py-20">
+          {bestemming.gallery.map((entry, index) => {
+            const url = resolveMediaUrl(entry.image)
+            return url ? (
+              <div
+                key={entry.id ?? index}
+                className="relative h-[360px] w-full overflow-hidden media-placeholder"
+              >
+                <Image src={url} alt={bestemming.name} fill className="object-cover" />
+              </div>
+            ) : null
+          })}
+        </div>
+      )}
+
       <div className="mx-auto flex max-w-[1400px] flex-col gap-7 px-6 py-16 md:px-10 md:py-20">
         <h2 className="font-body text-3xl font-medium tracking-[-0.02em] text-departure">
           Reizen naar {bestemming.name}

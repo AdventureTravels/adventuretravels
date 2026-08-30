@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
 import { AanvraagForm } from '@/components/AanvraagForm'
 import { BookingConditions } from '@/components/BookingConditions'
@@ -22,30 +21,35 @@ export default async function GroepsreizenPage() {
 
   return (
     <>
-      <Nav />
+      <div className="relative h-[560px] w-full media-placeholder">
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to bottom, rgba(20,23,15,0.55) 0%, rgba(20,23,15,0.12) 30%, rgba(20,23,15,0.10) 46%, rgba(20,23,15,0.70) 100%)',
+          }}
+        />
+        <Nav variant="transparent" />
 
-      <section className="px-6 pb-10 pt-20 md:px-10">
-        <div className="mx-auto flex max-w-[1400px] flex-col gap-5">
-          <span className="font-body text-[11px] font-medium uppercase tracking-[0.14em] text-muted">
-            <Link href="/groepen-bedrijven" className="hover:text-departure">
-              Groepen &amp; bedrijven
-            </Link>{' '}
-            &middot; Groepsreizen
+        <div className="absolute bottom-14 left-6 z-10 flex max-w-3xl flex-col gap-4 md:left-12">
+          <span className="font-body text-[10px] font-medium uppercase tracking-[0.22em] text-canvas">
+            Groepen &amp; bedrijven &middot; Groepsreizen
           </span>
-          <h1 className="max-w-3xl font-body text-4xl font-medium leading-tight tracking-[-0.02em] text-departure md:text-[52px] md:leading-[1.1]">
+          <h1 className="font-body text-[40px] font-medium leading-[1.1] tracking-[-0.02em] text-white md:text-[50px] md:leading-[1.08] md:tracking-[-0.03em]">
             Met je eigen groep het water op.
           </h1>
-          <p className="max-w-2xl font-body text-base font-light leading-relaxed text-muted md:text-[17px]">
+          <p className="max-w-xl font-body text-base font-light leading-relaxed text-paper md:text-[17px]">
             Voor vriendengroepen en verenigingen die samen willen sporten — één programma, één
             aanspreekpunt, één factuur.
           </p>
-          <div className="flex flex-wrap gap-6 pt-1 font-body text-[11px] font-medium uppercase tracking-[0.14em] text-departure">
+          <div className="flex flex-wrap gap-6 pt-1 font-body text-[11px] font-medium uppercase tracking-[0.14em] text-white">
             <span>Vanaf 6 personen</span>
             <span>April — oktober</span>
             <span>Alle niveaus</span>
           </div>
         </div>
-      </section>
+      </div>
+      <div className="h-5 bg-compass" />
 
       <div className="grid grid-cols-1 gap-px border-y border-line bg-line md:grid-cols-2">
         <div className="flex flex-col gap-4 bg-white px-8 py-14 md:px-14">
