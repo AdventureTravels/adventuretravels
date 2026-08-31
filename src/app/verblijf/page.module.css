@@ -1,0 +1,124 @@
+.page {
+  width: 100%;
+  margin: 0 auto;
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+.imageGrid {
+  padding: 0 48px 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.imageCell {
+  height: 420px;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--image-placeholder-bg);
+  position: relative;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.feature {
+  box-sizing: border-box;
+  background: var(--white);
+  padding: 52px 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.featureTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 24px;
+  letter-spacing: -0.01em;
+}
+
+.featureText {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.ctaBanner {
+  background: var(--departure-black);
+  color: var(--canvas-sand);
+  padding: 64px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 56px;
+}
+
+.ctaLeft {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  min-width: 0;
+}
+
+.ctaHeading {
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  max-width: 620px;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  border: 1px solid var(--canvas-sand);
+  color: var(--canvas-sand);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ctaButton:hover {
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+}
+
+@media (max-width: 900px) {
+  .imageGrid {
+    padding: 0 24px 40px;
+    grid-template-columns: 1fr;
+  }
+
+  .imageCell {
+    height: 280px;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .feature {
+    padding: 36px 24px;
+  }
+
+  .ctaBanner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px 24px;
+    gap: 24px;
+  }
+}

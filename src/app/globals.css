@@ -1,0 +1,63 @@
+:root {
+  --canvas-sand: #e3ddcd;
+  --canvas-sand-light: #f2efe6;
+  --white: #ffffff;
+  --dune-beige: #b4a98f;
+  --compass-red: #c7513c;
+  --compass-red-text: #a63f2c;
+  --departure-black: #23261f;
+  --line: #c6bea8;
+  --line-dotted: #b0a992;
+  --text-secondary: #5e5e4e;
+  --text-body-light: #4a4b3e;
+
+  --dark-text-secondary: #9a9683;
+  --dark-text-tertiary: #8a8674;
+  --dark-border: #3a3e32;
+  --dark-field-border: #6e7260;
+
+  --image-placeholder-bg: #c9c1ab;
+  --page-outer-bg: #d6cfba;
+
+  --font-body: var(--font-archivo), system-ui, sans-serif;
+  --font-display: var(--font-michroma), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  max-width: 100vw;
+}
+
+body {
+  min-height: 100%;
+  background: var(--page-outer-bg);
+  font-family: var(--font-body);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--compass-red-text);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--departure-black);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}

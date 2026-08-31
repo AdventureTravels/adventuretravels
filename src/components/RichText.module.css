@@ -1,0 +1,22 @@
+.richText p {
+  margin: 0 0 0.6em;
+}
+
+.richText p:last-child {
+  margin-bottom: 0;
+}
+
+.richText ul,
+.richText ol {
+  margin: 0 0 0.6em 1.2em;
+}
+
+.richText ul:last-child,
+.richText ol:last-child {
+  margin-bottom: 0;
+}
+
+.richText a {
+  color: inherit;
+  text-decoration: underline;
+}

@@ -1,0 +1,101 @@
+.hero {
+  position: relative;
+  min-width: 0;
+  height: var(--heroHeight, 620px);
+  background: var(--image-placeholder-bg);
+}
+
+.imageLayer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.gradient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 23, 15, 0.55) 0%,
+    rgba(20, 23, 15, 0.12) 30%,
+    rgba(20, 23, 15, 0.1) 46%,
+    rgba(20, 23, 15, 0.7) 100%
+  );
+}
+
+.content {
+  position: absolute;
+  left: 48px;
+  bottom: 56px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 760px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--canvas-sand);
+}
+
+.heading {
+  margin: 0;
+  font-weight: 600;
+  font-size: 58px;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+
+.subheading {
+  margin: 0;
+  max-width: 520px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--canvas-sand-light);
+}
+
+.metaRow {
+  display: flex;
+  gap: 26px;
+  padding-top: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.redBand {
+  height: 20px;
+  background: var(--compass-red);
+}
+
+@media (max-width: 900px) {
+  .hero {
+    height: auto;
+    min-height: 420px;
+    padding-bottom: 40px;
+  }
+
+  .content {
+    left: 24px;
+    right: 24px;
+    bottom: 32px;
+    max-width: none;
+  }
+
+  .heading {
+    font-size: 34px;
+  }
+
+  .metaRow {
+    flex-wrap: wrap;
+    gap: 12px 20px;
+  }
+}

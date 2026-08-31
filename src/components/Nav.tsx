@@ -1,116 +1,82 @@
-'use client'
+"use client";
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
-import { Button } from './Button'
+import { useState } from "react";
+import Link from "next/link";
+import { AtMark, ArrowIcon, MenuIcon, CloseIcon } from "./icons";
+import styles from "./Nav.module.css";
 
-const navLinks = [
-  { label: 'Reizen', href: '/reizen' },
-  { label: 'Sporten', href: '/sporten' },
-  { label: 'Bestemmingen', href: '/bestemmingen' },
-  { label: 'Verblijf', href: '/verblijf' },
-  { label: 'Groepen & bedrijven', href: '/groepen-bedrijven' },
-  { label: 'Journal', href: '/journal' },
-]
+const NAV_LINKS = [
+  { key: "reizen", href: "/reizen", label: "Reizen" },
+  { key: "sporten", href: "/sporten", label: "Sporten" },
+  { key: "bestemmingen", href: "/bestemmingen", label: "Bestemmingen" },
+  { key: "verblijf", href: "/verblijf", label: "Verblijf" },
+  { key: "groepen", href: "/groepen-en-bedrijven", label: "Groepen & bedrijven" },
+  { key: "journal", href: "/journal", label: "Journal" },
+];
 
-type NavProps = {
-  variant?: 'solid' | 'transparent'
-}
-
-export function Nav({ variant = 'solid' }: NavProps) {
-  const [open, setOpen] = useState(false)
-  const pathname = usePathname()
-  const isTransparent = variant === 'transparent'
+export function Nav({
+  variant,
+  active,
+}: {
+  variant: "transparent" | "solid";
+  active?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const markColor = variant === "transparent" && !open ? "#FFFFFF" : "#23261F";
 
   return (
-    <header className={`${isTransparent ? 'absolute inset-x-0 top-0 z-50' : 'relative'} w-full`}>
-      <div className="flex items-center justify-between gap-6 bg-departure px-6 py-2 font-body text-[10px] font-medium uppercase tracking-[0.16em] text-dune md:px-10">
-        <span className="hidden md:inline">Kleine groepen &middot; eigen gidsen &middot; verblijf zelf getest</span>
-        <div className="flex gap-7">
-          <span>NL / EN</span>
-          <span>Spreek een gids &middot; +31 20 244 18 60</span>
-        </div>
-      </div>
+    <nav className={`${styles.nav} ${styles[variant]} ${open ? styles.open : ""}`}>
+      <Link href="/" className={styles.brand} style={{ color: markColor }}>
+        <AtMark size={30} color={markColor} />
+        <span className={styles.wordmark}>ADVENTURETRAVELS</span>
+      </Link>
 
-      <div
-        className={`flex items-center justify-between gap-6 px-6 py-5 md:px-10 ${
-          isTransparent ? 'bg-transparent text-canvas' : 'border-b border-line bg-white text-departure'
-        }`}
-      >
-        <Link href="/" className="flex items-center gap-3 whitespace-nowrap">
-          <svg
-            width="26"
-            height="26"
-            viewBox="0 0 48 48"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={5.5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+      <div className={styles.links}>
+        {NAV_LINKS.map((link) => (
+          <Link
+            key={link.key}
+            href={link.href}
+            className={`${styles.link} ${link.key === active ? styles.linkActive : ""}`}
           >
-            <path d="M9 35 L24 11 L39 35" />
-            <path d="M15.5 25 H32.5" />
-            <path d="M24 25 V39" />
-          </svg>
-          <span className="font-display text-sm tracking-[0.09em]">ADVENTURETRAVELS</span>
-        </Link>
+            {link.label}
+          </Link>
+        ))}
+      </div>
+      <Link href="/reizen" className={styles.cta}>
+        Plan je reis
+        <ArrowIcon size={15} />
+      </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href || pathname?.startsWith(`${link.href}/`)
-            return (
+      <button
+        type="button"
+        className={styles.menuToggle}
+        aria-label={open ? "Sluit menu" : "Open menu"}
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+      >
+        {open ? <CloseIcon size={22} color="#23261F" /> : <MenuIcon size={22} color={markColor} />}
+      </button>
+
+      {open && (
+        <div className={styles.mobilePanel}>
+          <div className={styles.mobileLinks}>
+            {NAV_LINKS.map((link) => (
               <Link
-                key={link.href}
+                key={link.key}
                 href={link.href}
-                className={`font-body text-[11px] font-medium uppercase tracking-[0.14em] pb-[3px] ${
-                  isActive ? 'border-b-2 border-compass' : ''
-                }`}
+                onClick={() => setOpen(false)}
+                className={`${styles.mobileLink} ${link.key === active ? styles.linkActive : ""}`}
               >
                 {link.label}
               </Link>
-            )
-          })}
-        </nav>
-
-        <div className="hidden lg:block">
-          <Button href="/contact" variant="primary">
+            ))}
+          </div>
+          <Link href="/reizen" onClick={() => setOpen(false)} className={styles.mobileCta}>
             Plan je reis
-          </Button>
-        </div>
-
-        <button
-          type="button"
-          aria-label="Menu openen"
-          onClick={() => setOpen((v) => !v)}
-          className="flex flex-col gap-1.5 lg:hidden"
-        >
-          <span className={`block h-px w-6 ${isTransparent ? 'bg-canvas' : 'bg-departure'}`} />
-          <span className={`block h-px w-6 ${isTransparent ? 'bg-canvas' : 'bg-departure'}`} />
-        </button>
-      </div>
-
-      {open && (
-        <nav className="flex flex-col gap-1 border-t border-line bg-white px-6 py-4 text-departure lg:hidden">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="py-3 font-body text-sm uppercase tracking-[0.1em] border-b border-line last:border-none"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="/contact"
-            onClick={() => setOpen(false)}
-            className="py-3 font-body text-sm uppercase tracking-[0.1em]"
-          >
-            Plan je reis
+            <ArrowIcon size={15} />
           </Link>
-        </nav>
+        </div>
       )}
-    </header>
-  )
+    </nav>
+  );
 }

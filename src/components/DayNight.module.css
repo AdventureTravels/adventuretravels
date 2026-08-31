@@ -1,0 +1,133 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .photo {
+    height: 360px;
+  }
+
+  .panel {
+    padding: 48px 24px;
+  }
+}
+
+.photo {
+  position: relative;
+  height: 600px;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--image-placeholder-bg);
+}
+
+.photoLabel {
+  position: absolute;
+  left: 32px;
+  top: 32px;
+  pointer-events: none;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white);
+  z-index: 1;
+}
+
+.panel {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 72px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+}
+
+.panelDark {
+  background: var(--departure-black);
+  color: var(--canvas-sand);
+}
+
+.panelLight {
+  background: var(--white);
+}
+
+.eyebrowLight {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--compass-red-text);
+}
+
+.heading {
+  margin: 0;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.panelLight .heading {
+  color: var(--departure-black);
+}
+
+.body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.8;
+  max-width: 460px;
+}
+
+.panelDark .body {
+  color: var(--dark-text-secondary);
+}
+
+.panelLight .body {
+  color: var(--text-secondary);
+}
+
+.ctaOutlineLight {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: 1px solid var(--canvas-sand);
+  color: var(--canvas-sand);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ctaOutlineLight:hover {
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+}
+
+.ctaOutlineDark {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border: 1px solid var(--departure-black);
+  color: var(--departure-black);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ctaOutlineDark:hover {
+  background: var(--departure-black);
+  color: var(--white);
+}

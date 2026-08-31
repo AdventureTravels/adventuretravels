@@ -1,0 +1,120 @@
+.page {
+  width: 100%;
+  margin: 0 auto;
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+.layout {
+  padding: 0 48px 76px;
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 64px;
+  align-items: start;
+}
+
+.accordion {
+  background: var(--white);
+  padding: 20px 34px 26px;
+  min-width: 0;
+}
+
+.item {
+  border-bottom: 1px solid var(--line);
+  padding: 26px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.question {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--departure-black);
+  text-align: left;
+}
+
+.chevron {
+  flex: none;
+  transition: transform 150ms ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.answer {
+  margin: 0;
+  max-width: 620px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.sidebar {
+  background: var(--departure-black);
+  color: var(--canvas-sand);
+  padding: 40px 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sidebarTitle {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.sidebarText {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--dark-text-secondary);
+}
+
+.sidebarCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 16px 24px;
+  border: 1px solid var(--canvas-sand);
+  color: var(--canvas-sand);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.sidebarCta:hover {
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    padding: 0 24px 48px;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .accordion {
+    padding: 12px 20px 16px;
+  }
+}

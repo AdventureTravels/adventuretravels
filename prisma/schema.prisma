@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String @id @default(cuid())
+  email        String @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model Sport {
+  id        String @id @default(cuid())
+  slug      String @unique
+  name      String
+  heroImage String
+  heroTitle String
+  heroSubtitle String // rich text (HTML)
+  cardImage String
+  caption   String
+  order     Int @default(0)
+  mailerliteGroupId String? // auto-created MailerLite group id for this sport's segment
+
+  trips Trip[]
+}
+
+model Destination {
+  id           String @id @default(cuid())
+  slug         String @unique
+  name         String
+  heroImage    String
+  heroTitle    String
+  heroSubtitle String // rich text (HTML)
+  cardImage    String
+  caption      String
+  flightTime   String
+  bestPeriod   String
+  order        Int @default(0)
+
+  trips Trip[]
+}
+
+model Trip {
+  id            String @id @default(cuid())
+  slug          String @unique
+  title         String
+  image         String
+  level         String
+  category      String
+  text          String // rich text (HTML)
+  duration      String
+  date          String
+  price         String
+  priceNote     String
+  heroImage     String
+  heroSubtitle  String // rich text (HTML)
+  program       Json   // [{ day, text }]
+  included      String // rich text (HTML)
+  notIncluded   String // rich text (HTML)
+  stayTitle     String @default("Het verblijf")
+  stayBody      String @default("") // rich text (HTML)
+  stayImage     String
+  galleryImages Json   // string[], any length
+  fixedDepartureDate String? // set for a fixed-date group trip; null = visitor picks their own date
+  order         Int @default(0)
+
+  sport         Sport       @relation(fields: [sportId], references: [id])
+  sportId       String
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  destinationId String
+  bookingRequests BookingRequest[]
+}
+
+model BookingRequest {
+  id            String   @id @default(cuid())
+  trip          Trip     @relation(fields: [tripId], references: [id])
+  tripId        String
+  name          String
+  email         String
+  phone         String?
+  preferredDate String
+  message       String?
+  status        String   @default("new") // "new" | "contacted" | "done"
+  createdAt     DateTime @default(now())
+}
+
+model Article {
+  id          String @id @default(cuid())
+  slug        String @unique
+  tag         String
+  title       String
+  excerpt     String
+  heroImage   String
+  intro       String
+  sections    Json     // [{ number?, title, bodyHtml: string, quoteHtml?: string }]
+  calloutLabel String?
+  calloutText  String?
+  publishedAt String
+  order       Int @default(0)
+}
+
+model Review {
+  id     String @id @default(cuid())
+  stars  Int
+  quote  String
+  author String
+  order  Int @default(0)
+}
+
+model FaqItem {
+  id       String @id @default(cuid())
+  question String
+  answer   String
+  order    Int @default(0)
+}
+
+model Page {
+  id       String @id @default(cuid())
+  slug     String @unique
+  eyebrow  String
+  title    String
+  subtitle String
+  sections Json   // [{ title, bodyHtml: string, kind?: "text"|"stats"|"table"|"icons", data?: any }]
+  extra    Json?  // page-specific extras (portrait caption, badges, ...)
+}
+
+model SiteSettings {
+  id                 String @id @default("singleton")
+  topbarTagline      String
+  phone              String
+  email              String
+  heroEyebrow        String
+  heroHeading        String
+  heroSubheading     String
+  trustStats         Json   // [{ value, label }]
+  programCtaEyebrow  String
+  programCtaTitle    String
+  programCtaBody     String // rich text (HTML)
+  newsletterTitle    String
+  footerTagline      String
+}
+
+model IncludedItem {
+  id       String @id @default(cuid())
+  icon     String // icon key, see ICONS in src/lib/iconLookup.ts
+  title    String
+  bodyHtml String // rich text (HTML)
+  order    Int @default(0)
+}
+
+model TripType {
+  id    String @id @default(cuid())
+  href  String
+  icon  String // icon key, see ICONS in src/lib/iconLookup.ts
+  title String
+  meta  String
+  order Int @default(0)
+}

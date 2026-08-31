@@ -1,0 +1,255 @@
+.section {
+  background: var(--white);
+  padding: 80px 0 88px;
+}
+
+.head {
+  padding: 0 48px 30px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--compass-red-text);
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 36px;
+  letter-spacing: -0.02em;
+  color: var(--departure-black);
+}
+
+.headRight {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.viewAll {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--compass-red-text);
+  white-space: nowrap;
+}
+
+.viewAll:hover {
+  color: var(--departure-black);
+}
+
+.track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 48px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.card {
+  flex: none;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  color: var(--departure-black);
+}
+
+.card:hover {
+  color: var(--departure-black);
+  opacity: 0.86;
+}
+
+.cardImage {
+  position: relative;
+  height: 300px;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--image-placeholder-bg);
+}
+
+.levelBadge {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  padding: 7px 12px;
+  background: rgba(35, 38, 31, 0.86);
+  color: var(--canvas-sand);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.cardBody {
+  padding: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.categoryLabel {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.cardTitle {
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.cardText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.metaRow {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.metaDate {
+  color: var(--compass-red-text);
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.price {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.priceNote {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.footer {
+  padding: 30px 48px 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 2px;
+  background: var(--canvas-sand);
+  position: relative;
+}
+
+.progressThumb {
+  position: absolute;
+  top: 0;
+  height: 2px;
+  background: var(--departure-black);
+}
+
+.count {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.speakToGuide {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border: 1px solid var(--departure-black);
+  color: var(--departure-black);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.speakToGuide:hover {
+  background: var(--departure-black);
+  color: var(--white);
+}
+
+@media (max-width: 900px) {
+  .head {
+    padding: 0 24px 24px;
+    flex-wrap: wrap;
+  }
+
+  .track {
+    padding: 0 24px;
+  }
+
+  .card {
+    width: 300px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  .footer {
+    padding: 24px 24px 0;
+    flex-wrap: wrap;
+  }
+}

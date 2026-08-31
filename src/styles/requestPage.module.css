@@ -1,0 +1,42 @@
+.page {
+  width: 100%;
+  margin: 0 auto;
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+.stepsSection {
+  padding: 72px 48px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.stepsTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+
+.requestSection {
+  padding: 72px 48px 76px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 56px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .stepsSection {
+    padding: 48px 24px 0;
+  }
+
+  .requestSection {
+    padding: 48px 24px;
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

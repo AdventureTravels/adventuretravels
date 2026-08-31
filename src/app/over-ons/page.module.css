@@ -1,0 +1,147 @@
+.page {
+  width: 100%;
+  margin: 0 auto;
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+  font-family: var(--font-body);
+  font-weight: 300;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.text {
+  box-sizing: border-box;
+  padding: 84px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+  min-width: 0;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--compass-red-text);
+}
+
+.heading {
+  margin: 0;
+  font-weight: 600;
+  font-size: 46px;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.body {
+  margin: 0;
+  max-width: 520px;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.sub {
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.subTitle {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+
+.subText {
+  margin: 0;
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.ctaWrap {
+  padding-top: 12px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 26px;
+  border: 1px solid var(--departure-black);
+  color: var(--departure-black);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cta:hover {
+  background: var(--departure-black);
+  color: var(--white);
+}
+
+.portrait {
+  position: relative;
+  min-height: 640px;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--image-placeholder-bg);
+}
+
+.portraitGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(20, 23, 15, 0) 55%, rgba(20, 23, 15, 0.6) 100%);
+}
+
+.portraitCaption {
+  position: absolute;
+  left: 32px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.portraitName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.portraitRole {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--canvas-sand);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .text {
+    padding: 48px 24px;
+  }
+
+  .heading {
+    font-size: 32px;
+  }
+
+  .portrait {
+    min-height: 360px;
+  }
+}

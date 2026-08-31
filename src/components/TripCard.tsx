@@ -1,80 +1,61 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowIcon } from './icons'
+import Link from "next/link";
+import type { ReactNode } from "react";
+import { Placeholder } from "./Placeholder";
+import { RichText } from "./RichText";
+import { ArrowIcon } from "./icons";
+import styles from "./TripCard.module.css";
 
-export type TripCardData = {
-  slug: string
-  title: string
-  summary?: string | null
-  imageUrl?: string | null
-  sportLabel?: string | null
-  bestemmingLabel?: string | null
-  duration?: string | null
-  level?: string | null
-  price: number
-  priceUnit?: string | null
-}
+export type Trip = {
+  slug: string;
+  image: string;
+  level: string;
+  icon: ReactNode;
+  category: string;
+  title: string;
+  text: string;
+  duration: string;
+  date: string;
+  price: string;
+  priceNote?: string;
+};
 
-const levelLabels: Record<string, string> = {
-  beginner: 'Beginner',
-  gevorderd: 'Gevorderd',
-  alle_niveaus: 'Alle niveaus',
-}
-
-export function TripCard({ trip }: { trip: TripCardData }) {
+export function TripCard({
+  trip,
+  className,
+  ctaLabel = "Bekijk reis",
+}: {
+  trip: Trip;
+  className?: string;
+  ctaLabel?: string;
+}) {
   return (
-    <Link
-      href={`/reizen/${trip.slug}`}
-      className="group flex flex-col overflow-hidden border border-line bg-card"
-    >
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-hatch">
-        {trip.imageUrl ? (
-          <Image
-            src={trip.imageUrl}
-            alt={trip.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : null}
-        {trip.level && (
-          <span className="absolute left-4 top-4 bg-departure px-3 py-1 font-body text-[10px] font-medium uppercase tracking-[0.12em] text-canvas">
-            {levelLabels[trip.level] ?? trip.level}
-          </span>
-        )}
+    <Link href={`/reizen/${trip.slug}`} className={`${styles.card} ${className ?? ""}`}>
+      <div className={styles.image}>
+        <Placeholder label={trip.image} />
+        <span className={styles.levelBadge}>{trip.level}</span>
       </div>
-
-      <div className="flex flex-1 flex-col gap-3 p-6">
-        <div className="flex items-center gap-2 font-body text-[11px] font-medium uppercase tracking-[0.12em] text-accent-label">
-          {trip.sportLabel && <span>{trip.sportLabel}</span>}
-          {trip.sportLabel && trip.bestemmingLabel && <span>&middot;</span>}
-          {trip.bestemmingLabel && <span>{trip.bestemmingLabel}</span>}
+      <div className={styles.body}>
+        <div className={styles.category}>
+          {trip.icon}
+          <span className={styles.categoryLabel}>{trip.category}</span>
         </div>
-
-        <h3 className="font-body text-xl font-medium leading-snug text-departure">{trip.title}</h3>
-
-        {trip.summary && (
-          <p className="font-body text-sm font-light leading-relaxed text-muted">{trip.summary}</p>
-        )}
-
-        {trip.duration && (
-          <span className="font-body text-sm font-light text-muted">{trip.duration}</span>
-        )}
-
-        <div className="mt-auto flex items-center justify-between border-t border-line pt-4">
-          <div className="flex flex-col">
-            <span className="font-body text-lg font-medium leading-none text-departure">
-              &euro;{trip.price}
-            </span>
-            <span className="font-body text-[11px] font-light text-muted">
-              {trip.priceUnit ?? 'p.p.'}
-            </span>
-          </div>
-          <span className="flex items-center gap-2 font-body text-[11px] font-medium uppercase tracking-[0.12em] text-departure">
-            Bekijk reis
-            <ArrowIcon className="h-4 w-4" />
+        <div className={styles.title}>{trip.title}</div>
+        <RichText html={trip.text} className={styles.text} />
+        <div className={styles.metaRow}>
+          <span>{trip.duration}</span>
+          <span className={styles.metaDate}>{trip.date}</span>
+        </div>
+        <div className={styles.priceRow}>
+          <span className={styles.price}>
+            {trip.price}{" "}
+            <span className={styles.priceNote}>{trip.priceNote ?? "p.p. incl. verblijf, gids & diners"}</span>
+          </span>
+          <span className={styles.cta}>
+            {ctaLabel}
+            <ArrowIcon size={13} />
           </span>
         </div>
       </div>
     </Link>
-  )
+  );
 }

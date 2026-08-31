@@ -1,0 +1,135 @@
+.section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--departure-black);
+  color: var(--canvas-sand);
+}
+
+.left {
+  box-sizing: border-box;
+  padding: 76px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dune-beige);
+}
+
+.title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.body {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--dark-text-secondary);
+  max-width: 480px;
+}
+
+.formRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-top: 8px;
+  flex-wrap: wrap;
+}
+
+.emailField {
+  padding: 16px 26px;
+  border: 1px solid var(--dark-field-border);
+  color: var(--dark-text-secondary);
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  background: none;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 17px 28px;
+  background: var(--compass-red);
+  color: var(--departure-black);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: none;
+}
+
+.submit:hover {
+  background: var(--canvas-sand);
+}
+
+.fineprint {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--dark-text-tertiary);
+}
+
+.right {
+  box-sizing: border-box;
+  padding: 76px 56px;
+  border-left: 1px solid var(--dark-border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 26px;
+}
+
+.step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.stepNumber {
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: var(--compass-red);
+}
+
+.stepTitle {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.stepBody {
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--dark-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .section {
+    grid-template-columns: 1fr;
+  }
+
+  .left,
+  .right {
+    padding: 48px 24px;
+  }
+
+  .right {
+    border-left: none;
+    border-top: 1px solid var(--dark-border);
+  }
+
+  .title {
+    font-size: 28px;
+  }
+}

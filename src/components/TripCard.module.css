@@ -1,0 +1,113 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--departure-black);
+}
+
+.card:hover {
+  color: var(--departure-black);
+  opacity: 0.86;
+}
+
+.image {
+  position: relative;
+  height: 300px;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--image-placeholder-bg);
+}
+
+.levelBadge {
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  padding: 7px 12px;
+  background: rgba(35, 38, 31, 0.86);
+  color: var(--canvas-sand);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  z-index: 1;
+}
+
+.body {
+  padding: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.categoryLabel {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.title {
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.metaRow {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.metaDate {
+  color: var(--compass-red-text);
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.price {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.priceNote {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
