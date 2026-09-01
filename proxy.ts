@@ -1,9 +1,27 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth";
-import { CUSTOMER_SESSION_COOKIE } from "@/lib/customerAuth";
+import crypto from "node:crypto";
 
+// Proxy runs in its own bundle — deliberately no imports from @/lib/auth or
+// @/lib/customerAuth (which pull in Prisma, Resend, and next/headers). Only the
+// pure HMAC check needed to gate routes is duplicated here.
+const SESSION_COOKIE = "at_admin_session";
+const CUSTOMER_SESSION_COOKIE = "at_customer_session";
 const PORTAL_HOST = "mijn.adventuretravels.nl";
+
+function verifySessionToken(token: string | undefined): string | null {
+  if (!token) return null;
+  const secret = process.env.SESSION_SECRET;
+  if (!secret) return null;
+  const [encodedEmail, signature] = token.split(".");
+  if (!encodedEmail || !signature) return null;
+  const email = Buffer.from(encodedEmail, "base64url").toString("utf8");
+  const expected = crypto.createHmac("sha256", secret).update(email).digest("hex");
+  const a = Buffer.from(signature);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) return null;
+  return email;
+}
 
 export function proxy(request: NextRequest) {
   const host = request.headers.get("host") || "";
