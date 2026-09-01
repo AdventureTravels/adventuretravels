@@ -48,6 +48,9 @@ export async function setSessionCookie(email: string) {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
+    // Shared across adventuretravels.nl and mijn.adventuretravels.nl, so a staff
+    // login on one covers both. Host-only cookie in dev (no real domain to share).
+    domain: process.env.NODE_ENV === "production" ? ".adventuretravels.nl" : undefined,
     path: "/",
     maxAge: 60 * 60 * 24 * 30,
   });

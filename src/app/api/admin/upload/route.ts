@@ -13,6 +13,7 @@ const MIME_EXT: Record<string, string> = {
   "image/webp": "webp",
   "image/gif": "gif",
   "image/svg+xml": "svg",
+  "application/pdf": "pdf",
 };
 
 export async function POST(request: Request) {

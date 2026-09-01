@@ -1,0 +1,40 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.file {
+  font-size: 13px;
+  color: var(--compass-red-text);
+  text-decoration: underline;
+}
+
+.empty {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.button {
+  font-size: 13px;
+  padding: 7px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--departure-black);
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--canvas-sand-light);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.error {
+  font-size: 12px;
+  color: var(--compass-red-text);
+}

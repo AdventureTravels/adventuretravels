@@ -17,7 +17,7 @@ export function ImageUploadField({
   const [error, setError] = useState<string | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
-  const isUploaded = value.startsWith("/uploads/");
+  const isUploaded = value.startsWith("/uploads/") || value.startsWith("https://") || value.startsWith("http://");
 
   async function handleFile(file: File) {
     setUploading(true);

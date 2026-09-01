@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getSessionEmail, clearSessionCookie } from "@/lib/auth";
-import { prisma } from "@/lib/db";
 import styles from "../admin.module.css";
 
 const NAV = [
   { href: "/admin", label: "Overzicht" },
   { href: "/admin/trips", label: "Reizen" },
-  { href: "/admin/bookings", label: "Boekingsaanvragen" },
   { href: "/admin/sports", label: "Sporten" },
   { href: "/admin/destinations", label: "Bestemmingen" },
   { href: "/admin/articles", label: "Journal" },
@@ -30,7 +28,6 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
   if (!email) {
     redirect("/admin/login");
   }
-  const newBookings = await prisma.bookingRequest.count({ where: { status: "new" } });
 
   return (
     <div className={styles.shell}>
@@ -39,11 +36,11 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
         {NAV.map((item) => (
           <Link key={item.href} href={item.href} className={styles.navLink}>
             {item.label}
-            {item.href === "/admin/bookings" && newBookings > 0 && (
-              <span className={styles.navBadge}>{newBookings}</span>
-            )}
           </Link>
         ))}
+        <a href="https://mijn.adventuretravels.nl/staff" className={styles.navLink}>
+          Boekingen beheren ↗
+        </a>
         <div className={styles.sidebarSpacer} />
         <form action={logout} className={styles.logoutForm}>
           <button type="submit">Uitloggen ({email})</button>

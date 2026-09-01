@@ -78,6 +78,7 @@ model Trip {
 
 model BookingRequest {
   id            String   @id @default(cuid())
+  bookingNumber String?  @unique // "AT-XXXXXX", set on creation
   trip          Trip     @relation(fields: [tripId], references: [id])
   tripId        String
   name          String
@@ -85,8 +86,51 @@ model BookingRequest {
   phone         String?
   preferredDate String
   message       String?
-  status        String   @default("new") // "new" | "contacted" | "done"
+  status        String   @default("aangevraagd")
+  // "aangevraagd" | "bevestigd" | "aanbetaling_voldaan" | "volledig_betaald" | "afgerond" | "geannuleerd"
+  // legacy values still present on old rows: "new" | "contacted" | "done"
+  totalAmount    String?
+  depositAmount  String?
+  depositPaid    Boolean   @default(false)
+  depositPaidAt  DateTime?
+  balanceAmount  String?
+  balancePaid    Boolean   @default(false)
+  balancePaidAt  DateTime?
+  notes          String? // internal staff notes, not shown to the customer
   createdAt     DateTime @default(now())
+
+  participants  Participant[]
+  invoices      Invoice[]
+}
+
+model Participant {
+  id            String  @id @default(cuid())
+  booking       BookingRequest @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId     String
+  name          String
+  birthdate     String?
+  dietaryNotes  String?
+  order         Int     @default(0)
+}
+
+model Invoice {
+  id        String   @id @default(cuid())
+  booking   BookingRequest @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId String
+  label     String // e.g. "Aanbetaling", "Restbetaling"
+  amount    String
+  fileUrl   String? // Vercel Blob URL, once uploaded
+  status    String   @default("verzonden") // "verzonden" | "betaald"
+  issuedAt  DateTime @default(now())
+}
+
+model CustomerMagicLinkToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
 }
 
 model Article {

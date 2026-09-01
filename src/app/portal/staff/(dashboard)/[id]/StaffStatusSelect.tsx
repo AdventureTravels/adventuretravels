@@ -1,14 +1,9 @@
 "use client";
 
-import styles from "../../admin.module.css";
+import { statusLabel, STATUS_OPTIONS } from "@/lib/bookingStatus";
+import styles from "@/app/admin/admin.module.css";
 
-const STATUS_LABELS: Record<string, string> = {
-  new: "Nieuw",
-  contacted: "Contact gehad",
-  done: "Afgerond",
-};
-
-export function BookingStatusSelect({
+export function StaffStatusSelect({
   action,
   status,
 }: {
@@ -23,8 +18,10 @@ export function BookingStatusSelect({
         defaultValue={status}
         onChange={(e) => e.currentTarget.form?.requestSubmit()}
       >
-        {Object.entries(STATUS_LABELS).map(([value, label]) => (
-          <option key={value} value={value}>{label}</option>
+        {STATUS_OPTIONS.map((value) => (
+          <option key={value} value={value}>
+            {statusLabel(value)}
+          </option>
         ))}
       </select>
     </form>
