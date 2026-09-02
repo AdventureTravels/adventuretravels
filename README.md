@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AdventureTravels.nl
 
-## Getting Started
+Next.js 16 (App Router) · Prisma 6 op Neon Postgres · Vercel Blob · Resend · MailerLite.
+Eigen CMS onder `/admin`, klantportaal op `mijn.adventuretravels.nl` (intern `/portal`), staff-portaal onder `/portal/staff`.
 
-First, run the development server:
+Lees `AGENTS.md` en de Next.js-docs in `node_modules/next/dist/docs/` voordat je code schrijft.
+
+## Sleutels en omgevingsvariabelen
+
+Sleutels staan **niet** in git. `.env*` is uitgesloten via `.gitignore`; alleen `.env.example` (namen, geen waarden) wordt gecommit.
+
+Lokaal werken:
 
 ```bash
+npm install
+npx vercel link
+npx vercel env pull .env
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Nieuwe of gewijzigde sleutels beheer je in Vercel (Project → Settings → Environment Variables) en haal je daarna opnieuw op met `vercel env pull`. Een sleutel die ooit in git of in een chat heeft gestaan, roteer je in Vercel.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Zie `.env.example` voor de volledige lijst variabelen.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Database en migraties
 
-## Learn More
+De database is de enige bron van waarheid voor content, prijzen en voorwaarden. Een deploy verandert nooit content.
 
-To learn more about Next.js, take a look at the following resources:
+- Schema: `prisma/schema.prisma`. Wijzigingen gaan altijd via een migratie: `npm run db:migrate` (lokaal, maakt een map aan onder `prisma/migrations/`).
+- Deploy: `vercel-build` draait `prisma migrate deploy && next build`. Er draait **geen** `db push` en **geen** seed meer tijdens een build.
+- Seed: `npm run db:seed` is alleen bedoeld voor een lege database. Hij maakt uitsluitend aan wat nog niet bestaat en overschrijft nooit bestaande rijen. Zet `SEED_ADMIN_PASSWORD` om een eerste admin aan te maken.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Eenmalig: bestaande database baselinen
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+De productiedatabase is tot en met v4 met `prisma db push` opgebouwd, zonder migratiegeschiedenis. Vóór de eerste deploy met `migrate deploy` moet de beginmigratie `0_init` één keer als "al toegepast" worden gemarkeerd, anders probeert Prisma bestaande tabellen opnieuw aan te maken en faalt de build:
 
-## Deploy on Vercel
+```bash
+npx vercel env pull .env
+npx prisma migrate resolve --applied 0_init
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Dit schrijft alleen een rij in `_prisma_migrations`; het raakt geen data. Daarna werken alle volgende migraties automatisch bij deploy.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Scripts
+
+| Script | Doel |
+| --- | --- |
+| `npm run dev` | Dev-server op http://localhost:3000 |
+| `npm run build` | Productiebuild (zonder migraties) |
+| `npm run db:migrate` | Nieuwe migratie maken en lokaal toepassen |
+| `npm run db:deploy` | Openstaande migraties toepassen (wat Vercel doet) |
+| `npm run db:seed` | Lege database vullen met startcontent |
+| `npm run lint` | ESLint |
