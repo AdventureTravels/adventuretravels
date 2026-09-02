@@ -1,20 +1,18 @@
 import { Topbar } from "@/components/Topbar";
 import { Hero } from "@/components/Hero";
-import { StickySearchStrip } from "@/components/StickySearchStrip";
 import { TrustStrip } from "@/components/TrustStrip";
-import { FeaturedTrips, type FeaturedTrip } from "@/components/FeaturedTrips";
+import { FeaturedTrips } from "@/components/FeaturedTrips";
 import { DayNight } from "@/components/DayNight";
 import { Included } from "@/components/Included";
 import { TripTypes, type TripTypeTile } from "@/components/TripTypes";
 import { ProgramCta } from "@/components/ProgramCta";
 import { Reviews } from "@/components/Reviews";
-import { Newsletter } from "@/components/Newsletter";
 import { Journal, type JournalTeaser } from "@/components/Journal";
 import { Footer } from "@/components/Footer";
 import { getTrips } from "@/lib/content/trips";
 import { getArticles } from "@/lib/content/articles";
 import { getTripTypes } from "@/lib/content/tripTypes";
-import { tripSportIcon } from "@/lib/tripCard";
+import { toTripCardData } from "@/lib/tripCard";
 import { renderIcon } from "@/lib/iconLookup";
 import styles from "./page.module.css";
 
@@ -28,19 +26,7 @@ export default async function Home() {
     meta: type.meta,
   }));
 
-  const featuredTrips: FeaturedTrip[] = trips.slice(0, 4).map((trip) => ({
-    href: `/reizen/${trip.slug}`,
-    image: trip.image,
-    level: trip.level,
-    icon: tripSportIcon(trip.sport.slug),
-    category: trip.category,
-    title: trip.title,
-    text: trip.text,
-    duration: trip.duration,
-    date: trip.date,
-    price: trip.price,
-    priceNote: trip.priceNote,
-  }));
+  const tripCards = trips.map(toTripCardData);
 
   const journalTeasers: JournalTeaser[] = articles.slice(0, 4).map((article) => ({
     href: `/journal/${article.slug}`,
@@ -52,16 +38,14 @@ export default async function Home() {
   return (
     <div className={styles.page}>
       <Topbar />
-      <Hero />
-      <StickySearchStrip />
+      <Hero trips={tripCards} />
       <TrustStrip />
-      <FeaturedTrips trips={featuredTrips} />
+      <FeaturedTrips trips={tripCards} />
       <DayNight />
       <Included />
       <TripTypes types={tripTypeTiles} />
       <ProgramCta />
       <Reviews />
-      <Newsletter />
       <Journal articles={journalTeasers} />
       <Footer />
     </div>

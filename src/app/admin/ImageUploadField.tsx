@@ -43,15 +43,15 @@ export function ImageUploadField({
         {isUploaded ? (
           <img src={value} alt="" className={styles.imageUploadPreview} />
         ) : (
-          <div className={styles.imageUploadPreviewEmpty}>{value || "Geen afbeelding"}</div>
+          <div className={styles.imageUploadPreviewEmpty}>Geen foto: dit beeld wordt niet getoond</div>
         )}
         <div className={styles.imageUploadControls}>
           <input
             className={styles.input}
-            type="text"
+            type="url"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="Label (placeholder) of upload een foto"
+            placeholder="https://… (of upload een foto)"
           />
           <input
             ref={fileInput}

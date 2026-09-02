@@ -1,10 +1,10 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { Topbar } from "@/components/Topbar";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { PageIntro } from "@/components/PageIntro";
-import { Placeholder } from "@/components/Placeholder";
 import { ArrowIcon, CompassIcon, CheckCircleIcon, HouseIcon, SunMark } from "@/components/icons";
 import styles from "./page.module.css";
 
@@ -24,15 +24,6 @@ export default function VerblijfPage() {
         title="Zelf getest, of we boeken het niet."
         subtitle="Elke accommodatie in dit aanbod hebben we zelf bezocht en beoordeeld — niet uit een catalogus geselecteerd."
       />
-
-      <div className={styles.imageGrid}>
-        <div className={styles.imageCell}>
-          <Placeholder label="Kamer bij het park" />
-        </div>
-        <div className={styles.imageCell}>
-          <Placeholder label="Avond aan tafel" />
-        </div>
-      </div>
 
       <div className={styles.features}>
         <div className={styles.feature}>
@@ -65,10 +56,10 @@ export default function VerblijfPage() {
           <SunMark size={58} />
           <div className={styles.ctaHeading}>Bekijk welke reis bij dit verblijf hoort.</div>
         </div>
-        <a href="/reizen" className={styles.ctaButton}>
+        <Link href="/reizen" className={styles.ctaButton}>
           Bekijk reizen
           <ArrowIcon size={14} />
-        </a>
+        </Link>
       </div>
 
       <TrustStripSimple />

@@ -1,12 +1,13 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Placeholder } from "./Placeholder";
+import { SiteImage } from "./SiteImage";
 import { ArrowIcon } from "./icons";
 import styles from "./CategoryCard.module.css";
 
 export function CategoryCard({
   href,
   image,
+  imageAlt,
   icon,
   name,
   nameSize = 20,
@@ -17,6 +18,7 @@ export function CategoryCard({
 }: {
   href: string;
   image: string;
+  imageAlt: string;
   icon: ReactNode;
   name: string;
   nameSize?: number;
@@ -28,7 +30,7 @@ export function CategoryCard({
   return (
     <Link href={href} className={styles.card}>
       <div className={styles.image} style={{ height }}>
-        <Placeholder label={image} showLabel={false} />
+        <SiteImage src={image} alt={imageAlt} />
         <div className={styles.gradient} />
         <div className={styles.overlay}>
           <div className={styles.overlayTop}>

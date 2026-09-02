@@ -4,7 +4,6 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { CategoryCard } from "@/components/CategoryCard";
-import { ComingSoonTile } from "@/components/ComingSoonTile";
 import { PinIcon } from "@/components/icons";
 import { getDestinations } from "@/lib/content/destinations";
 import { getTripsByDestinationSlug } from "@/lib/content/trips";
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function BestemmingenPage() {
   const destinations = await getDestinations();
-  const tripCounts = await Promise.all(
+  const tripsPerDestination = await Promise.all(
     destinations.map((destination) => getTripsByDestinationSlug(destination.slug))
   );
 
@@ -37,24 +36,23 @@ export default async function BestemmingenPage() {
 
       <div className={styles.grid}>
         {destinations.map((destination, i) => {
-          const trips = tripCounts[i];
-          const sportNames = Array.from(new Set(trips.map((trip) => trip.sport.name))).join(", ");
+          const sportNames = Array.from(new Set(tripsPerDestination[i].map((trip) => trip.sport.name))).join(", ");
           return (
             <CategoryCard
               key={destination.id}
               href={`/bestemmingen/${destination.slug}`}
               image={destination.cardImage}
+              imageAlt={destination.name}
               icon={<PinIcon size={22} color="#FFFFFF" strokeWidth={2.6} />}
               name={destination.name}
               nameSize={26}
               height={380}
-              subLabel={`${trips.length} reis · ${sportNames.toLowerCase()}`}
+              subLabel={sportNames || undefined}
               caption={`${destination.caption} · ${destination.bestPeriod}`}
               ctaLabel="Bekijk bestemming"
             />
           );
         })}
-        <ComingSoonTile text="Meer bestemmingen volgen" height={380} />
       </div>
       <div className={styles.spacer} />
 

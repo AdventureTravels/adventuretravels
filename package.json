@@ -11,7 +11,8 @@
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "db:cleanup-v5": "tsx scripts/cleanup-v5.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Trip, Sport } from "@prisma/client";
+import type { Trip, Sport, Destination } from "@prisma/client";
 import { WaveIcon, MountainBikeIcon } from "@/components/icons";
 import type { Trip as TripCardData } from "@/components/TripCard";
 
@@ -16,13 +16,14 @@ export function tripSportIcon(
   return <Icon size={size} color={color} strokeWidth={strokeWidth} />;
 }
 
-export function toTripCardData(trip: Trip & { sport: Sport }): TripCardData {
+export function toTripCardData(trip: Trip & { sport: Sport; destination: Destination }): TripCardData {
   return {
     slug: trip.slug,
     image: trip.image,
+    imageAlt: trip.title,
     level: trip.level,
     icon: tripSportIcon(trip.sport.slug),
-    category: trip.category,
+    label: `${trip.sport.name} · ${trip.destination.name}`,
     title: trip.title,
     text: trip.text,
     duration: trip.duration,

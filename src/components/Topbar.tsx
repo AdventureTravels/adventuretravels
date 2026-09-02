@@ -7,7 +7,6 @@ export async function Topbar() {
     <div className={styles.topbar}>
       <span>{settings.topbarTagline}</span>
       <div className={styles.right}>
-        <span>NL / EN</span>
         <a href={`tel:${settings.phone.replace(/\s/g, "")}`}>Spreek een gids · {settings.phone}</a>
       </div>
     </div>

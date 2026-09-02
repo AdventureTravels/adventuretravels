@@ -181,11 +181,13 @@ model SiteSettings {
   heroEyebrow        String
   heroHeading        String
   heroSubheading     String
-  trustStats         Json   // [{ value, label }]
+  heroImage          String   @default("") // Blob-URL; leeg = geen foto in de homepage-hero
+  usps               String[] @default([]) // drie feitelijke USP's zonder getallen (homepage + strips)
+  dayImage           String   @default("") // Blob-URL, homepage dag/avond-blok
+  eveningImage       String   @default("")
   programCtaEyebrow  String
   programCtaTitle    String
   programCtaBody     String // rich text (HTML)
-  newsletterTitle    String
   footerTagline      String
 }
 

@@ -4,30 +4,29 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { updateSiteSettings } from "@/lib/content/settings";
 
+const text = (formData: FormData, key: string) => String(formData.get(key) ?? "").trim();
+
 export async function updateSiteSettingsAction(formData: FormData) {
-  let trustStats;
-  try {
-    trustStats = JSON.parse(String(formData.get("trustStats") ?? "[]"));
-  } catch {
-    redirect("/admin/settings?error=json");
-  }
+  const usps = [text(formData, "usp0"), text(formData, "usp1"), text(formData, "usp2")].filter(Boolean);
 
   await updateSiteSettings({
-    topbarTagline: String(formData.get("topbarTagline") ?? "").trim(),
-    phone: String(formData.get("phone") ?? "").trim(),
-    email: String(formData.get("email") ?? "").trim(),
-    heroEyebrow: String(formData.get("heroEyebrow") ?? "").trim(),
-    heroHeading: String(formData.get("heroHeading") ?? "").trim(),
-    heroSubheading: String(formData.get("heroSubheading") ?? "").trim(),
-    trustStats,
-    programCtaEyebrow: String(formData.get("programCtaEyebrow") ?? "").trim(),
-    programCtaTitle: String(formData.get("programCtaTitle") ?? "").trim(),
-    programCtaBody: String(formData.get("programCtaBody") ?? "").trim(),
-    newsletterTitle: String(formData.get("newsletterTitle") ?? "").trim(),
-    footerTagline: String(formData.get("footerTagline") ?? "").trim(),
+    topbarTagline: text(formData, "topbarTagline"),
+    phone: text(formData, "phone"),
+    email: text(formData, "email"),
+    heroEyebrow: text(formData, "heroEyebrow"),
+    heroHeading: text(formData, "heroHeading"),
+    heroSubheading: text(formData, "heroSubheading"),
+    heroImage: text(formData, "heroImage"),
+    usps,
+    dayImage: text(formData, "dayImage"),
+    eveningImage: text(formData, "eveningImage"),
+    programCtaEyebrow: text(formData, "programCtaEyebrow"),
+    programCtaTitle: text(formData, "programCtaTitle"),
+    programCtaBody: text(formData, "programCtaBody"),
+    footerTagline: text(formData, "footerTagline"),
   });
 
   revalidatePath("/admin/settings");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   redirect("/admin/settings?saved=1");
 }

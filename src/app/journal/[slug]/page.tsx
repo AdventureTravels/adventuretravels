@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
@@ -6,15 +7,12 @@ import { HeroBanner } from "@/components/HeroBanner";
 import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { TripCard } from "@/components/TripCard";
-import { ComingSoonTile } from "@/components/ComingSoonTile";
 import { getArticleBySlug } from "@/lib/content/articles";
 import type { ArticleSection } from "@/lib/content/articles";
 import { getTrips } from "@/lib/content/trips";
 import { toTripCardData } from "@/lib/tripCard";
 import { RichText } from "@/components/RichText";
 import styles from "./page.module.css";
-
-const KNOWN_SLUGS = ["antalya-warm-water", "welke-board-past-bij-jouw-niveau"];
 
 export async function generateMetadata({
   params,
@@ -32,14 +30,11 @@ export async function generateMetadata({
 
 export default async function JournalArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  if (KNOWN_SLUGS.includes(slug)) notFound();
-
   const article = await getArticleBySlug(slug);
   if (!article) notFound();
 
   const sections = article.sections as unknown as ArticleSection[];
   const trips = await getTrips();
-  const relatedTrip = trips[0];
 
   return (
     <div>
@@ -48,7 +43,8 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
       <HeroBanner
         active="journal"
         height={480}
-        imageLabel={article.heroImage}
+        image={article.heroImage}
+        imageAlt={article.title}
         eyebrow={`${article.tag} · ${article.publishedAt}`}
         title={article.title}
       />
@@ -74,18 +70,21 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
           )}
         </div>
 
-        <div className={styles.related}>
-          <div className={styles.relatedHead}>
-            <h2 className={styles.relatedTitle}>Gerelateerde reizen</h2>
-            <a href="/reizen" className={styles.relatedViewAll}>
-              Alle reizen
-            </a>
+        {trips.length > 0 && (
+          <div className={styles.related}>
+            <div className={styles.relatedHead}>
+              <h2 className={styles.relatedTitle}>Onze reizen</h2>
+              <Link href="/reizen" className={styles.relatedViewAll}>
+                Alle reizen
+              </Link>
+            </div>
+            <div className={styles.relatedGrid}>
+              {trips.slice(0, 2).map((trip) => (
+                <TripCard key={trip.slug} trip={toTripCardData(trip)} ctaLabel="Bekijk deze reis" />
+              ))}
+            </div>
           </div>
-          <div className={styles.relatedGrid}>
-            {relatedTrip && <TripCard trip={toTripCardData(relatedTrip)} ctaLabel="Bekijk deze reis" />}
-            <ComingSoonTile text="Meer reizen volgen" height={300} />
-          </div>
-        </div>
+        )}
       </div>
 
       <TrustStripSimple />

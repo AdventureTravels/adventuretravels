@@ -1,4 +1,3 @@
-import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
 const SINGLETON_ID = "singleton";
@@ -7,8 +6,6 @@ export function getSiteSettings() {
   return prisma.siteSettings.findUniqueOrThrow({ where: { id: SINGLETON_ID } });
 }
 
-export type TrustStat = { value: string; label: string };
-
 export type SiteSettingsInput = {
   topbarTagline: string;
   phone: string;
@@ -16,17 +13,16 @@ export type SiteSettingsInput = {
   heroEyebrow: string;
   heroHeading: string;
   heroSubheading: string;
-  trustStats: TrustStat[];
+  heroImage: string;
+  usps: string[];
+  dayImage: string;
+  eveningImage: string;
   programCtaEyebrow: string;
   programCtaTitle: string;
   programCtaBody: string;
-  newsletterTitle: string;
   footerTagline: string;
 };
 
 export function updateSiteSettings(data: SiteSettingsInput) {
-  return prisma.siteSettings.update({
-    where: { id: SINGLETON_ID },
-    data: { ...data, trustStats: data.trustStats as unknown as Prisma.InputJsonValue },
-  });
+  return prisma.siteSettings.update({ where: { id: SINGLETON_ID }, data });
 }

@@ -1,4 +1,5 @@
 import { ArrowIcon, CheckCircleIcon, SunMark } from "./icons";
+import { getSiteSettings } from "@/lib/content/settings";
 import styles from "./RequestForm.module.css";
 
 export type RequestField =
@@ -75,13 +76,16 @@ export function RequestForm({
   );
 }
 
-export function RequestSidebar() {
+export async function RequestSidebar() {
+  const settings = await getSiteSettings();
   return (
     <div className={styles.sidebar}>
       <div className={styles.callCard}>
         <SunMark size={54} />
         <div className={styles.callTitle}>Liever eerst even bellen?</div>
-        <p className={styles.callText}>Spreek een gids · +31 20 244 18 60</p>
+        <p className={styles.callText}>
+          <a href={`tel:${settings.phone.replace(/\s/g, "")}`}>Spreek een gids · {settings.phone}</a>
+        </p>
       </div>
       <div className={styles.afterCard}>
         <span className={styles.afterLabel}>Na je aanvraag</span>
@@ -89,7 +93,6 @@ export function RequestSidebar() {
           {[
             "Voorstel met programma en prijs",
             "Dezelfde boekings- en betaalflow als een reguliere reis",
-            "15% aanbetaling, kosteloos annuleren tot 45 dagen voor vertrek",
           ].map((item) => (
             <div key={item} className={styles.afterItem}>
               <CheckCircleIcon size={18} color="#C7513C" strokeWidth={2.4} />

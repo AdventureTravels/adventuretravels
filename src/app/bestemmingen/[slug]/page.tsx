@@ -6,8 +6,6 @@ import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { TwoColInfo } from "@/components/TwoColInfo";
 import { TripCard } from "@/components/TripCard";
-import { ComingSoonTile } from "@/components/ComingSoonTile";
-import { Placeholder } from "@/components/Placeholder";
 import { getDestinationBySlug } from "@/lib/content/destinations";
 import { getTripsByDestinationSlug } from "@/lib/content/trips";
 import { toTripCardData } from "@/lib/tripCard";
@@ -39,7 +37,8 @@ export default async function DestinationDetailPage({ params }: { params: Promis
       <HeroBanner
         active="bestemmingen"
         height={620}
-        imageLabel={destination.heroImage}
+        image={destination.heroImage}
+        imageAlt={destination.name}
         eyebrow={destination.name}
         title={destination.heroTitle}
         subtitle={destination.heroSubtitle}
@@ -49,34 +48,24 @@ export default async function DestinationDetailPage({ params }: { params: Promis
       <TwoColInfo
         items={[
           {
-            title: "Wat dit bijzonder maakt",
-            text: "Warm water tot laat in het seizoen, professionele cable park-faciliteiten en een prijsniveau dat langere reizen behapbaar maakt.",
-          },
-          {
             title: "Praktisch",
-            text: `Vliegtijd circa ${destination.flightTime}. Beste periode: ${destination.bestPeriod}. Sport hier aangeboden: ${sportNames.join(", ").toLowerCase()}.`,
+            text: `Vliegtijd circa ${destination.flightTime}. Beste periode: ${destination.bestPeriod}.${
+              sportNames.length ? ` Sport hier aangeboden: ${sportNames.join(", ").toLowerCase()}.` : ""
+            }`,
           },
         ]}
       />
 
-      <div className={styles.gallery}>
-        <div className={styles.galleryImage}>
-          <Placeholder label="Avond aan de kust" />
+      {trips.length > 0 && (
+        <div className={styles.section} style={{ paddingTop: 0 }}>
+          <h2 className={styles.sectionTitle}>Reizen naar {destination.name}</h2>
+          <div className={styles.tripGrid3}>
+            {trips.map((trip) => (
+              <TripCard key={trip.slug} trip={toTripCardData(trip)} />
+            ))}
+          </div>
         </div>
-        <div className={styles.galleryImage}>
-          <Placeholder label="Ochtend op het water" />
-        </div>
-      </div>
-
-      <div className={styles.section} style={{ paddingTop: 0 }}>
-        <h2 className={styles.sectionTitle}>Reizen naar {destination.name}</h2>
-        <div className={styles.tripGrid3}>
-          {trips.map((trip) => (
-            <TripCard key={trip.slug} trip={toTripCardData(trip)} />
-          ))}
-          <ComingSoonTile text={`Meer reizen naar ${destination.name} volgen`} height={300} />
-        </div>
-      </div>
+      )}
 
       <TrustStripSimple />
       <Footer />

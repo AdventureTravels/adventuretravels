@@ -4,7 +4,7 @@ import { Topbar } from "@/components/Topbar";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
-import { Placeholder } from "@/components/Placeholder";
+import { SiteImage, isImageUrl } from "@/components/SiteImage";
 import { RichText } from "@/components/RichText";
 import { ArrowIcon } from "@/components/icons";
 import { getPageBySlug } from "@/lib/content/pages";
@@ -53,14 +53,16 @@ export default async function OverOnsPage() {
             </a>
           </div>
         </div>
-        <div className={styles.portrait}>
-          <Placeholder label={extra.portraitImage ?? "Portret"} showLabel={false} />
-          <div className={styles.portraitGradient} />
-          <div className={styles.portraitCaption}>
-            <span className={styles.portraitName}>{extra.portraitName}</span>
-            <span className={styles.portraitRole}>{extra.portraitRole}</span>
+        {isImageUrl(extra.portraitImage) && (
+          <div className={styles.portrait}>
+            <SiteImage src={extra.portraitImage} alt={extra.portraitName ?? "Portret"} />
+            <div className={styles.portraitGradient} />
+            <div className={styles.portraitCaption}>
+              <span className={styles.portraitName}>{extra.portraitName}</span>
+              <span className={styles.portraitRole}>{extra.portraitRole}</span>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <TrustStripSimple />

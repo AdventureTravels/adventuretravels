@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { verifyMagicLinkToken, setCustomerSessionCookie } from "@/lib/customerAuth";
 import styles from "../portal.module.css";
@@ -26,9 +27,9 @@ export default async function VerifyPage({
           Deze inloglink is niet meer geldig — links werken 30 minuten en maar één keer. Vraag hieronder
           een nieuwe aan.
         </p>
-        <a href="/" className={styles.button} style={{ display: "inline-block", textAlign: "center", textDecoration: "none" }}>
+        <Link href="/" className={styles.button} style={{ display: "inline-block", textAlign: "center", textDecoration: "none" }}>
           Nieuwe link aanvragen
-        </a>
+        </Link>
       </div>
     </div>
   );

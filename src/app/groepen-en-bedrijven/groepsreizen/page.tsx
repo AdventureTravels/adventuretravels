@@ -70,7 +70,8 @@ export default function GroepsreizenPage() {
       <HeroBanner
         active="groepen"
         height={560}
-        imageLabel="Herobeeld — groep op de kabel"
+        image=""
+        imageAlt=""
         eyebrow="Groepen & bedrijven · Groepsreizen"
         title="Met je eigen groep het water op."
         subtitle="Voor vriendengroepen en verenigingen die samen willen sporten — één programma, één aanspreekpunt, één factuur."

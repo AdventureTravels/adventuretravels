@@ -2,7 +2,6 @@
 
 import { SliderControls } from "./SliderControls";
 import { useSlider } from "./useSlider";
-import { ComingSoonTile } from "./ComingSoonTile";
 import styles from "./Journal.module.css";
 
 export type JournalTeaser = {
@@ -12,11 +11,10 @@ export type JournalTeaser = {
   text: string;
 };
 
-const SLOT_COUNT = 4;
-
+/** Journal-teasers op de homepage. Alleen wat er is; niets zonder artikelen. */
 export function Journal({ articles }: { articles: JournalTeaser[] }) {
   const { ref, onScroll, prev, next } = useSlider();
-  const emptySlots = Math.max(0, SLOT_COUNT - articles.length);
+  if (articles.length === 0) return null;
 
   return (
     <div id="journal" className={styles.section}>
@@ -25,21 +23,16 @@ export function Journal({ articles }: { articles: JournalTeaser[] }) {
           <span className={styles.eyebrow}>Journal</span>
           <h2 className={styles.title}>Uit het veld</h2>
         </div>
-        <SliderControls onPrev={prev} onNext={next} />
+        {articles.length > 1 && <SliderControls onPrev={prev} onNext={next} />}
       </div>
 
       <div ref={ref} onScroll={onScroll} className={styles.track}>
         {articles.map((article) => (
-          <a key={article.title} href={article.href} className={styles.card}>
+          <a key={article.href} href={article.href} className={styles.card}>
             <span className={styles.tag}>{article.tag}</span>
             <div className={styles.cardTitle}>{article.title}</div>
             <p className={styles.cardText}>{article.text}</p>
           </a>
-        ))}
-        {Array.from({ length: emptySlots }).map((_, i) => (
-          <div key={i} className={styles.card}>
-            <ComingSoonTile text="Meer artikelen volgen" />
-          </div>
         ))}
       </div>
     </div>

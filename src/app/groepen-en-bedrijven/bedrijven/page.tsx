@@ -70,7 +70,8 @@ export default function BedrijvenPage() {
       <HeroBanner
         active="groepen"
         height={560}
-        imageLabel="Herobeeld — team aan tafel"
+        image=""
+        imageAlt=""
         eyebrow="Groepen & bedrijven · Bedrijven"
         title="Teambuilding die niet in een vergaderzaal eindigt."
         subtitle="Teambuilding en incentive-reizen met een sportief programma — georganiseerd zodat jij alleen hoeft aan te schuiven."

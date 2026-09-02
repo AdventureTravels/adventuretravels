@@ -41,6 +41,21 @@ npx prisma migrate resolve --applied 0_init
 
 Dit schrijft alleen een rij in `_prisma_migrations`; het raakt geen data. Daarna werken alle volgende migraties automatisch bij deploy.
 
+### Eenmalig: v4-content opschonen
+
+De v4-seed heeft fictieve reviews, aantallen en teksten over aanbetaling en kosteloos annuleren in de database gezet. Die verdwijnen niet door een deploy. Draai eenmalig, eerst als dry-run:
+
+```bash
+DRY_RUN=1 npm run db:cleanup-v5
+npm run db:cleanup-v5
+```
+
+Het script raakt alleen rijen die aantoonbaar uit de oude seed komen of een oude claim bevatten; handmatig ingevoerde content blijft staan.
+
+## Beelden
+
+Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.
+
 ## Scripts
 
 | Script | Doel |
@@ -50,4 +65,5 @@ Dit schrijft alleen een rij in `_prisma_migrations`; het raakt geen data. Daarna
 | `npm run db:migrate` | Nieuwe migratie maken en lokaal toepassen |
 | `npm run db:deploy` | Openstaande migraties toepassen (wat Vercel doet) |
 | `npm run db:seed` | Lege database vullen met startcontent |
+| `npm run db:cleanup-v5` | Eenmalige opschoning van v4-content (zie boven) |
 | `npm run lint` | ESLint |

@@ -1,22 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { Placeholder } from "./Placeholder";
+import { SiteImage, isImageUrl } from "./SiteImage";
 import { PrevArrowIcon, ArrowIcon } from "./icons";
 import styles from "./ImageSlider.module.css";
 
-export function ImageSlider({ images }: { images: string[] }) {
+/** Fotogalerij. Alleen echte uploads worden getoond; zonder foto's rendert
+ * de component niets. */
+export function ImageSlider({ images, altPrefix }: { images: string[]; altPrefix: string }) {
   const [index, setIndex] = useState(0);
-  if (images.length === 0) return null;
+  const photos = images.filter(isImageUrl);
+  if (photos.length === 0) return null;
 
-  const prev = () => setIndex((i) => (i - 1 + images.length) % images.length);
-  const next = () => setIndex((i) => (i + 1) % images.length);
+  const current = Math.min(index, photos.length - 1);
+  const prev = () => setIndex((i) => (i - 1 + photos.length) % photos.length);
+  const next = () => setIndex((i) => (i + 1) % photos.length);
 
   return (
     <div className={styles.slider}>
       <div className={styles.viewport}>
-        <Placeholder label={images[index]} />
-        {images.length > 1 && (
+        <SiteImage src={photos[current]} alt={`${altPrefix} ${current + 1}`} />
+        {photos.length > 1 && (
           <>
             <button type="button" className={`${styles.control} ${styles.controlPrev}`} onClick={prev} aria-label="Vorige foto">
               <PrevArrowIcon size={16} />
@@ -25,11 +29,11 @@ export function ImageSlider({ images }: { images: string[] }) {
               <ArrowIcon size={16} />
             </button>
             <div className={styles.dots}>
-              {images.map((image, i) => (
+              {photos.map((image, i) => (
                 <button
                   key={image + i}
                   type="button"
-                  className={i === index ? `${styles.dot} ${styles.dotActive}` : styles.dot}
+                  className={i === current ? `${styles.dot} ${styles.dotActive}` : styles.dot}
                   onClick={() => setIndex(i)}
                   aria-label={`Foto ${i + 1}`}
                 />

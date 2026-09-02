@@ -1,0 +1,80 @@
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.trackSingle {
+  overflow-x: hidden;
+}
+
+.slide {
+  flex: none;
+  width: 380px;
+  max-width: 100%;
+  scroll-snap-align: start;
+}
+
+.trackSingle .slide {
+  width: 100%;
+  max-width: 420px;
+}
+
+.card {
+  height: 100%;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--line);
+  cursor: pointer;
+}
+
+.dotActive {
+  background: var(--departure-black);
+}
+
+.dark .dot {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.dark .dotActive {
+  background: var(--white);
+}
+
+@media (max-width: 900px) {
+  .slide {
+    width: 82vw;
+  }
+}

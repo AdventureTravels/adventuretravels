@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { PageIntro } from "@/components/PageIntro";
 import { ArticleCard } from "@/components/ArticleCard";
-import { ComingSoonTile } from "@/components/ComingSoonTile";
+import { getArticles } from "@/lib/content/articles";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -13,7 +13,9 @@ export const metadata: Metadata = {
   description: "Verhalen van onderweg.",
 };
 
-export default function JournalPage() {
+export default async function JournalPage() {
+  const articles = await getArticles();
+
   return (
     <div className={styles.page}>
       <Topbar />
@@ -25,23 +27,20 @@ export default function JournalPage() {
         subtitle="Praktische inzichten en reisverhalen van het team en van gasten."
       />
 
-      <div className={styles.grid}>
-        <ArticleCard
-          href="/journal/antalya-warm-water"
-          image="Artikelfoto — Antalya"
-          tag="Turkije · 5 min"
-          title="Waarom Antalya jaarrond warm water heeft"
-          text="Wat het seizoen bepaalt voor je sessies op de kabel."
-        />
-        <ArticleCard
-          href="/journal/welke-board-past-bij-jouw-niveau"
-          image="Artikelfoto — materiaal"
-          tag="Materiaal · 4 min"
-          title="Welke board past bij jouw niveau"
-          text="Praktisch overzicht voor beginners en gevorderden."
-        />
-        <ComingSoonTile text="Meer artikelen volgen" height={420} />
-      </div>
+      {articles.length > 0 && (
+        <div className={styles.grid}>
+          {articles.map((article) => (
+            <ArticleCard
+              key={article.id}
+              href={`/journal/${article.slug}`}
+              image={article.heroImage}
+              tag={article.tag}
+              title={article.title}
+              text={article.excerpt}
+            />
+          ))}
+        </div>
+      )}
 
       <TrustStripSimple />
       <Footer />

@@ -1,14 +1,16 @@
-import { Placeholder } from "./Placeholder";
+import { SiteImage } from "./SiteImage";
 import { Nav } from "./Nav";
 import { RichText } from "./RichText";
 import styles from "./HeroBanner.module.css";
 
-/** Full-bleed photo hero used at the top of inner pages: transparent nav
- * over the image, eyebrow/title/subtitle, optional meta row, red band below. */
+/** Full-bleed foto-hero bovenaan binnenpagina's: transparante nav over de
+ * foto, eyebrow/titel/subtitel, optionele meta-regel, rode band eronder.
+ * Zonder geüploade foto blijft alleen de donkere achtergrond over. */
 export function HeroBanner({
   active,
   height = 620,
-  imageLabel,
+  image,
+  imageAlt,
   eyebrow,
   title,
   subtitle,
@@ -16,17 +18,19 @@ export function HeroBanner({
 }: {
   active?: string;
   height?: number;
-  imageLabel: string;
+  image: string;
+  imageAlt: string;
   eyebrow: string;
   title: string;
   subtitle?: string;
   meta?: string[];
 }) {
+  const metaItems = meta?.filter(Boolean) ?? [];
   return (
     <>
       <div className={styles.hero} style={{ ["--heroHeight" as string]: `${height}px` }}>
         <div className={styles.imageLayer}>
-          <Placeholder label={imageLabel} />
+          <SiteImage src={image} alt={imageAlt} loading="eager" />
         </div>
         <div className={styles.gradient} />
         <Nav variant="transparent" active={active} />
@@ -34,9 +38,9 @@ export function HeroBanner({
           <span className={styles.eyebrow}>{eyebrow}</span>
           <h1 className={styles.heading}>{title}</h1>
           {subtitle && <RichText html={subtitle} className={styles.subheading} />}
-          {meta && (
+          {metaItems.length > 0 && (
             <div className={styles.metaRow}>
-              {meta.map((item) => (
+              {metaItems.map((item) => (
                 <span key={item}>{item}</span>
               ))}
             </div>

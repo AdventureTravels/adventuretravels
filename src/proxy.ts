@@ -67,13 +67,17 @@ export function proxy(request: NextRequest) {
     }
   }
 
+  // Publieke pad (zonder /portal-rewrite) voor hreflang/canonical in de layout.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", pathname);
+
   if (internalPath !== pathname) {
     const url = request.nextUrl.clone();
     url.pathname = internalPath;
-    return NextResponse.rewrite(url);
+    return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
   }
 
-  return NextResponse.next();
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {

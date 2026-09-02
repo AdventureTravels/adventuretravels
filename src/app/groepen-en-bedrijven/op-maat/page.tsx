@@ -71,7 +71,8 @@ export default function OpMaatPage() {
       <HeroBanner
         active="groepen"
         height={560}
-        imageLabel="Herobeeld — avond aan het water"
+        image=""
+        imageAlt=""
         eyebrow="Groepen & bedrijven · Op maat"
         title="Een reis die precies om jullie heen is gebouwd."
         subtitle="Een reis volledig naar eigen wens samengesteld — sport, verblijf, duur en tempo bepalen jullie."

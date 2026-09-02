@@ -2,7 +2,7 @@
   position: relative;
   min-width: 0;
   height: var(--heroHeight, 620px);
-  background: var(--image-placeholder-bg);
+  background: var(--departure-black);
 }
 
 .imageLayer {

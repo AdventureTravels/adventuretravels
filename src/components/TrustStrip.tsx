@@ -1,17 +1,20 @@
+import { CheckCircleIcon } from "./icons";
 import { getSiteSettings } from "@/lib/content/settings";
-import type { TrustStat } from "@/lib/content/settings";
 import styles from "./TrustStrip.module.css";
 
+/** Feitelijke USP's uit SiteSettings, zonder getallen. Rendert niets als er
+ * geen USP's zijn ingevuld. */
 export async function TrustStrip() {
   const settings = await getSiteSettings();
-  const stats = settings.trustStats as unknown as TrustStat[];
+  const usps = settings.usps.filter(Boolean);
+  if (usps.length === 0) return null;
 
   return (
     <div className={styles.strip}>
-      {stats.map((stat) => (
-        <div key={stat.label} className={styles.item}>
-          <span className={styles.value}>{stat.value}</span>
-          <span className={styles.label}>{stat.label}</span>
+      {usps.map((usp) => (
+        <div key={usp} className={styles.item}>
+          <CheckCircleIcon size={20} color="#C7513C" strokeWidth={2.4} />
+          <span className={styles.label}>{usp}</span>
         </div>
       ))}
     </div>

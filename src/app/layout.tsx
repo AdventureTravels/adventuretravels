@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { headers } from "next/headers";
 import { Archivo, Michroma } from "next/font/google";
 import "./globals.css";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adventuretravels.nl";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -16,15 +19,21 @@ const michroma = Michroma({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "AdventureTravels — actieve sportreizen, dag en avond",
-  description:
-    "Kleine groepen, eigen gidsen, alles inbegrepen. Sport de hele dag, eet als een local zodra het licht kantelt.",
+  description: "Kleine groepen, eigen gidsen, verblijf zelf getest. Sport de hele dag, eet als een local zodra het licht kantelt.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Gezet door src/proxy.ts, zodat de hreflang-tags per pagina naar de juiste URL wijzen.
+  const pathname = (await headers()).get("x-pathname") ?? "/";
+  const pageUrl = new URL(pathname, SITE_URL).toString();
+
   return (
     <html lang="nl" className={`${archivo.variable} ${michroma.variable}`}>
       <head>
+        <link rel="alternate" hrefLang="nl" href={pageUrl} />
+        <link rel="alternate" hrefLang="x-default" href={pageUrl} />
         <Script id="microsoft-clarity" strategy="afterInteractive">
           {`(function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};

@@ -1,26 +1,26 @@
 import { getSiteSettings } from "@/lib/content/settings";
 import { updateSiteSettingsAction } from "./actions";
 import { RichTextEditor } from "../../RichTextEditor";
+import { ImageUploadField } from "../../ImageUploadField";
 import styles from "../../admin.module.css";
 
 export default async function AdminSettingsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string; saved?: string }>;
+  searchParams: Promise<{ saved?: string }>;
 }) {
   const settings = await getSiteSettings();
-  const { error, saved } = await searchParams;
+  const { saved } = await searchParams;
 
   return (
     <div>
       <div className={styles.pageHead}>
         <div>
           <h1 className={styles.pageTitle}>Site-instellingen</h1>
-          <p className={styles.pageSubtitle}>Copy die op meerdere plekken op de site wordt gebruikt.</p>
+          <p className={styles.pageSubtitle}>Copy en beelden die op meerdere plekken op de site worden gebruikt.</p>
         </div>
       </div>
 
-      {error === "json" && <div className={styles.error}>Trustcijfers zijn geen geldige JSON.</div>}
       {saved && <div className={styles.notice}>Opgeslagen.</div>}
 
       <div className={styles.card} style={{ marginTop: 16 }}>
@@ -39,26 +39,33 @@ export default async function AdminSettingsPage({
               <input className={styles.input} id="email" name="email" defaultValue={settings.email} required />
             </div>
           </div>
+
+          <h2 className={styles.label} style={{ marginTop: 8 }}>Homepage-hero</h2>
           <div className={styles.field}>
             <label className={styles.label} htmlFor="heroEyebrow">Hero eyebrow</label>
-            <input className={styles.input} id="heroEyebrow" name="heroEyebrow" defaultValue={settings.heroEyebrow} required />
+            <input className={styles.input} id="heroEyebrow" name="heroEyebrow" defaultValue={settings.heroEyebrow} />
           </div>
           <div className={styles.field}>
             <label className={styles.label} htmlFor="heroHeading">Hero-titel (\n voor regeleinde)</label>
             <textarea className={styles.textarea} id="heroHeading" name="heroHeading" rows={2} defaultValue={settings.heroHeading} required />
           </div>
           <RichTextEditor name="heroSubheading" label="Hero-subtitel" defaultValue={settings.heroSubheading} />
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="trustStats">Trustcijfers (JSON: [{`{ value, label }`}])</label>
-            <textarea
-              className={styles.textarea}
-              id="trustStats"
-              name="trustStats"
-              rows={6}
-              defaultValue={JSON.stringify(settings.trustStats, null, 2)}
-              required
-            />
-          </div>
+          <ImageUploadField name="heroImage" label="Hero-foto" defaultValue={settings.heroImage} />
+
+          <h2 className={styles.label} style={{ marginTop: 8 }}>USP&apos;s (drie feiten, zonder getallen)</h2>
+          <p className={styles.hint}>Worden getoond onder de hero en boven de footer. Leeg = de balk wordt niet getoond.</p>
+          {[0, 1, 2].map((i) => (
+            <div key={i} className={styles.field}>
+              <label className={styles.label} htmlFor={`usp${i}`}>USP {i + 1}</label>
+              <input className={styles.input} id={`usp${i}`} name={`usp${i}`} defaultValue={settings.usps[i] ?? ""} />
+            </div>
+          ))}
+
+          <h2 className={styles.label} style={{ marginTop: 8 }}>Dag &amp; avond (homepage)</h2>
+          <ImageUploadField name="dayImage" label="Foto dag" defaultValue={settings.dayImage} />
+          <ImageUploadField name="eveningImage" label="Foto avond" defaultValue={settings.eveningImage} />
+
+          <h2 className={styles.label} style={{ marginTop: 8 }}>Programma-pdf</h2>
           <div className={styles.field}>
             <label className={styles.label} htmlFor="programCtaEyebrow">Programma-cta eyebrow</label>
             <input className={styles.input} id="programCtaEyebrow" name="programCtaEyebrow" defaultValue={settings.programCtaEyebrow} required />
@@ -68,10 +75,7 @@ export default async function AdminSettingsPage({
             <input className={styles.input} id="programCtaTitle" name="programCtaTitle" defaultValue={settings.programCtaTitle} required />
           </div>
           <RichTextEditor name="programCtaBody" label="Programma-cta tekst" defaultValue={settings.programCtaBody} />
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="newsletterTitle">Nieuwsbrief-titel</label>
-            <input className={styles.input} id="newsletterTitle" name="newsletterTitle" defaultValue={settings.newsletterTitle} required />
-          </div>
+
           <div className={styles.field}>
             <label className={styles.label} htmlFor="footerTagline">Footer-tagline</label>
             <textarea className={styles.textarea} id="footerTagline" name="footerTagline" rows={2} defaultValue={settings.footerTagline} required />

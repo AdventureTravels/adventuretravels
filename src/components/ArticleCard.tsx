@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Placeholder } from "./Placeholder";
+import { SiteImage, isImageUrl } from "./SiteImage";
 import { ArrowIcon } from "./icons";
 import styles from "./ArticleCard.module.css";
 
@@ -18,9 +18,11 @@ export function ArticleCard({
 }) {
   return (
     <Link href={href} className={styles.card}>
-      <div className={styles.image}>
-        <Placeholder label={image} />
-      </div>
+      {isImageUrl(image) && (
+        <div className={styles.image}>
+          <SiteImage src={image} alt={title} />
+        </div>
+      )}
       <div className={styles.body}>
         <span className={styles.tag}>{tag}</span>
         <div className={styles.title}>{title}</div>
