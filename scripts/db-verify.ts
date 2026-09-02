@@ -20,7 +20,7 @@ type Snapshot = {
   schema: "v4" | "v5";
   counts: Record<string, number>;
   bookingsByStatus: Record<string, number>;
-  bookings: { number: string; status: string; trip: string; participants: number; invoices: number }[];
+  bookings: { id: string; number: string; status: string; trip: string; participants: number; invoices: number }[];
   trips: { slug: string; status: string; partner: string | null }[];
 };
 
@@ -37,7 +37,6 @@ async function count(sql: string): Promise<number> {
 async function snapshot(): Promise<Snapshot> {
   const v5 = await tableExists("Booking");
   const bookingTable = v5 ? "Booking" : "BookingRequest";
-  const nameCol = v5 ? "contactName" : "name";
 
   const counts: Record<string, number> = {
     reizen: await count(`SELECT count(*) AS n FROM "Trip"`),
@@ -61,12 +60,11 @@ async function snapshot(): Promise<Snapshot> {
   const bookingsByStatus = Object.fromEntries(statusRows.map((r) => [r.status, Number(r.n)]));
 
   const bookings = await prisma.$queryRawUnsafe<Snapshot["bookings"][number][]>(`
-    SELECT COALESCE(b."bookingNumber", b."id") AS "number", b."status", t."title" AS trip,
+    SELECT b."id", COALESCE(b."bookingNumber", b."id") AS "number", b."status", t."title" AS trip,
            (SELECT count(*) FROM "Participant" p WHERE p."bookingId" = b."id")::int AS participants,
            (SELECT count(*) FROM "Invoice" i WHERE i."bookingId" = b."id")::int AS invoices
     FROM "${bookingTable}" b JOIN "Trip" t ON t."id" = b."tripId"
     ORDER BY b."createdAt"`);
-  void nameCol;
 
   const trips = v5
     ? await prisma.$queryRawUnsafe<Snapshot["trips"]>(
@@ -110,7 +108,10 @@ function printDiff(before: Snapshot, after: Snapshot) {
   if (before.counts.facturen !== after.counts.facturen) problems.push("Aantal facturen verschilt.");
   if (before.counts.reizen !== after.counts.reizen) problems.push("Aantal reizen verschilt.");
   if (after.counts.deelnemers_zonder_boeking > 0 || after.counts.facturen_zonder_boeking > 0) problems.push("Er zijn wezen (deelnemers/facturen zonder boeking).");
-  const missing = before.bookings.filter((b) => !after.bookings.some((a) => a.number === b.number || a.number.endsWith(b.number)));
+  // Match op id; oude snapshots zonder id vallen terug op nummer (of id-als-nummer).
+  const missing = before.bookings.filter(
+    (b) => !after.bookings.some((a) => a.id === b.id || a.id === b.number || a.number === b.number)
+  );
   if (missing.length) problems.push(`Boekingen niet teruggevonden: ${missing.map((b) => b.number).join(", ")}`);
   const notCancelled = after.bookings.filter((a) => a.status !== "cancelled");
   if (after.schema === "v5" && notCancelled.length) problems.push(`Gemigreerde boekingen niet op "cancelled": ${notCancelled.map((b) => b.number).join(", ")}`);
