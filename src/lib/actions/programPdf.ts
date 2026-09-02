@@ -4,12 +4,15 @@ import { createLead } from "@/lib/content/leads";
 import { getSiteSettings } from "@/lib/content/settings";
 import { fetchPdfAttachment, sendProgramPdf } from "@/lib/email";
 import { findOrCreateGroup, isMailerLiteConfigured, subscribeToGroup } from "@/lib/mailerlite";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export type ProgramPdfState = { ok: boolean; error?: string } | null;
 
 const NEWSLETTER_GROUP = "Nieuwsbrief";
 
 export async function requestProgramPdfAction(_prev: ProgramPdfState, formData: FormData): Promise<ProgramPdfState> {
+  const botError = await verifyTurnstile(formData);
+  if (botError) return { ok: false, error: botError };
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const newsletterOptIn = formData.get("newsletterOptIn") === "on";

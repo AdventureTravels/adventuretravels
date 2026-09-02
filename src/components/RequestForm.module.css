@@ -181,3 +181,15 @@
     grid-template-columns: 1fr;
   }
 }
+
+.error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--compass-red-text);
+}
+
+.success {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+}

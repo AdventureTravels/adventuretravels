@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 
-export type LeadType = "pdf_request" | "guide_callback" | "group_inquiry";
+export type LeadType = "pdf_request" | "guide_callback" | "group_inquiry" | "contact";
 
 export type LeadInput = {
   type: LeadType;
@@ -10,6 +10,11 @@ export type LeadInput = {
   tripId?: string | null;
   preferredDay?: string | null;
   preferredDaypart?: string | null;
+  organization?: string | null;
+  groupSize?: string | null;
+  sport?: string | null;
+  period?: string | null;
+  subject?: string | null;
   message?: string | null;
   newsletterOptIn?: boolean;
   sourceUrl?: string | null;

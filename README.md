@@ -94,6 +94,12 @@ npm run db:verify -- after
 - Programma-pdf (`ProgramCta`): naam + e-mail + optioneel nieuwsbriefvinkje → `Lead(type=pdf_request)` → mail met de pdf uit `SiteSettings.programPdfUrl`. Geen pdf = blok niet zichtbaar.
 - Lokaal testen: Mollie-testsleutel in `.env`; webhooks bereiken localhost niet, de bevestigingspagina vangt dat op.
 
+## Formulieren (v5)
+
+- Alle publieke formulieren (contact, spreek-een-gids, groepen & bedrijven, programma-pdf, portaal-inloglink, checkout stap 3) hebben Cloudflare Turnstile (`src/lib/turnstile.ts`, `src/components/Turnstile.tsx`) en een privacyzin met link (`FormPrivacy`). Veldnamen zijn overal `name`, `email`, `phone`.
+- Sleutels: `TURNSTILE_SITE_KEY` en `TURNSTILE_SECRET`. Zonder sleutels gebruikt development de officiële Cloudflare-testsleutels (altijd geslaagd); productie laat het formulier door met een foutmelding in de log. Voeg in het Cloudflare-dashboard `adventuretravels.nl`, `mijn.adventuretravels.nl` en `localhost` toe als hostnames.
+- Aanvragen komen als `Lead` in de database (`pdf_request`, `guide_callback`, `group_inquiry`, `contact`) en als mail bij `SiteSettings.email`, met de reisnaam in het onderwerp waar bekend.
+
 ## Beelden
 
 Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.

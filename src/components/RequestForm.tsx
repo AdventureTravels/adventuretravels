@@ -1,106 +1,101 @@
-import { ArrowIcon, CheckCircleIcon, SunMark } from "./icons";
-import { getSiteSettings } from "@/lib/content/settings";
+"use client";
+
+import { useActionState } from "react";
+import { submitGroupInquiryAction, type LeadFormState } from "@/lib/actions/leads";
+import { Turnstile } from "./Turnstile";
+import { FormPrivacy } from "./FormPrivacy";
+import { SourceUrlField } from "./SourceUrlField";
+import { ArrowIcon } from "./icons";
 import styles from "./RequestForm.module.css";
 
-export type RequestField =
-  | { name: string; label: string; type: "text" | "email" | "tel"; placeholder: string }
-  | { name: string; label: string; type: "select"; options: string[]; defaultValue: string }
-  | { name: string; label: string; type: "textarea"; placeholder: string };
-
-export function RequestForm({
-  title,
-  subtitle,
-  fields,
-  subject,
-}: {
+export type GroupInquiryConfig = {
+  /** Onderwerp van de aanvraag, bv. "Aanvraag groepsreis"; ook het mailonderwerp. */
+  subject: string;
   title: string;
   subtitle: string;
-  fields: RequestField[];
-  subject: string;
-}) {
+  groupSizes: string[];
+  sports: string[];
+  periods: string[];
+  messagePlaceholder: string;
+};
+
+/** Aanvraagformulier Groepen & bedrijven → Lead(type=group_inquiry). */
+export function RequestForm({ config, siteKey }: { config: GroupInquiryConfig; siteKey: string | null }) {
+  const [state, formAction, pending] = useActionState<LeadFormState, FormData>(submitGroupInquiryAction, null);
+
+  if (state?.ok) {
+    return (
+      <div className={styles.card}>
+        <h2 className={styles.title}>Aanvraag ontvangen.</h2>
+        <p className={styles.success}>We reageren binnen 1 werkdag met een eerste voorstel of een paar vragen.</p>
+      </div>
+    );
+  }
+
   return (
-    <form
-      className={styles.card}
-      action={`mailto:hallo@adventuretravels.nl?subject=${encodeURIComponent(subject)}`}
-      method="post"
-      encType="text/plain"
-    >
+    <form action={formAction} className={styles.card}>
       <div>
-        <h2 className={styles.title}>{title}</h2>
-        <p className={styles.subtitle}>{subtitle}</p>
+        <h2 className={styles.title}>{config.title}</h2>
+        <p className={styles.subtitle}>{config.subtitle}</p>
       </div>
+      <input type="hidden" name="subject" value={config.subject} />
+      <SourceUrlField />
       <div className={styles.grid}>
-        {fields.map((field) => (
-          <div
-            key={field.name}
-            className={field.type === "textarea" ? `${styles.field} ${styles.fieldFull}` : styles.field}
-          >
-            <label className={styles.label} htmlFor={field.name}>
-              {field.label}
-            </label>
-            {field.type === "select" ? (
-              <select id={field.name} name={field.name} defaultValue={field.defaultValue} className={styles.select}>
-                {field.options.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-            ) : field.type === "textarea" ? (
-              <textarea
-                id={field.name}
-                name={field.name}
-                placeholder={field.placeholder}
-                className={styles.textarea}
-              />
-            ) : (
-              <input
-                id={field.name}
-                name={field.name}
-                type={field.type}
-                placeholder={field.placeholder}
-                className={styles.input}
-              />
-            )}
-          </div>
-        ))}
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="name">Naam</label>
+          <input id="name" name="name" type="text" autoComplete="name" placeholder="Voor- en achternaam" className={styles.input} required />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="organization">Organisatie</label>
+          <input id="organization" name="organization" type="text" autoComplete="organization" placeholder="Bedrijf, vereniging of vriendengroep" className={styles.input} />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="email">E-mail</label>
+          <input id="email" name="email" type="email" autoComplete="email" placeholder="naam@voorbeeld.nl" className={styles.input} required />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="phone">Telefoon</label>
+          <input id="phone" name="phone" type="tel" autoComplete="tel" placeholder="+31 6 …" className={styles.input} required />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="groupSize">Aantal personen</label>
+          <select id="groupSize" name="groupSize" className={styles.select} defaultValue={config.groupSizes[0]}>
+            {config.groupSizes.map((o) => (
+              <option key={o} value={o}>{o}</option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="sport">Sport</label>
+          <select id="sport" name="sport" className={styles.select} defaultValue={config.sports[0]}>
+            {config.sports.map((o) => (
+              <option key={o} value={o}>{o}</option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="period">Periode</label>
+          <select id="period" name="period" className={styles.select} defaultValue={config.periods[0]}>
+            {config.periods.map((o) => (
+              <option key={o} value={o}>{o}</option>
+            ))}
+          </select>
+        </div>
+        <div className={`${styles.field} ${styles.fieldFull}`}>
+          <label className={styles.label} htmlFor="message">Wensen</label>
+          <textarea id="message" name="message" placeholder={config.messagePlaceholder} className={styles.textarea} />
+        </div>
       </div>
+      <Turnstile siteKey={siteKey} />
+      <FormPrivacy purpose="je aanvraag te beantwoorden en een voorstel te maken" />
+      {state?.error && <p className={styles.error}>{state.error}</p>}
       <div className={styles.footerRow}>
-        <button type="submit" className={styles.submit}>
-          Vraag een offerte aan
+        <button type="submit" className={styles.submit} disabled={pending}>
+          {pending ? "Bezig…" : "Vraag een voorstel aan"}
           <ArrowIcon size={15} />
         </button>
         <span className={styles.footerNote}>We reageren binnen 1 werkdag.</span>
       </div>
     </form>
-  );
-}
-
-export async function RequestSidebar() {
-  const settings = await getSiteSettings();
-  return (
-    <div className={styles.sidebar}>
-      <div className={styles.callCard}>
-        <SunMark size={54} />
-        <div className={styles.callTitle}>Liever eerst even bellen?</div>
-        <p className={styles.callText}>
-          <a href={`tel:${settings.phone.replace(/\s/g, "")}`}>Spreek een gids · {settings.phone}</a>
-        </p>
-      </div>
-      <div className={styles.afterCard}>
-        <span className={styles.afterLabel}>Na je aanvraag</span>
-        <div className={styles.afterList}>
-          {[
-            "Voorstel met programma en prijs",
-            "Dezelfde boekings- en betaalflow als een reguliere reis",
-          ].map((item) => (
-            <div key={item} className={styles.afterItem}>
-              <CheckCircleIcon size={18} color="#C7513C" strokeWidth={2.4} />
-              <span>{item}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }

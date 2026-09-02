@@ -5,7 +5,9 @@ import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { TwoColInfo } from "@/components/TwoColInfo";
 import { StepsGrid } from "@/components/StepsGrid";
-import { RequestForm, RequestSidebar, type RequestField } from "@/components/RequestForm";
+import { RequestForm, type GroupInquiryConfig } from "@/components/RequestForm";
+import { RequestSidebar } from "@/components/RequestSidebar";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import styles from "@/styles/requestPage.module.css";
 
 export const metadata: Metadata = {
@@ -23,45 +25,15 @@ const STEPS = [
   },
 ];
 
-const FIELDS: RequestField[] = [
-  { name: "naam", label: "Naam", type: "text", placeholder: "Voor- en achternaam" },
-  { name: "email", label: "E-mail", type: "email", placeholder: "naam@voorbeeld.nl" },
-  { name: "telefoon", label: "Telefoon", type: "tel", placeholder: "+31 6 …" },
-  {
-    name: "groepsgrootte",
-    label: "Groepsgrootte",
-    type: "select",
-    defaultValue: "6 — 12 personen",
-    options: ["6 — 12 personen", "13 — 20 personen", "20+ personen"],
-  },
-  {
-    name: "sport",
-    label: "Gewenste sport",
-    type: "select",
-    defaultValue: "Wakeboarden",
-    options: ["Wakeboarden"],
-  },
-  {
-    name: "periode",
-    label: "Periode",
-    type: "select",
-    defaultValue: "Mei — september",
-    options: ["April", "Mei — september", "Oktober"],
-  },
-  {
-    name: "budget",
-    label: "Budgetindicatie",
-    type: "select",
-    defaultValue: "€ 750 — € 1.000 p.p.",
-    options: ["Tot € 750 p.p.", "€ 750 — € 1.000 p.p.", "€ 1.000+ p.p."],
-  },
-  {
-    name: "toelichting",
-    label: "Toelichting",
-    type: "textarea",
-    placeholder: "Wat is de gelegenheid, en wat is voor jullie belangrijk?",
-  },
-];
+const FORM: GroupInquiryConfig = {
+  subject: "Aanvraag groepsreis",
+  title: "Aanvraag groepsreis",
+  subtitle: "Hoe concreter je aanvraag, hoe scherper ons voorstel.",
+  groupSizes: ["6 – 12 personen", "13 – 20 personen", "Meer dan 20 personen"],
+  sports: ["Wakeboarden"],
+  periods: ["Maart – mei", "Juni – augustus", "September – november", "Nog niet bekend"],
+  messagePlaceholder: "Wat is de gelegenheid, en wat is voor jullie belangrijk?",
+};
 
 export default function GroepsreizenPage() {
   return (
@@ -97,12 +69,7 @@ export default function GroepsreizenPage() {
       </div>
 
       <div className={styles.requestSection}>
-        <RequestForm
-          title="Aanvraag groepsreis"
-          subtitle="Hoe concreter je aanvraag, hoe scherper ons voorstel."
-          fields={FIELDS}
-          subject="Aanvraag groepsreis"
-        />
+        <RequestForm config={FORM} siteKey={turnstileSiteKey()} />
         <RequestSidebar />
       </div>
 

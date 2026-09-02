@@ -2,12 +2,15 @@ import { redirect } from "next/navigation";
 import { getCustomerEmail } from "@/lib/customerAuth";
 import { getSessionEmail } from "@/lib/auth";
 import { requestMagicLinkAction } from "./actions";
+import { Turnstile } from "@/components/Turnstile";
+import { FormPrivacy } from "@/components/FormPrivacy";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import styles from "./portal.module.css";
 
 export default async function PortalHomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ verzonden?: string }>;
+  searchParams: Promise<{ verzonden?: string; error?: string }>;
 }) {
   const customerEmail = await getCustomerEmail();
   if (customerEmail) redirect("/boekingen");
@@ -15,7 +18,7 @@ export default async function PortalHomePage({
   const staffEmail = await getSessionEmail();
   if (staffEmail) redirect("/staff");
 
-  const { verzonden } = await searchParams;
+  const { verzonden, error } = await searchParams;
 
   return (
     <div className={styles.page}>
@@ -36,7 +39,10 @@ export default async function PortalHomePage({
           </div>
         ) : (
           <form action={requestMagicLinkAction} className={styles.form}>
-            <input className={styles.input} type="email" name="email" placeholder="jouw@email.nl" required />
+            {error && <div className={styles.notice}>{error}</div>}
+            <input className={styles.input} type="email" name="email" placeholder="jouw@email.nl" autoComplete="email" required />
+            <Turnstile siteKey={turnstileSiteKey()} />
+            <FormPrivacy purpose="je een inloglink voor je boeking te sturen" />
             <button type="submit" className={styles.button}>
               Stuur inloglink
             </button>

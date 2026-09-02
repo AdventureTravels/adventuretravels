@@ -2,6 +2,7 @@ import { getSiteSettings } from "@/lib/content/settings";
 import { isImageUrl } from "./SiteImage";
 import { RichText } from "./RichText";
 import { ProgramCtaForm } from "./ProgramCtaForm";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import styles from "./ProgramCta.module.css";
 
 const STEPS = [
@@ -21,7 +22,7 @@ export async function ProgramCta() {
         <span className={styles.eyebrow}>{settings.programCtaEyebrow}</span>
         <h2 className={styles.title}>{settings.programCtaTitle}</h2>
         <RichText html={settings.programCtaBody} className={styles.body} />
-        <ProgramCtaForm />
+        <ProgramCtaForm siteKey={turnstileSiteKey()} />
       </div>
       <div className={styles.right}>
         {STEPS.map((step) => (

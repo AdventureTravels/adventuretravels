@@ -4,9 +4,11 @@ import { useActionState } from "react";
 import Link from "next/link";
 import { requestProgramPdfAction, type ProgramPdfState } from "@/lib/actions/programPdf";
 import { ArrowIcon } from "./icons";
+import { Turnstile } from "./Turnstile";
+import { SourceUrlField } from "./SourceUrlField";
 import styles from "./ProgramCta.module.css";
 
-export function ProgramCtaForm() {
+export function ProgramCtaForm({ siteKey }: { siteKey: string | null }) {
   const [state, formAction, pending] = useActionState<ProgramPdfState, FormData>(requestProgramPdfAction, null);
 
   if (state?.ok) {
@@ -15,7 +17,7 @@ export function ProgramCtaForm() {
 
   return (
     <form action={formAction} className={styles.form}>
-      <input type="hidden" name="sourceUrl" value={typeof window !== "undefined" ? window.location.href : ""} />
+      <SourceUrlField />
       <div className={styles.formRow}>
         <input type="text" name="name" required placeholder="Je naam" aria-label="Naam" autoComplete="name" className={styles.emailField} />
         <input type="email" name="email" required placeholder="jouw@email.nl" aria-label="E-mailadres" autoComplete="email" className={styles.emailField} />
@@ -28,6 +30,7 @@ export function ProgramCtaForm() {
         <input type="checkbox" name="newsletterOptIn" />
         <span>Houd me op de hoogte van nieuwe reizen (nieuwsbrief, afmelden in één klik)</span>
       </label>
+      <Turnstile siteKey={siteKey} />
       {state?.error && <p className={styles.error}>{state.error}</p>}
       <p className={styles.fineprint}>
         We gebruiken je naam en e-mailadres alleen om de pdf te sturen. Zie ons <Link href="/privacy">privacybeleid</Link>.

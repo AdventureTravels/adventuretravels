@@ -252,8 +252,13 @@ model Lead {
   phone            String?
   trip             Trip?    @relation(fields: [tripId], references: [id])
   tripId           String?
-  preferredDay     String?
+  preferredDay     String? // gids-terugbelverzoek
   preferredDaypart String?
+  organization     String? // groepsaanvraag
+  groupSize        String?
+  sport            String?
+  period           String?
+  subject          String? // contactformulier
   message          String?
   newsletterOptIn  Boolean  @default(false)
   sourceUrl        String?

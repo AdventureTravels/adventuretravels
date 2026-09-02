@@ -257,13 +257,13 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
             )}
           </div>
 
-          <a href={phoneHref} className={styles.helpCard}>
+          <Link href={`/spreek-een-gids?reis=${trip.slug}`} className={styles.helpCard}>
             <CompassIcon size={34} color="#C7513C" strokeWidth={2.2} />
             <div>
               <div className={styles.helpTitle}>Twijfel over je niveau?</div>
-              <div className={styles.helpText}>Spreek een gids · {settings.phone}</div>
+              <div className={styles.helpText}>Laat een gids je terugbellen, of bel {settings.phone}</div>
             </div>
-          </a>
+          </Link>
         </div>
       </div>
 

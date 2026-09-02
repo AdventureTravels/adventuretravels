@@ -5,7 +5,9 @@ import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { TwoColInfo } from "@/components/TwoColInfo";
 import { StepsGrid } from "@/components/StepsGrid";
-import { RequestForm, RequestSidebar, type RequestField } from "@/components/RequestForm";
+import { RequestForm, type GroupInquiryConfig } from "@/components/RequestForm";
+import { RequestSidebar } from "@/components/RequestSidebar";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import styles from "@/styles/requestPage.module.css";
 
 export const metadata: Metadata = {
@@ -24,45 +26,15 @@ const STEPS = [
   },
 ];
 
-const FIELDS: RequestField[] = [
-  { name: "naam", label: "Naam", type: "text", placeholder: "Voor- en achternaam" },
-  { name: "email", label: "E-mail", type: "email", placeholder: "naam@voorbeeld.nl" },
-  { name: "telefoon", label: "Telefoon", type: "tel", placeholder: "+31 6 …" },
-  {
-    name: "personen",
-    label: "Aantal personen",
-    type: "select",
-    defaultValue: "2 — 4 personen",
-    options: ["2 — 4 personen", "5 — 8 personen", "8+ personen"],
-  },
-  {
-    name: "sport",
-    label: "Gewenste sport",
-    type: "select",
-    defaultValue: "Wakeboarden",
-    options: ["Wakeboarden"],
-  },
-  {
-    name: "periode",
-    label: "Periode",
-    type: "select",
-    defaultValue: "Mei — september",
-    options: ["April", "Mei — september", "Oktober"],
-  },
-  {
-    name: "budget",
-    label: "Budgetindicatie",
-    type: "select",
-    defaultValue: "€ 750 — € 1.000 p.p.",
-    options: ["Tot € 750 p.p.", "€ 750 — € 1.000 p.p.", "€ 1.000+ p.p."],
-  },
-  {
-    name: "toelichting",
-    label: "Toelichting",
-    type: "textarea",
-    placeholder: "Wat is de gelegenheid, en wat is voor jullie belangrijk?",
-  },
-];
+const FORM: GroupInquiryConfig = {
+  subject: "Aanvraag reis op maat",
+  title: "Aanvraag reis op maat",
+  subtitle: "Vertel wat je voor ogen hebt; wij vertalen het naar een programma.",
+  groupSizes: ["2 – 5 personen", "6 – 12 personen", "Meer dan 12 personen"],
+  sports: ["Wakeboarden"],
+  periods: ["Maart – mei", "Juni – augustus", "September – november", "Nog niet bekend"],
+  messagePlaceholder: "Sport, verblijf, duur, tempo: wat moet er anders dan bij een standaardreis?",
+};
 
 export default function OpMaatPage() {
   return (
@@ -98,12 +70,7 @@ export default function OpMaatPage() {
       </div>
 
       <div className={styles.requestSection}>
-        <RequestForm
-          title="Aanvraag reis op maat"
-          subtitle="Vertel wat je in gedachten hebt — we werken het uit."
-          fields={FIELDS}
-          subject="Aanvraag reis op maat"
-        />
+        <RequestForm config={FORM} siteKey={turnstileSiteKey()} />
         <RequestSidebar />
       </div>
 

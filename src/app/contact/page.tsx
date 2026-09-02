@@ -7,6 +7,7 @@ import { PageIntro } from "@/components/PageIntro";
 import { PhoneIcon, MailIcon, ClockIcon } from "@/components/icons";
 import { getSiteSettings } from "@/lib/content/settings";
 import { ContactForm } from "./ContactForm";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -24,7 +25,7 @@ export default async function ContactPage() {
       <PageIntro eyebrow="Contact" title="Praat met iemand die zelf ook wakeboardt." />
 
       <div className={styles.layout}>
-        <ContactForm />
+        <ContactForm siteKey={turnstileSiteKey()} />
 
         <div className={styles.infoCol}>
           <div className={styles.infoRow}>

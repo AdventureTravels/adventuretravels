@@ -5,6 +5,8 @@ import { Topbar } from "@/components/Topbar";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { PaymentMethods } from "@/components/PaymentMethods";
+import { Turnstile } from "@/components/Turnstile";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import { getTripBySlug } from "@/lib/content/trips";
 import { getOpenDeparturesWithAvailability } from "@/lib/content/departures";
 import { getSiteSettings } from "@/lib/content/settings";
@@ -185,6 +187,7 @@ export default async function CheckoutPage({
                 <h2 className={styles.cardTitle}>Betaling</h2>
                 <p className={styles.hint}>Je betaalt de volledige reissom nu via Mollie. Kies de methode op de volgende pagina.</p>
                 <PaymentMethods />
+                <Turnstile siteKey={turnstileSiteKey()} />
                 <button type="submit" className={styles.primary}>
                   Boek en betaal {formatCents(summary.totalCents)}
                 </button>

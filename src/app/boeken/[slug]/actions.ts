@@ -12,6 +12,7 @@ import { parseCancellationPolicy } from "@/lib/cancellation";
 import { participantsFromForm } from "@/lib/participantsForm";
 import { PARTICIPANT_LEVELS } from "@/lib/levels";
 import { createMolliePayment, isMollieConfigured } from "@/lib/mollie";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 const text = (formData: FormData, key: string) => String(formData.get(key) ?? "").trim();
 
@@ -106,6 +107,8 @@ export async function payAction(slug: string, formData: FormData) {
   if (formData.get("acceptTerms") !== "on") fail(slug, 3, "Vink aan dat je akkoord gaat met de algemene voorwaarden.");
   if (formData.get("acceptCancellation") !== "on") fail(slug, 3, "Vink aan dat je de annuleringsvoorwaarden van deze reis hebt gelezen.");
   if (!isMollieConfigured()) fail(slug, 3, "Betalen is op dit moment niet mogelijk. Bel ons om te boeken.");
+  const botError = await verifyTurnstile(formData);
+  if (botError) fail(slug, 3, botError);
 
   const [trip, settings] = await Promise.all([getTripBySlug(slug), getSiteSettings()]);
   if (!trip) redirect(`/reizen/${slug}`);
