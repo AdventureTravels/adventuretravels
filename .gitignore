@@ -42,3 +42,6 @@ next-env.d.ts
 
 # example env file (names only, no values) is safe to commit
 !.env.example
+
+# db:verify-snapshots
+/.db-verify

@@ -71,7 +71,27 @@ export type BookingInput = {
   participants: ParticipantInput[];
 };
 
+/** Statussen waarvoor de klant de voorwaarden moet hebben geaccepteerd. */
+export const ACTIVE_STATUSES = ["pending_payment", "paid", "confirmed"] as const;
+
+/**
+ * Zelfde regel als de CHECK-constraint "Booking_terms_required_for_active_status":
+ * een actieve status vereist beide acceptatie-tijdstippen. Gooit een fout.
+ */
+export function assertTermsForStatus(
+  status: string,
+  terms: { termsAcceptedAt: Date | null; cancellationTermsAcceptedAt: Date | null }
+) {
+  if (!(ACTIVE_STATUSES as readonly string[]).includes(status)) return;
+  if (!terms.termsAcceptedAt || !terms.cancellationTermsAcceptedAt) {
+    throw new Error(
+      `Boeking kan niet op "${status}": algemene voorwaarden en annuleringsvoorwaarden zijn niet (beide) geaccepteerd.`
+    );
+  }
+}
+
 export async function createBooking(data: BookingInput) {
+  assertTermsForStatus("pending_payment", data);
   const bookingNumber = await generateBookingNumber();
   const { participants, ...rest } = data;
   return prisma.booking.create({
@@ -88,7 +108,12 @@ export async function createBooking(data: BookingInput) {
   });
 }
 
-export function updateBookingStatus(id: string, status: string) {
+export async function updateBookingStatus(id: string, status: string) {
+  const booking = await prisma.booking.findUniqueOrThrow({
+    where: { id },
+    select: { termsAcceptedAt: true, cancellationTermsAcceptedAt: true },
+  });
+  assertTermsForStatus(status, booking);
   return prisma.booking.update({ where: { id }, data: { status } });
 }
 

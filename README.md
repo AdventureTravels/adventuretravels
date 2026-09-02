@@ -52,6 +52,20 @@ npm run db:cleanup-v5
 
 Het script raakt alleen rijen die aantoonbaar uit de oude seed komen of een oude claim bevatten; handmatig ingevoerde content blijft staan.
 
+### Generale repetitie op een Neon-branch
+
+Maak in Neon een branch van productie en zet die `DATABASE_URL` in `.env`. Dan:
+
+```bash
+npm run db:verify -- before
+npx prisma migrate resolve --applied 0_init
+npx prisma migrate deploy
+npm run db:cleanup-v5
+npm run db:verify -- after
+```
+
+`db:verify` telt reizen, boekingen per status, deelnemers, facturen, reviews en partners (raw SQL, werkt op v4 én v5) en toont bij `after` het verschil met `before`, inclusief boekingen die niet zijn teruggevonden. Snapshots staan in `.db-verify/` (niet in git).
+
 ### Volgorde bij de v5-upgrade van een bestaande database
 
 1. `npx prisma migrate resolve --applied 0_init` (eenmalig, vóór de eerste deploy).
@@ -67,6 +81,8 @@ Het script raakt alleen rijen die aantoonbaar uit de oude seed komen of een oude
 - `Review` hangt altijd aan een `Booking` (token-flow), `Lead` vangt pdf-aanvragen, gids-terugbelverzoeken en groepsaanvragen.
 - Publicatiecheck: `isTripPublishable()` in `src/lib/publish.ts`; alle publieke queries in `src/lib/content/trips.ts` filteren erop.
 - Bedragen zijn `Decimal`; formattering via `formatPrice()` in `src/lib/format.ts`.
+- Een `Booking` kan alleen `pending_payment`, `paid` of `confirmed` zijn als `termsAcceptedAt` én `cancellationTermsAcceptedAt` gevuld zijn: afgedwongen in `src/lib/content/bookings.ts` en als CHECK-constraint `Booking_terms_required_for_active_status` (Prisma kent CHECK-constraints niet; `prisma migrate dev` kan die als drift melden, negeren).
+- Feature flag `CHECKOUT_ENABLED` (env): zolang die niet `true` is, komt geen enkele reis door de publicatiecheck.
 
 ## Beelden
 

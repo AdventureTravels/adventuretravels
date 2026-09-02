@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import {
   updateBookingStatus,
   updateBookingNotes,
@@ -15,7 +16,11 @@ import { participantsFromForm } from "@/lib/participantsForm";
 export async function updateStatusAction(id: string, formData: FormData) {
   const status = String(formData.get("status") ?? "");
   if (!isBookingStatus(status)) return;
-  await updateBookingStatus(id, status);
+  try {
+    await updateBookingStatus(id, status);
+  } catch (error) {
+    redirect(`/staff/${id}?error=${encodeURIComponent(error instanceof Error ? error.message : "Status niet gewijzigd.")}`);
+  }
   revalidatePath(`/staff/${id}`);
   revalidatePath("/staff");
 }

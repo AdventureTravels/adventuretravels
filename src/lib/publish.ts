@@ -1,6 +1,7 @@
 import type { Partner, Trip, TripDeparture } from "@prisma/client";
 import { isCancellationPolicyValid } from "./cancellation";
 import { isImageUrl } from "@/components/SiteImage";
+import { CHECKOUT_ENABLED } from "./flags";
 
 export type PublishableTripInput = Trip & { partner: Partner; departures: TripDeparture[] };
 
@@ -15,6 +16,7 @@ export function openDepartures(departures: TripDeparture[], now = new Date()): T
  */
 export function publishProblems(trip: PublishableTripInput): string[] {
   const problems: string[] = [];
+  if (!CHECKOUT_ENABLED) problems.push("Checkout is nog niet beschikbaar (CHECKOUT_ENABLED staat niet op true).");
   if (trip.status !== "published") problems.push(`Status is "${trip.status}", niet "published".`);
   if (!trip.partner.isActive) problems.push("Partner staat op inactief.");
   if (!isCancellationPolicyValid(trip.partner.cancellationPolicy)) problems.push("Partner heeft geen geldige annuleringsstaffel.");

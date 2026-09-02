@@ -125,6 +125,12 @@ CREATE TABLE "Lead" (
     CONSTRAINT "Lead_pkey" PRIMARY KEY ("id")
 );
 
+-- Een boeking is alleen actief (wacht op betaling, betaald, bevestigd) als beide
+-- voorwaarden-tijdstippen gevuld zijn. Gemigreerde v4-aanvragen zijn "cancelled".
+ALTER TABLE "Booking" ADD CONSTRAINT "Booking_terms_required_for_active_status"
+    CHECK ("status" NOT IN ('pending_payment', 'paid', 'confirmed')
+        OR ("termsAcceptedAt" IS NOT NULL AND "cancellationTermsAcceptedAt" IS NOT NULL));
+
 CREATE UNIQUE INDEX "Partner_slug_key" ON "Partner"("slug");
 CREATE UNIQUE INDEX "Booking_bookingNumber_key" ON "Booking"("bookingNumber");
 CREATE UNIQUE INDEX "Payment_molliePaymentId_key" ON "Payment"("molliePaymentId");

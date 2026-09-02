@@ -142,9 +142,10 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
             )}
 
             <a href={phoneHref} className={styles.bookPrimary}>
-              Bel om te boeken · {settings.phone}
+              Bel om te boeken
               <ArrowIcon size={15} />
             </a>
+            <div className={styles.bookFineprint}>{settings.phone}</div>
           </div>
           <a href={phoneHref} className={styles.helpCard}>
             <CompassIcon size={34} color="#C7513C" strokeWidth={2.2} />

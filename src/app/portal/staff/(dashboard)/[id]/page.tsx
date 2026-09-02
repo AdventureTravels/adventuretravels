@@ -15,10 +15,17 @@ import {
 } from "./actions";
 import styles from "@/app/admin/admin.module.css";
 
-export default async function StaffBookingDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function StaffBookingDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ error?: string }>;
+}) {
   const { id } = await params;
   const booking = await getBookingById(id);
   if (!booking) notFound();
+  const { error } = await searchParams;
 
   const breakdown = booking.priceBreakdown as unknown as PriceLine[];
   const address = booking.contactAddress as unknown as Partial<BookingAddress>;
@@ -35,6 +42,7 @@ export default async function StaffBookingDetailPage({ params }: { params: Promi
         </div>
         <StaffStatusSelect action={updateStatusAction.bind(null, booking.id)} status={booking.status} />
       </div>
+      {error && <div className={styles.error}>{error}</div>}
 
       <div className={styles.card}>
         <h2 className={styles.label} style={{ marginBottom: 12 }}>Reis en contact</h2>
