@@ -1,7 +1,6 @@
 import { Topbar } from "@/components/Topbar";
 import { Hero } from "@/components/Hero";
 import { TrustStrip } from "@/components/TrustStrip";
-import { FeaturedTrips } from "@/components/FeaturedTrips";
 import { DayNight } from "@/components/DayNight";
 import { Included } from "@/components/Included";
 import { TripTypes, type TripTypeTile } from "@/components/TripTypes";
@@ -40,7 +39,6 @@ export default async function Home() {
       <Topbar />
       <Hero trips={tripCards} />
       <TrustStrip />
-      <FeaturedTrips trips={tripCards} />
       <DayNight />
       <Included />
       <TripTypes types={tripTypeTiles} />
