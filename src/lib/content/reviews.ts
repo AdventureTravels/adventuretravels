@@ -22,6 +22,25 @@ export function getAllReviews() {
   });
 }
 
+export type ReviewInput = {
+  bookingId: string;
+  tripId: string;
+  rating: number;
+  text: string;
+  reviewerName: string;
+  reviewerPlace: string | null;
+  travelMonth: string;
+  token: string;
+};
+
+export function createReview(data: ReviewInput) {
+  return prisma.review.create({ data });
+}
+
+export function getReviewByBookingId(bookingId: string) {
+  return prisma.review.findUnique({ where: { bookingId } });
+}
+
 export function getReviewByToken(token: string) {
   return prisma.review.findUnique({ where: { token }, include: { trip: true, booking: true } });
 }

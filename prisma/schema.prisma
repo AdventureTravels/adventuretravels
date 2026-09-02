@@ -184,6 +184,7 @@ model Booking {
   cancellationTermsAcceptedAt DateTime?
   notes                       String? // interne notities, niet zichtbaar voor de klant
   reminderSentAt              DateTime? // betaalherinnering (cron) verstuurd
+  reviewRequestedAt           DateTime? // reviewmail (cron) verstuurd
   createdAt                   DateTime  @default(now())
 
   participants Participant[]

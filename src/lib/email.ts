@@ -152,6 +152,21 @@ export async function sendBookingAutoCancelled(booking: BookingWithRelations) {
   });
 }
 
+export async function sendReviewRequest(booking: BookingWithRelations, url: string) {
+  const settings = await getSiteSettings();
+  await sendEmail({
+    to: booking.contactEmail,
+    subject: `Hoe was ${booking.trip.title}?`,
+    replyTo: settings.email,
+    html: `
+      <p>Hoi ${esc(booking.contactName.split(" ")[0])},</p>
+      <p>Je bent een paar dagen terug van ${esc(booking.trip.title)}. Wil je in twee minuten vertellen hoe het was? Je review helpt de volgende reiziger kiezen, en ons om de reis beter te maken.</p>
+      <p><a href="${url}" style="display:inline-block;padding:12px 20px;background:#c7513c;color:#fff;text-decoration:none">Schrijf je review</a></p>
+      <p style="font-size:13px;color:#5e5e4e">Alleen jij kunt via deze link een review plaatsen; we tonen je voornaam met initiaal en, als je dat wilt, je woonplaats. Publiceren doen we pas na een check op de inhoud.</p>
+    `,
+  });
+}
+
 export async function sendProgramPdf(to: string, name: string, pdf: Attachment) {
   const settings = await getSiteSettings();
   await sendEmail({

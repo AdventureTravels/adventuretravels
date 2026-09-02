@@ -100,6 +100,11 @@ npm run db:verify -- after
 - Sleutels: `TURNSTILE_SITE_KEY` en `TURNSTILE_SECRET`. Zonder sleutels gebruikt development de officiële Cloudflare-testsleutels (altijd geslaagd); productie laat het formulier door met een foutmelding in de log. Voeg in het Cloudflare-dashboard `adventuretravels.nl`, `mijn.adventuretravels.nl` en `localhost` toe als hostnames.
 - Aanvragen komen als `Lead` in de database (`pdf_request`, `guide_callback`, `group_inquiry`, `contact`) en als mail bij `SiteSettings.email`, met de reisnaam in het onderwerp waar bekend.
 
+## Reviews (v5)
+
+- `/api/cron/review-requests` (dagelijks 09:00) mailt 3 dagen na thuiskomst (retourdatum, of aankomst + nachten) één keer per betaalde of bevestigde boeking een link `/review/[token]`. Het token is een gesigneerd boekings-id (`src/lib/reviewToken.ts`); `Booking.reviewRequestedAt` voorkomt dubbele mails.
+- De reviewpagina vraagt score, tekst, voornaam en woonplaats en toestemming; de review komt binnen als `pending`. Alleen `approved` reviews staan op de site (homepage sitebreed, reispagina per reis; gemiddelde pas vanaf 10). Goedkeuren in `/admin/reviews`; vrije invoer bestaat niet meer.
+
 ## Beelden
 
 Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.
