@@ -325,3 +325,116 @@
   font-size: 14px;
   line-height: 1.7;
 }
+
+.listsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.listsGrid .bookingSection {
+  min-width: 0;
+}
+
+.departure {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: var(--canvas-sand-light);
+}
+
+.departureHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.departureDates {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.departurePrice {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.departureMeta {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.guide {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  align-items: start;
+  padding: 32px;
+  background: var(--white);
+  border: 1px solid var(--line);
+}
+
+.guide:has(> .guideBody:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.guidePhoto {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--departure-black);
+}
+
+.guideBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.guideEyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--compass-red-text);
+}
+
+.guideName {
+  margin: 0;
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.guideMeta {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.guidePhone {
+  align-self: flex-start;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--departure-black);
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .listsGrid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .guide {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
 import { HeroBanner } from "@/components/HeroBanner";
@@ -7,15 +8,19 @@ import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { SiteImage, isImageUrl } from "@/components/SiteImage";
 import { RichText } from "@/components/RichText";
 import { ImageSlider } from "@/components/ImageSlider";
+import { Reviews } from "@/components/Reviews";
+import { PaymentMethods } from "@/components/PaymentMethods";
+import { VzrGarant } from "@/components/VzrGarant";
 import { ArrowIcon, CompassIcon } from "@/components/icons";
 import { getTripBySlug } from "@/lib/content/trips";
 import type { TripProgramStep, GalleryImage } from "@/lib/content/trips";
+import { getOpenDeparturesWithAvailability } from "@/lib/content/departures";
 import { getSiteSettings } from "@/lib/content/settings";
 import { stripHtml } from "@/lib/stripHtml";
-import { formatNights, formatSeason } from "@/lib/format";
+import { formatDate, formatNights, formatPrice, formatSeason } from "@/lib/format";
 import { levelLabel } from "@/lib/levels";
-import { tripFromPrice } from "@/lib/tripCard";
 import { renderCancellationPolicy } from "@/lib/cancellation";
+import { CHECKOUT_ENABLED } from "@/lib/flags";
 import styles from "./page.module.css";
 
 export async function generateMetadata({
@@ -29,6 +34,7 @@ export async function generateMetadata({
   return {
     title: `${trip.title} — AdventureTravels`,
     description: stripHtml(trip.heroSubtitle),
+    alternates: { canonical: `/reizen/${trip.slug}` },
   };
 }
 
@@ -41,8 +47,10 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
   const gallery = trip.galleryImages as unknown as GalleryImage[];
   const summary = program.map((step) => `${step.day} — ${step.text}`).join(". ");
   const phoneHref = `tel:${settings.phone.replace(/\s/g, "")}`;
-  const price = tripFromPrice(trip);
-  const policy = renderCancellationPolicy(trip.partner.cancellationPolicy);
+  const isGroup = trip.type === "group";
+  const departures = isGroup ? await getOpenDeparturesWithAvailability(trip.id, trip.departures) : [];
+  const policy = renderCancellationPolicy(trip.partner.cancellationPolicy, isGroup ? "vertrek" : "aankomst");
+  const guide = trip.guide;
 
   return (
     <div className={styles.page}>
@@ -55,7 +63,11 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
         eyebrow={`${trip.sport.name} · ${trip.destination.name}`}
         title={trip.title}
         subtitle={trip.heroSubtitle}
-        meta={[formatNights(trip.minNights, trip.maxNights), formatSeason(trip.seasonStartMonth, trip.seasonEndMonth), levelLabel(trip.level)]}
+        meta={
+          isGroup
+            ? [`${departures.length} ${departures.length === 1 ? "vertrek" : "vertrekken"}`, "Vlucht inbegrepen", levelLabel(trip.level)]
+            : [formatNights(trip.minNights, trip.maxNights), formatSeason(trip.seasonStartMonth, trip.seasonEndMonth), levelLabel(trip.level)]
+        }
       />
 
       <div className={styles.body}>
@@ -77,10 +89,10 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
             <div className={styles.block}>
               <h2 className={styles.blockTitle}>{trip.stayTitle}</h2>
               <RichText html={trip.stayBody} className={styles.blockText} />
-              <a href="/verblijf" className={styles.stayCta}>
+              <Link href="/verblijf" className={styles.stayCta}>
                 Verblijf-concept
                 <ArrowIcon size={14} />
-              </a>
+              </Link>
             </div>
             {isImageUrl(trip.stayImage) && (
               <div className={styles.stayImage}>
@@ -94,59 +106,157 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
               <ImageSlider images={gallery} />
             </div>
           )}
+
+          {guide && (
+            <div className={styles.guide}>
+              {isImageUrl(guide.photo) && (
+                <div className={styles.guidePhoto}>
+                  <SiteImage src={guide.photo} alt={guide.photoAlt || guide.name} />
+                </div>
+              )}
+              <div className={styles.guideBody}>
+                <span className={styles.guideEyebrow}>Je gids</span>
+                <h2 className={styles.guideName}>{guide.name}</h2>
+                <p className={styles.guideMeta}>Woont in {guide.livesIn}</p>
+                <p className={styles.blockText}>{guide.bio}</p>
+                {guide.phone && (
+                  <a href={`tel:${guide.phone.replace(/\s/g, "")}`} className={styles.guidePhone}>
+                    Bel {guide.name} · {guide.phone}
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
+
+          <Reviews tripId={trip.id} />
         </div>
 
         <div className={styles.side}>
           <div className={styles.bookingCard}>
-            {price && (
+            {!isGroup && trip.pricePpBase !== null && (
               <div>
                 <div className={styles.price}>
-                  {price.from && <span className={styles.priceUnit}>vanaf </span>}
-                  {price.amount} <span className={styles.priceUnit}>p.p.</span>
+                  {trip.pricePerExtraNight !== null && <span className={styles.priceUnit}>vanaf </span>}
+                  {formatPrice(trip.pricePpBase)} <span className={styles.priceUnit}>p.p.</span>
                 </div>
                 <div className={styles.priceIncludes}>
-                  {trip.type === "group"
-                    ? "all-in, inclusief vlucht"
-                    : `bij ${formatNights(trip.minNights, trip.minNights)}`}
+                  bij {formatNights(trip.minNights, trip.minNights)}
+                  {trip.pricePerExtraNight !== null && `, elke extra nacht ${formatPrice(trip.pricePerExtraNight)} p.p.`}
                 </div>
               </div>
             )}
-            <div className={styles.bookingSection}>
-              <div className={styles.bookingSectionLabel}>Inbegrepen</div>
-              <ul className={styles.bookingList}>
-                {trip.includes.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+            {isGroup && departures.length > 0 && (
+              <div>
+                <div className={styles.price}>
+                  {departures.length > 1 && <span className={styles.priceUnit}>vanaf </span>}
+                  {formatPrice(departures.reduce((min, d) => (d.pricePpAllIn.lessThan(min) ? d.pricePpAllIn : min), departures[0].pricePpAllIn))}{" "}
+                  <span className={styles.priceUnit}>p.p.</span>
+                </div>
+                <div className={styles.priceIncludes}>all-in, inclusief vlucht en gids</div>
+              </div>
+            )}
+
+            <div className={styles.listsGrid}>
+              <div className={styles.bookingSection}>
+                <div className={styles.bookingSectionLabel}>Inbegrepen</div>
+                <ul className={styles.bookingList}>
+                  {trip.includes.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+              <div className={styles.bookingSection}>
+                <div className={styles.bookingSectionLabel}>Niet inbegrepen</div>
+                <ul className={styles.bookingList}>
+                  {trip.excludes.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
-            <div className={styles.bookingSection}>
-              <div className={styles.bookingSectionLabel}>Niet inbegrepen</div>
-              <ul className={styles.bookingList}>
-                {trip.excludes.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
+
+            {!isGroup && (
+              <div className={styles.bookingSection}>
+                <div className={styles.bookingSectionLabel}>Vlucht</div>
+                <p className={styles.bookingSectionText}>
+                  Vlucht niet inbegrepen. Wij boeken je vlucht bij op aanvraag; je ontvangt binnen 24 uur een prijs.
+                </p>
+              </div>
+            )}
+
             <div className={styles.bookingSection}>
               <div className={styles.bookingSectionLabel}>Niveau</div>
               <p className={styles.bookingSectionText}>{levelLabel(trip.level)}</p>
             </div>
-            {policy && (
-              <div className={styles.bookingSection}>
-                <div className={styles.bookingSectionLabel}>Annuleren</div>
-                <p className={styles.bookingSectionText}>{policy}</p>
-                {trip.partner.cancellationNotes && (
-                  <p className={styles.bookingSectionTextMuted}>{trip.partner.cancellationNotes}</p>
-                )}
-              </div>
-            )}
 
-            <a href={phoneHref} className={styles.bookPrimary}>
-              Bel om te boeken
-              <ArrowIcon size={15} />
-            </a>
-            <div className={styles.bookFineprint}>{settings.phone}</div>
+            <div className={styles.bookingSection}>
+              <div className={styles.bookingSectionLabel}>Annuleren</div>
+              <p className={styles.bookingSectionText}>{policy}</p>
+              {trip.partner.cancellationNotes && (
+                <p className={styles.bookingSectionTextMuted}>{trip.partner.cancellationNotes}</p>
+              )}
+            </div>
+
+            <div className={styles.bookingSection}>
+              <div className={styles.bookingSectionLabel}>Betaling</div>
+              <p className={styles.bookingSectionText}>
+                Je betaalt de volledige reissom bij boeking via iDEAL, creditcard of bankoverschrijving.
+              </p>
+              <PaymentMethods compact />
+            </div>
+
+            <VzrGarant />
+
+            {isGroup ? (
+              <div className={styles.bookingSection}>
+                <div className={styles.bookingSectionLabel}>Vertrekken</div>
+                {departures.map((d) => (
+                  <div key={d.id} className={styles.departure}>
+                    <div className={styles.departureHead}>
+                      <span className={styles.departureDates}>
+                        {formatDate(d.departureDate)} – {formatDate(d.returnDate)}
+                      </span>
+                      <span className={styles.departurePrice}>{formatPrice(d.pricePpAllIn)} p.p.</span>
+                    </div>
+                    <div className={styles.departureMeta}>
+                      {d.seatsLeft > 0 ? `Nog ${d.seatsLeft} van ${d.maxParticipants} plekken` : "Vol"} · boeken tot{" "}
+                      {formatDate(d.bookingDeadline)}
+                    </div>
+                    <div className={styles.departureMeta}>
+                      Gaat door vanaf {d.minParticipants} deelnemers. Wordt dat niet gehaald, dan krijg je binnen 14 dagen het
+                      volledige bedrag terug.
+                    </div>
+                    {d.seatsLeft > 0 &&
+                      (CHECKOUT_ENABLED ? (
+                        <Link href={`/boeken/${trip.slug}?departure=${d.id}`} className={styles.bookPrimary}>
+                          Boek dit vertrek
+                          <ArrowIcon size={15} />
+                        </Link>
+                      ) : (
+                        <a href={phoneHref} className={styles.bookPrimary}>
+                          Bel om te boeken
+                          <ArrowIcon size={15} />
+                        </a>
+                      ))}
+                  </div>
+                ))}
+              </div>
+            ) : CHECKOUT_ENABLED ? (
+              <Link href={`/boeken/${trip.slug}`} className={styles.bookPrimary}>
+                Boek deze reis
+                <ArrowIcon size={15} />
+              </Link>
+            ) : (
+              <>
+                <a href={phoneHref} className={styles.bookPrimary}>
+                  Bel om te boeken
+                  <ArrowIcon size={15} />
+                </a>
+                <div className={styles.bookFineprint}>{settings.phone}</div>
+              </>
+            )}
           </div>
+
           <a href={phoneHref} className={styles.helpCard}>
             <CompassIcon size={34} color="#C7513C" strokeWidth={2.2} />
             <div>

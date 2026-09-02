@@ -3,6 +3,7 @@ import { AtMark } from "./icons";
 import { getSiteSettings } from "@/lib/content/settings";
 import { getSports } from "@/lib/content/sports";
 import { getDestinations } from "@/lib/content/destinations";
+import { VzrGarant } from "./VzrGarant";
 import styles from "./Footer.module.css";
 
 const COMPANY = [
@@ -11,9 +12,6 @@ const COMPANY = [
   { label: "Journal", href: "/journal" },
   { label: "Veelgestelde vragen", href: "/faq" },
 ];
-
-/** Het VZR Garant-logo mag pas mee zodra de aansluiting rond is. */
-export const VZR_GARANT_ACTIVE = process.env.VZR_GARANT_ACTIVE === "true";
 
 export async function Footer() {
   const [settings, sports, destinations] = await Promise.all([getSiteSettings(), getSports(), getDestinations()]);
@@ -25,11 +23,7 @@ export async function Footer() {
           <AtMark size={36} color="#23261F" />
           <div className={styles.wordmark}>ADVENTURETRAVELS</div>
           <p className={styles.tagline}>{settings.footerTagline}</p>
-          {VZR_GARANT_ACTIVE && (
-            <div className={styles.badges}>
-              <span>VZR Garant</span>
-            </div>
-          )}
+          <VzrGarant withText={false} />
         </div>
 
         {sports.length > 0 && (
