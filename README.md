@@ -84,6 +84,16 @@ npm run db:verify -- after
 - Een `Booking` kan alleen `pending_payment`, `paid` of `confirmed` zijn als `termsAcceptedAt` én `cancellationTermsAcceptedAt` gevuld zijn: afgedwongen in `src/lib/content/bookings.ts` en als CHECK-constraint `Booking_terms_required_for_active_status` (Prisma kent CHECK-constraints niet; `prisma migrate dev` kan die als drift melden, negeren).
 - Feature flag `CHECKOUT_ENABLED` (env): zolang die niet `true` is, komt geen enkele reis door de publicatiecheck.
 
+## Checkout en betaling (v5)
+
+- `/boeken/[slug]` in drie stappen (reis → gegevens → overzicht en betaling). De concept-boeking staat in een gesigneerde cookie (`src/lib/checkoutSession.ts`); persoonsgegevens komen nooit in de URL.
+- Eén prijsberekening voor reispagina, checkout, server action, mail en bevestiging: `calculateBreakdown()` in `src/lib/pricing.ts` (hele centen).
+- Betalen via Mollie (`src/lib/mollie.ts`). Webhook `/api/mollie/webhook` haalt de betaling altijd zelf op en verwerkt overgangen precies één keer (`updateMany` met statusvoorwaarde). De bevestigingspagina synchroniseert ook zelf, voor als de webhook nog onderweg is.
+- Bankoverschrijving: boeking blijft `pending_payment`, klant krijgt Mollie-instructies per mail; `/api/cron/checkout-followup` (dagelijks 08:00, `vercel.json`, beveiligd met `CRON_SECRET`) stuurt na 3 dagen een herinnering en annuleert na 7 dagen.
+- Mails via Resend in `src/lib/email.ts`; het standaardinformatieformulier (`SiteSettings.infoFormPdfUrl`) gaat als bijlage mee. Zonder dat formulier komt geen enkele reis door de publicatiecheck.
+- Programma-pdf (`ProgramCta`): naam + e-mail + optioneel nieuwsbriefvinkje → `Lead(type=pdf_request)` → mail met de pdf uit `SiteSettings.programPdfUrl`. Geen pdf = blok niet zichtbaar.
+- Lokaal testen: Mollie-testsleutel in `.env`; webhooks bereiken localhost niet, de bevestigingspagina vangt dat op.
+
 ## Beelden
 
 Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.

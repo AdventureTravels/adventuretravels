@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { isTripPublishable } from "@/lib/publish";
+import { isTripPublishable, type PublishContext } from "@/lib/publish";
+import { getSiteSettings } from "@/lib/content/settings";
 
 /** Alles wat een publieke reiskaart of -pagina nodig heeft, inclusief wat de publicatiecheck leest. */
 export const PUBLIC_TRIP_INCLUDE = {
@@ -18,13 +19,21 @@ export type PublicTrip = Prisma.TripGetPayload<{ include: typeof PUBLIC_TRIP_INC
 // Publiek: alleen publiceerbare reizen
 // ---------------------------------------------------------------------------
 
+export async function publishContext(): Promise<PublishContext> {
+  const settings = await getSiteSettings();
+  return { infoFormPdfUrl: settings.infoFormPdfUrl };
+}
+
 async function publishedWhere(where: Prisma.TripWhereInput = {}): Promise<PublicTrip[]> {
-  const trips = await prisma.trip.findMany({
-    where: { ...where, status: "published" },
-    orderBy: { order: "asc" },
-    include: PUBLIC_TRIP_INCLUDE,
-  });
-  return trips.filter(isTripPublishable);
+  const [trips, ctx] = await Promise.all([
+    prisma.trip.findMany({
+      where: { ...where, status: "published" },
+      orderBy: { order: "asc" },
+      include: PUBLIC_TRIP_INCLUDE,
+    }),
+    publishContext(),
+  ]);
+  return trips.filter((t) => isTripPublishable(t, ctx));
 }
 
 export function getTrips() {
@@ -32,8 +41,8 @@ export function getTrips() {
 }
 
 export async function getTripBySlug(slug: string): Promise<PublicTrip | null> {
-  const trip = await prisma.trip.findUnique({ where: { slug }, include: PUBLIC_TRIP_INCLUDE });
-  if (!trip || !isTripPublishable(trip)) return null;
+  const [trip, ctx] = await Promise.all([prisma.trip.findUnique({ where: { slug }, include: PUBLIC_TRIP_INCLUDE }), publishContext()]);
+  if (!trip || !isTripPublishable(trip, ctx)) return null;
   return trip;
 }
 

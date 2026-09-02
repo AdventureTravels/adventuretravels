@@ -22,3 +22,16 @@
   padding: 5px 9px;
   font-size: 10px;
 }
+
+.logo {
+  display: flex;
+  align-items: center;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+
+.logo img {
+  display: block;
+  width: auto;
+}

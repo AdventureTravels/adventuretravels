@@ -1,19 +1,28 @@
+import { listMollieMethods } from "@/lib/mollie";
 import styles from "./PaymentMethods.module.css";
 
-/** De betaalmethoden die Mollie voor ons activeert. Tekstbadges tot de
- * officiële methode-afbeeldingen uit de Mollie-API komen (Fase 4). */
-export const PAYMENT_METHODS = [
-  { id: "ideal", label: "iDEAL" },
-  { id: "creditcard", label: "Creditcard" },
-  { id: "banktransfer", label: "Bankoverschrijving" },
-] as const;
+/** Betaalmethoden zoals Mollie ze voor ons activeert, met de officiële
+ * afbeeldingen. Zonder Mollie-koppeling: tekstbadges van de drie beloofde methoden. */
+const FALLBACK = [
+  { id: "ideal", description: "iDEAL", imageSvg: "" },
+  { id: "creditcard", description: "Creditcard", imageSvg: "" },
+  { id: "banktransfer", description: "Bankoverschrijving", imageSvg: "" },
+];
 
-export function PaymentMethods({ compact = false }: { compact?: boolean }) {
+export async function PaymentMethods({ compact = false }: { compact?: boolean }) {
+  const live = await listMollieMethods();
+  const methods = live.length > 0 ? live : FALLBACK;
+
   return (
     <ul className={`${styles.list} ${compact ? styles.compact : ""}`} aria-label="Betaalmethoden">
-      {PAYMENT_METHODS.map((m) => (
-        <li key={m.id} className={styles.badge}>
-          {m.label}
+      {methods.map((m) => (
+        <li key={m.id} className={m.imageSvg ? styles.logo : styles.badge} title={m.description}>
+          {m.imageSvg ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={m.imageSvg} alt={m.description} height={compact ? 22 : 28} />
+          ) : (
+            m.description
+          )}
         </li>
       ))}
     </ul>

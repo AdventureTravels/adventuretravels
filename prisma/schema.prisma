@@ -183,6 +183,7 @@ model Booking {
   termsAcceptedAt             DateTime? // null alleen bij gemigreerde v4-aanvragen
   cancellationTermsAcceptedAt DateTime?
   notes                       String? // interne notities, niet zichtbaar voor de klant
+  reminderSentAt              DateTime? // betaalherinnering (cron) verstuurd
   createdAt                   DateTime  @default(now())
 
   participants Participant[]

@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { getAllTrips } from "@/lib/content/trips";
+import { getAllTrips, publishContext } from "@/lib/content/trips";
 import { publishProblems } from "@/lib/publish";
 import { formatPrice } from "@/lib/format";
 import { deleteTripAction } from "./actions";
 import styles from "../../admin.module.css";
 
 export default async function AdminTripsPage() {
-  const trips = await getAllTrips();
+  const [trips, ctx] = await Promise.all([getAllTrips(), publishContext()]);
 
   return (
     <div>
@@ -36,7 +36,7 @@ export default async function AdminTripsPage() {
           </thead>
           <tbody>
             {trips.map((trip) => {
-              const problems = publishProblems(trip);
+              const problems = publishProblems(trip, ctx);
               return (
                 <tr key={trip.id}>
                   <td>{trip.title}</td>

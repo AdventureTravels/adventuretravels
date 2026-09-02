@@ -5,7 +5,7 @@ import { GalleryEditor } from "./GalleryEditor";
 import type { PublicTrip, GalleryImage } from "@/lib/content/trips";
 import { LEVELS, levelLabel } from "@/lib/levels";
 import { monthName } from "@/lib/format";
-import { publishProblems } from "@/lib/publish";
+import { publishProblems, type PublishContext } from "@/lib/publish";
 import styles from "../../admin.module.css";
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -17,6 +17,7 @@ export function TripForm({
   destinations,
   partners,
   guides,
+  publishContext,
 }: {
   action: (formData: FormData) => void;
   trip?: PublicTrip;
@@ -24,9 +25,10 @@ export function TripForm({
   destinations: Destination[];
   partners: Partner[];
   guides: Guide[];
+  publishContext: PublishContext;
 }) {
   const gallery = Array.isArray(trip?.galleryImages) ? (trip.galleryImages as unknown as GalleryImage[]) : [];
-  const problems = trip ? publishProblems(trip) : [];
+  const problems = trip ? publishProblems(trip, publishContext) : [];
 
   return (
     <form action={action} className={styles.form}>

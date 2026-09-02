@@ -133,3 +133,41 @@
     font-size: 28px;
   }
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.optIn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.optIn input {
+  margin-top: 3px;
+  accent-color: var(--compass-red);
+}
+
+.success {
+  margin: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  background: var(--canvas-sand-light);
+  font-size: 14px;
+}
+
+.error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--compass-red-text);
+}
+
+.fineprint a {
+  text-decoration: underline;
+}

@@ -14,9 +14,12 @@ export function openDepartures(departures: TripDeparture[], now = new Date()): T
  * filteren hierop; de admin toont de reden waarom een reis (nog) niet
  * publiceerbaar is via publishProblems().
  */
-export function publishProblems(trip: PublishableTripInput): string[] {
+export type PublishContext = { infoFormPdfUrl: string };
+
+export function publishProblems(trip: PublishableTripInput, ctx?: PublishContext): string[] {
   const problems: string[] = [];
-  if (!CHECKOUT_ENABLED) problems.push("Checkout is nog niet beschikbaar (CHECKOUT_ENABLED staat niet op true).");
+  if (!CHECKOUT_ENABLED) problems.push("Checkout is uitgeschakeld (CHECKOUT_ENABLED=false).");
+  if (ctx && !isImageUrl(ctx.infoFormPdfUrl)) problems.push("Standaardinformatieformulier pakketreis ontbreekt (Site-instellingen); verplicht vóór boeking.");
   if (trip.status !== "published") problems.push(`Status is "${trip.status}", niet "published".`);
   if (!trip.partner.isActive) problems.push("Partner staat op inactief.");
   if (!isCancellationPolicyValid(trip.partner.cancellationPolicy)) problems.push("Partner heeft geen geldige annuleringsstaffel.");
@@ -34,6 +37,6 @@ export function publishProblems(trip: PublishableTripInput): string[] {
   return problems;
 }
 
-export function isTripPublishable(trip: PublishableTripInput): boolean {
-  return publishProblems(trip).length === 0;
+export function isTripPublishable(trip: PublishableTripInput, ctx?: PublishContext): boolean {
+  return publishProblems(trip, ctx).length === 0;
 }
