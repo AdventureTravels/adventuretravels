@@ -16,8 +16,15 @@ export const metadata: Metadata = { title: "Je boeking — AdventureTravels", ro
 
 const PORTAL_URL = process.env.PORTAL_URL ?? "https://mijn.adventuretravels.nl";
 
-export default async function ConfirmationPage({ params }: { params: Promise<{ bookingNumber: string }> }) {
+export default async function ConfirmationPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ bookingNumber: string }>;
+  searchParams: Promise<{ betaalfout?: string }>;
+}) {
   const { bookingNumber } = await params;
+  const { betaalfout } = await searchParams;
   let booking = await getBookingByNumber(bookingNumber);
   if (!booking) notFound();
 
@@ -29,6 +36,7 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ b
       if (synced.booking) booking = synced.booking;
     } catch (error) {
       console.error("Betaling synchroniseren mislukt:", error);
+      booking = (await getBookingByNumber(bookingNumber)) ?? booking;
     }
   }
 
@@ -36,8 +44,9 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ b
   const summary = bookingSummary(booking);
   const payment = booking.payments[0];
   const raw = (payment?.raw ?? {}) as { details?: BankTransferDetails; expiresAt?: string };
-  const isBankTransferOpen = booking.status === "pending_payment" && payment?.method === "banktransfer" && payment.status === "open";
-  const paymentFailed = booking.status === "pending_payment" && payment && ["failed", "canceled", "expired"].includes(payment.status);
+  const isBankTransferOpen = booking.status === "pending_payment" && payment?.method === "banktransfer" && payment.status === "open" && !betaalfout;
+  const paymentFailed =
+    booking.status === "pending_payment" && (!payment || Boolean(betaalfout) || ["failed", "canceled", "expired"].includes(payment.status));
   const paid = booking.status === "paid" || booking.status === "confirmed";
 
   return (
@@ -50,7 +59,7 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ b
           <h1 className={styles.title}>
             {paid && "Je reis is geboekt."}
             {isBankTransferOpen && "Bijna klaar: maak het bedrag over."}
-            {paymentFailed && "De betaling is niet gelukt."}
+            {paymentFailed && (payment ? "De betaling is niet gelukt." : "De betaalpagina kon niet worden geopend.")}
             {booking.status === "cancelled" && "Deze boeking is geannuleerd."}
             {booking.status === "refunded" && "Deze boeking is terugbetaald."}
             {booking.status === "pending_payment" && !isBankTransferOpen && !paymentFailed && "We wachten op je betaling."}

@@ -150,13 +150,15 @@ export async function payAction(slug: string, formData: FormData) {
   });
   void settings;
 
+  // De boeking bestaat nu; het concept mag weg, ook als Mollie zo faalt
+  // (dan kan de klant vanaf de bevestigingspagina opnieuw betalen).
+  await clearCheckoutDraft();
   let checkoutUrl: string;
   try {
     checkoutUrl = await createMolliePayment(booking);
   } catch (error) {
     console.error("Mollie-betaling aanmaken mislukt:", error);
-    fail(slug, 3, "De betaalpagina kon niet worden geopend. Probeer het opnieuw of bel ons.");
+    redirect(`/boeken/bevestiging/${booking.bookingNumber}?betaalfout=1`);
   }
-  await clearCheckoutDraft();
   redirect(checkoutUrl);
 }
