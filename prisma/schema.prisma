@@ -8,22 +8,22 @@ datasource db {
 }
 
 model AdminUser {
-  id           String @id @default(cuid())
-  email        String @unique
+  id           String   @id @default(cuid())
+  email        String   @unique
   passwordHash String
   createdAt    DateTime @default(now())
 }
 
 model Sport {
-  id        String @id @default(cuid())
-  slug      String @unique
-  name      String
-  heroImage String
-  heroTitle String
-  heroSubtitle String // rich text (HTML)
-  cardImage String
-  caption   String
-  order     Int @default(0)
+  id                String  @id @default(cuid())
+  slug              String  @unique
+  name              String
+  heroImage         String
+  heroTitle         String
+  heroSubtitle      String // rich text (HTML)
+  cardImage         String
+  caption           String
+  order             Int     @default(0)
   mailerliteGroupId String? // auto-created MailerLite group id for this sport's segment
 
   trips Trip[]
@@ -40,127 +40,254 @@ model Destination {
   caption      String
   flightTime   String
   bestPeriod   String
-  order        Int @default(0)
+  order        Int    @default(0)
 
   trips Trip[]
 }
 
+model Partner {
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  name               String
+  type               String // "park" | "gym" | "accommodation" | "other"
+  country            String
+  city               String
+  contactName        String?
+  contactEmail       String?
+  contactPhone       String?
+  commissionPct      Decimal? @db.Decimal(5, 2)
+  cancellationPolicy Json // [{ daysBefore, pct }] oplopend streng, laatste rij 100% — zie src/lib/cancellation.ts
+  cancellationNotes  String? // vrije toelichting, bv. over de vlucht
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+
+  trips Trip[]
+}
+
+model Guide {
+  id       String   @id @default(cuid())
+  name     String
+  bio      String
+  photo    String   @default("") // Blob-URL; leeg = geen foto
+  photoAlt String   @default("")
+  phone    String   @default("") // leeg = niet tonen
+  livesIn  String
+  sports   String[] @default([])
+
+  trips      Trip[]
+  departures TripDeparture[]
+}
+
 model Trip {
-  id            String @id @default(cuid())
-  slug          String @unique
-  title         String
-  image         String
-  level         String
-  category      String
-  text          String // rich text (HTML)
-  duration      String
-  date          String
-  price         String
-  priceNote     String
-  heroImage     String
-  heroSubtitle  String // rich text (HTML)
-  program       Json   // [{ day, text }]
-  included      String // rich text (HTML)
-  notIncluded   String // rich text (HTML)
-  stayTitle     String @default("Het verblijf")
-  stayBody      String @default("") // rich text (HTML)
-  stayImage     String
-  galleryImages Json   // string[], any length
-  fixedDepartureDate String? // set for a fixed-date group trip; null = visitor picks their own date
-  order         Int @default(0)
+  id     String @id @default(cuid())
+  slug   String @unique
+  title  String
+  type   String @default("individual") // "individual" | "group"
+  status String @default("draft") // "draft" | "published" | "archived"
+  level  String @default("all") // "beginner" | "intermediate" | "advanced" | "all"
+
+  // Content
+  image         String   @default("") // kaart, Blob-URL
+  imageAlt      String   @default("")
+  text          String   @default("") // rich text (HTML), korte omschrijving op de kaart
+  heroImage     String   @default("")
+  heroImageAlt  String   @default("")
+  heroSubtitle  String   @default("") // rich text (HTML)
+  program       Json     @default("[]") // [{ day, text }]
+  stayTitle     String   @default("Het verblijf")
+  stayBody      String   @default("") // rich text (HTML)
+  stayImage     String   @default("")
+  stayImageAlt  String   @default("")
+  galleryImages Json     @default("[]") // [{ src, alt }]
+  includes      String[] @default([])
+  excludes      String[] @default([])
+  order         Int      @default(0)
+
+  // Individueel: seizoen, nachten en prijs
+  seasonStartMonth   Int      @default(1)
+  seasonEndMonth     Int      @default(12)
+  minNights          Int      @default(7)
+  maxNights          Int      @default(7)
+  pricePpBase        Decimal? @db.Decimal(10, 2) // prijs p.p. bij minNights
+  pricePerExtraNight Decimal? @db.Decimal(10, 2)
 
   sport         Sport       @relation(fields: [sportId], references: [id])
   sportId       String
   destination   Destination @relation(fields: [destinationId], references: [id])
   destinationId String
-  bookingRequests BookingRequest[]
+  partner       Partner     @relation(fields: [partnerId], references: [id])
+  partnerId     String
+  guide         Guide?      @relation(fields: [guideId], references: [id])
+  guideId       String?
+
+  departures TripDeparture[]
+  extras     TripExtra[]
+  bookings   Booking[]
+  reviews    Review[]
+  leads      Lead[]
+  createdAt  DateTime        @default(now())
 }
 
-model BookingRequest {
-  id            String   @id @default(cuid())
-  bookingNumber String?  @unique // "AT-XXXXXX", set on creation
-  trip          Trip     @relation(fields: [tripId], references: [id])
-  tripId        String
-  name          String
-  email         String
-  phone         String?
-  preferredDate String
-  message       String?
-  status        String   @default("aangevraagd")
-  // "aangevraagd" | "bevestigd" | "aanbetaling_voldaan" | "volledig_betaald" | "afgerond" | "geannuleerd"
-  // legacy values still present on old rows: "new" | "contacted" | "done"
-  totalAmount    String?
-  depositAmount  String?
-  depositPaid    Boolean   @default(false)
-  depositPaidAt  DateTime?
-  balanceAmount  String?
-  balancePaid    Boolean   @default(false)
-  balancePaidAt  DateTime?
-  notes          String? // internal staff notes, not shown to the customer
-  createdAt     DateTime @default(now())
+model TripDeparture {
+  id              String   @id @default(cuid())
+  trip            Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  tripId          String
+  departureDate   DateTime
+  returnDate      DateTime
+  pricePpAllIn    Decimal  @db.Decimal(10, 2)
+  maxParticipants Int
+  minParticipants Int
+  bookingDeadline DateTime
+  guide           Guide?   @relation(fields: [guideId], references: [id])
+  guideId         String?
+  status          String   @default("open") // "open" | "full" | "cancelled" | "done"
 
-  participants  Participant[]
-  invoices      Invoice[]
+  bookings Booking[]
+}
+
+model TripExtra {
+  id          String  @id @default(cuid())
+  trip        Trip    @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  tripId      String
+  name        String
+  description String?
+  pricePp     Decimal @db.Decimal(10, 2)
+  isPerNight  Boolean @default(false)
+  order       Int     @default(0)
+}
+
+model Booking {
+  id               String         @id @default(cuid())
+  bookingNumber    String         @unique // "AT-XXXXXX"
+  trip             Trip           @relation(fields: [tripId], references: [id])
+  tripId           String
+  departure        TripDeparture? @relation(fields: [departureId], references: [id])
+  departureId      String?
+  arrivalDate      DateTime
+  nights           Int
+  flightRequested  Boolean        @default(false)
+  departureAirport String?
+  extras           Json           @default("[]") // [{ extraId, name, pricePp, qty }]
+
+  contactName    String
+  contactEmail   String
+  contactPhone   String @default("")
+  contactAddress Json   @default("{}") // { street, houseNumber, postalCode, city, country }
+
+  priceBreakdown Json    @default("[]") // regels zoals getoond in stap 3 van de checkout
+  totalAmount    Decimal @db.Decimal(10, 2)
+  status         String  @default("pending_payment")
+  // "pending_payment" | "paid" | "confirmed" | "cancelled" | "refunded"
+
+  cancellationPolicySnapshot  Json      @default("[]") // kopie van Partner.cancellationPolicy op boekmoment
+  termsAcceptedAt             DateTime? // null alleen bij gemigreerde v4-aanvragen
+  cancellationTermsAcceptedAt DateTime?
+  notes                       String? // interne notities, niet zichtbaar voor de klant
+  createdAt                   DateTime  @default(now())
+
+  participants Participant[]
+  payments     Payment[]
+  invoices     Invoice[] // handmatige facturen, bv. voor een bijgeboekte vlucht
+  review       Review?
+}
+
+model Payment {
+  id              String    @id @default(cuid())
+  booking         Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId       String
+  molliePaymentId String    @unique
+  amount          Decimal   @db.Decimal(10, 2)
+  status          String // Mollie-status: open | pending | paid | failed | canceled | expired
+  method          String?
+  paidAt          DateTime?
+  raw             Json
+  createdAt       DateTime  @default(now())
 }
 
 model Participant {
-  id            String  @id @default(cuid())
-  booking       BookingRequest @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  bookingId     String
-  name          String
-  birthdate     String?
-  dietaryNotes  String?
-  order         Int     @default(0)
+  id           String  @id @default(cuid())
+  booking      Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId    String
+  firstName    String
+  lastName     String  @default("")
+  birthdate    String? // ISO-datum (YYYY-MM-DD)
+  level        String? // "beginner" | "intermediate" | "advanced"
+  dietaryNotes String?
+  order        Int     @default(0)
 }
 
 model Invoice {
   id        String   @id @default(cuid())
-  booking   BookingRequest @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   bookingId String
-  label     String // e.g. "Aanbetaling", "Restbetaling"
-  amount    String
+  label     String // bv. "Vlucht"
+  amount    Decimal  @db.Decimal(10, 2)
   fileUrl   String? // Vercel Blob URL, once uploaded
   status    String   @default("verzonden") // "verzonden" | "betaald"
   issuedAt  DateTime @default(now())
 }
 
+model Review {
+  id            String   @id @default(cuid())
+  booking       Booking  @relation(fields: [bookingId], references: [id])
+  bookingId     String   @unique
+  trip          Trip     @relation(fields: [tripId], references: [id])
+  tripId        String
+  rating        Int
+  text          String
+  reviewerName  String // voornaam + initiaal
+  reviewerPlace String?
+  travelMonth   String
+  status        String   @default("pending") // "pending" | "approved" | "rejected"
+  token         String   @unique
+  createdAt     DateTime @default(now())
+}
+
+model Lead {
+  id               String   @id @default(cuid())
+  type             String // "pdf_request" | "guide_callback" | "group_inquiry"
+  name             String
+  email            String
+  phone            String?
+  trip             Trip?    @relation(fields: [tripId], references: [id])
+  tripId           String?
+  preferredDay     String?
+  preferredDaypart String?
+  message          String?
+  newsletterOptIn  Boolean  @default(false)
+  sourceUrl        String?
+  createdAt        DateTime @default(now())
+}
+
 model CustomerMagicLinkToken {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   email     String
-  token     String   @unique
+  token     String    @unique
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 }
 
 model Article {
-  id          String @id @default(cuid())
-  slug        String @unique
-  tag         String
-  title       String
-  excerpt     String
-  heroImage   String
-  intro       String
-  sections    Json     // [{ number?, title, bodyHtml: string, quoteHtml?: string }]
+  id           String  @id @default(cuid())
+  slug         String  @unique
+  tag          String
+  title        String
+  excerpt      String
+  heroImage    String
+  intro        String
+  sections     Json // [{ number?, title, bodyHtml: string, quoteHtml?: string }]
   calloutLabel String?
   calloutText  String?
-  publishedAt String
-  order       Int @default(0)
-}
-
-model Review {
-  id     String @id @default(cuid())
-  stars  Int
-  quote  String
-  author String
-  order  Int @default(0)
+  publishedAt  String
+  order        Int     @default(0)
 }
 
 model FaqItem {
   id       String @id @default(cuid())
   question String
   answer   String
-  order    Int @default(0)
+  order    Int    @default(0)
 }
 
 model Page {
@@ -169,26 +296,28 @@ model Page {
   eyebrow  String
   title    String
   subtitle String
-  sections Json   // [{ title, bodyHtml: string, kind?: "text"|"stats"|"table"|"icons", data?: any }]
-  extra    Json?  // page-specific extras (portrait caption, badges, ...)
+  sections Json // [{ title, bodyHtml: string, kind?: "text"|"stats"|"table"|"icons", data?: any }]
+  extra    Json? // page-specific extras (portrait caption, badges, ...)
 }
 
 model SiteSettings {
-  id                 String @id @default("singleton")
-  topbarTagline      String
-  phone              String
-  email              String
-  heroEyebrow        String
-  heroHeading        String
-  heroSubheading     String
-  heroImage          String   @default("") // Blob-URL; leeg = geen foto in de homepage-hero
-  usps               String[] @default([]) // drie feitelijke USP's zonder getallen (homepage + strips)
-  dayImage           String   @default("") // Blob-URL, homepage dag/avond-blok
-  eveningImage       String   @default("")
-  programCtaEyebrow  String
-  programCtaTitle    String
-  programCtaBody     String // rich text (HTML)
-  footerTagline      String
+  id                String   @id @default("singleton")
+  topbarTagline     String
+  phone             String
+  email             String
+  heroEyebrow       String
+  heroHeading       String
+  heroSubheading    String
+  heroImage         String   @default("") // Blob-URL; leeg = geen foto in de homepage-hero
+  usps              String[] @default([]) // drie feitelijke USP's zonder getallen (homepage + strips)
+  dayImage          String   @default("") // Blob-URL, homepage dag/avond-blok
+  eveningImage      String   @default("")
+  programCtaEyebrow String
+  programCtaTitle   String
+  programCtaBody    String // rich text (HTML)
+  programPdfUrl     String   @default("") // Blob-URL van de programma-pdf; leeg = ProgramCta rendert niet
+  infoFormPdfUrl    String   @default("") // standaardinformatieformulier pakketreis (pdf)
+  footerTagline     String
 }
 
 model IncludedItem {
@@ -196,7 +325,7 @@ model IncludedItem {
   icon     String // icon key, see ICONS in src/lib/iconLookup.ts
   title    String
   bodyHtml String // rich text (HTML)
-  order    Int @default(0)
+  order    Int    @default(0)
 }
 
 model TripType {
@@ -205,5 +334,5 @@ model TripType {
   icon  String // icon key, see ICONS in src/lib/iconLookup.ts
   title String
   meta  String
-  order Int @default(0)
+  order Int    @default(0)
 }

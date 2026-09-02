@@ -318,3 +318,10 @@
     height: 260px;
   }
 }
+
+.bookingList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.7;
+}

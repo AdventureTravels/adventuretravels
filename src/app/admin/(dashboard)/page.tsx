@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db";
 import styles from "../admin.module.css";
 
 export default async function AdminHomePage() {
-  const [trips, sports, destinations, articles, reviews, faq, included, tripTypes, pages] = await Promise.all([
+  const [trips, sports, destinations, articles, reviews, faq, included, tripTypes, pages, partners, guides, bookings] = await Promise.all([
     prisma.trip.count(),
     prisma.sport.count(),
     prisma.destination.count(),
@@ -13,10 +13,16 @@ export default async function AdminHomePage() {
     prisma.includedItem.count(),
     prisma.tripType.count(),
     prisma.page.count(),
+    prisma.partner.count(),
+    prisma.guide.count(),
+    prisma.booking.count(),
   ]);
 
   const cards: { label: string; count: number; href: string }[] = [
     { label: "Reizen", count: trips, href: "/admin/trips" },
+    { label: "Partners", count: partners, href: "/admin/partners" },
+    { label: "Gidsen", count: guides, href: "/admin/guides" },
+    { label: "Boekingen", count: bookings, href: "https://mijn.adventuretravels.nl/staff" },
     { label: "Sporten", count: sports, href: "/admin/sports" },
     { label: "Bestemmingen", count: destinations, href: "/admin/destinations" },
     { label: "Journal-artikelen", count: articles, href: "/admin/articles" },

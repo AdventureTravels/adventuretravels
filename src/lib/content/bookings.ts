@@ -1,81 +1,112 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { randomBytes } from "node:crypto";
+import type { CancellationTier } from "@/lib/cancellation";
 
-export function getBookingRequests() {
-  return prisma.bookingRequest.findMany({
+export const BOOKING_INCLUDE = {
+  trip: { include: { partner: true, sport: true, destination: true } },
+  departure: true,
+  participants: { orderBy: { order: "asc" as const } },
+  invoices: { orderBy: { issuedAt: "asc" as const } },
+  payments: { orderBy: { createdAt: "desc" as const } },
+} satisfies Prisma.BookingInclude;
+
+export type BookingWithRelations = Prisma.BookingGetPayload<{ include: typeof BOOKING_INCLUDE }>;
+
+export function getBookings(where: Prisma.BookingWhereInput = {}) {
+  return prisma.booking.findMany({
+    where,
     orderBy: { createdAt: "desc" },
-    include: { trip: true },
+    include: { trip: true, payments: { orderBy: { createdAt: "desc" } } },
   });
 }
 
-export function getBookingRequestById(id: string) {
-  return prisma.bookingRequest.findUnique({
-    where: { id },
-    include: { trip: true, participants: { orderBy: { order: "asc" } }, invoices: { orderBy: { issuedAt: "asc" } } },
-  });
+export function getBookingById(id: string) {
+  return prisma.booking.findUnique({ where: { id }, include: BOOKING_INCLUDE });
+}
+
+export function getBookingByNumber(bookingNumber: string) {
+  return prisma.booking.findUnique({ where: { bookingNumber }, include: BOOKING_INCLUDE });
 }
 
 export function getBookingsByEmail(email: string) {
-  return prisma.bookingRequest.findMany({
-    where: { email: { equals: email, mode: "insensitive" } },
+  return prisma.booking.findMany({
+    where: { contactEmail: { equals: email, mode: "insensitive" } },
     orderBy: { createdAt: "desc" },
-    include: { trip: true },
+    include: { trip: true, payments: { orderBy: { createdAt: "desc" } } },
   });
 }
 
-export type BookingRequestInput = {
-  tripId: string;
-  name: string;
-  email: string;
-  phone?: string;
-  preferredDate: string;
-  message?: string;
-};
-
-async function generateBookingNumber() {
+export async function generateBookingNumber() {
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = randomBytes(4).toString("hex").slice(0, 6).toUpperCase();
     const bookingNumber = `AT-${code}`;
-    const existing = await prisma.bookingRequest.findUnique({ where: { bookingNumber } });
+    const existing = await prisma.booking.findUnique({ where: { bookingNumber } });
     if (!existing) return bookingNumber;
   }
   throw new Error("Kon geen uniek boekingsnummer genereren.");
 }
 
-export async function createBookingRequest(data: BookingRequestInput) {
-  const bookingNumber = await generateBookingNumber();
-  return prisma.bookingRequest.create({ data: { ...data, bookingNumber } });
-}
+export type PriceLine = { label: string; qty: number; unitAmount: string; amount: string };
+export type BookingExtraLine = { extraId: string; name: string; pricePp: string; qty: number };
+export type BookingAddress = { street: string; houseNumber: string; postalCode: string; city: string; country: string };
 
-export function updateBookingRequestStatus(id: string, status: string) {
-  return prisma.bookingRequest.update({ where: { id }, data: { status } });
-}
-
-export type BookingPaymentInput = {
-  totalAmount?: string;
-  depositAmount?: string;
-  depositPaid?: boolean;
-  balanceAmount?: string;
-  balancePaid?: boolean;
-  notes?: string;
+export type BookingInput = {
+  tripId: string;
+  departureId: string | null;
+  arrivalDate: Date;
+  nights: number;
+  flightRequested: boolean;
+  departureAirport: string | null;
+  extras: BookingExtraLine[];
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
+  contactAddress: BookingAddress;
+  priceBreakdown: PriceLine[];
+  totalAmount: string;
+  cancellationPolicySnapshot: CancellationTier[];
+  termsAcceptedAt: Date;
+  cancellationTermsAcceptedAt: Date;
+  participants: ParticipantInput[];
 };
 
-export function updateBookingPayment(id: string, data: BookingPaymentInput) {
-  const patch: BookingPaymentInput & { depositPaidAt?: Date | null; balancePaidAt?: Date | null } = { ...data };
-  if (data.depositPaid !== undefined) {
-    patch.depositPaidAt = data.depositPaid ? new Date() : null;
-  }
-  if (data.balancePaid !== undefined) {
-    patch.balancePaidAt = data.balancePaid ? new Date() : null;
-  }
-  return prisma.bookingRequest.update({ where: { id }, data: patch });
+export async function createBooking(data: BookingInput) {
+  const bookingNumber = await generateBookingNumber();
+  const { participants, ...rest } = data;
+  return prisma.booking.create({
+    data: {
+      ...rest,
+      bookingNumber,
+      extras: rest.extras as unknown as Prisma.InputJsonValue,
+      contactAddress: rest.contactAddress as unknown as Prisma.InputJsonValue,
+      priceBreakdown: rest.priceBreakdown as unknown as Prisma.InputJsonValue,
+      cancellationPolicySnapshot: rest.cancellationPolicySnapshot as unknown as Prisma.InputJsonValue,
+      participants: { create: participants.map((p, order) => ({ ...p, order })) },
+    },
+    include: BOOKING_INCLUDE,
+  });
 }
 
-export function deleteBookingRequest(id: string) {
-  return prisma.bookingRequest.delete({ where: { id } });
+export function updateBookingStatus(id: string, status: string) {
+  return prisma.booking.update({ where: { id }, data: { status } });
 }
 
-export type ParticipantInput = { name: string; birthdate?: string; dietaryNotes?: string };
+export function updateBookingNotes(id: string, notes: string | null) {
+  return prisma.booking.update({ where: { id }, data: { notes } });
+}
+
+export function deleteBooking(id: string) {
+  return prisma.booking.delete({ where: { id } });
+}
+
+export type ParticipantInput = {
+  firstName: string;
+  lastName: string;
+  birthdate?: string | null;
+  level?: string | null;
+  dietaryNotes?: string | null;
+};
 
 export function setBookingParticipants(bookingId: string, participants: ParticipantInput[]) {
   return prisma.$transaction([

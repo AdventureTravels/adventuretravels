@@ -2,49 +2,40 @@
 
 import { revalidatePath } from "next/cache";
 import {
-  updateBookingRequestStatus,
-  updateBookingPayment,
+  updateBookingStatus,
+  updateBookingNotes,
   setBookingParticipants,
   addInvoice,
   deleteInvoice,
   updateInvoiceStatus,
 } from "@/lib/content/bookings";
-import { indexedRowsInOrder } from "@/lib/adminFormSections";
+import { isBookingStatus } from "@/lib/bookingStatus";
+import { participantsFromForm } from "@/lib/participantsForm";
 
 export async function updateStatusAction(id: string, formData: FormData) {
-  const status = String(formData.get("status") ?? "aangevraagd");
-  await updateBookingRequestStatus(id, status);
+  const status = String(formData.get("status") ?? "");
+  if (!isBookingStatus(status)) return;
+  await updateBookingStatus(id, status);
   revalidatePath(`/staff/${id}`);
   revalidatePath("/staff");
 }
 
-export async function updatePaymentAction(id: string, formData: FormData) {
-  await updateBookingPayment(id, {
-    totalAmount: String(formData.get("totalAmount") ?? "").trim() || undefined,
-    depositAmount: String(formData.get("depositAmount") ?? "").trim() || undefined,
-    depositPaid: formData.get("depositPaid") === "on",
-    balanceAmount: String(formData.get("balanceAmount") ?? "").trim() || undefined,
-    balancePaid: formData.get("balancePaid") === "on",
-    notes: String(formData.get("notes") ?? "").trim() || undefined,
-  });
+export async function updateNotesAction(id: string, formData: FormData) {
+  await updateBookingNotes(id, String(formData.get("notes") ?? "").trim() || null);
   revalidatePath(`/staff/${id}`);
-  revalidatePath("/staff");
 }
 
 export async function updateParticipantsAction(id: string, formData: FormData) {
-  const rows = indexedRowsInOrder(formData, "participants")
-    .map((row) => ({ name: row.name?.trim() ?? "", birthdate: row.birthdate?.trim(), dietaryNotes: row.dietaryNotes?.trim() }))
-    .filter((row) => row.name);
-  await setBookingParticipants(id, rows);
+  await setBookingParticipants(id, participantsFromForm(formData));
   revalidatePath(`/staff/${id}`);
 }
 
 export async function addInvoiceAction(id: string, formData: FormData) {
   const label = String(formData.get("label") ?? "").trim();
-  const amount = String(formData.get("amount") ?? "").trim();
+  const amount = String(formData.get("amount") ?? "").trim().replace(",", ".");
   const fileUrl = String(formData.get("fileUrl") ?? "").trim();
-  if (!label || !amount) return;
-  await addInvoice(id, { label, amount, fileUrl: fileUrl || undefined });
+  if (!label || !amount || !Number.isFinite(Number(amount))) return;
+  await addInvoice(id, { label, amount: Number(amount).toFixed(2), fileUrl: fileUrl || undefined });
   revalidatePath(`/staff/${id}`);
 }
 

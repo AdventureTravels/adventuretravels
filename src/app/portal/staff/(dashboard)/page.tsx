@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { getBookings } from "@/lib/content/bookings";
 import { statusLabel, STATUS_OPTIONS } from "@/lib/bookingStatus";
+import { formatDateShort, formatPrice } from "@/lib/format";
 import styles from "@/app/admin/admin.module.css";
 
 export default async function StaffBookingsPage({
@@ -10,21 +11,17 @@ export default async function StaffBookingsPage({
 }) {
   const { status, q } = await searchParams;
 
-  const bookings = await prisma.bookingRequest.findMany({
-    where: {
-      ...(status ? { status } : {}),
-      ...(q
-        ? {
-            OR: [
-              { name: { contains: q, mode: "insensitive" } },
-              { email: { contains: q, mode: "insensitive" } },
-              { bookingNumber: { contains: q, mode: "insensitive" } },
-            ],
-          }
-        : {}),
-    },
-    orderBy: { createdAt: "desc" },
-    include: { trip: true },
+  const bookings = await getBookings({
+    ...(status ? { status } : {}),
+    ...(q
+      ? {
+          OR: [
+            { contactName: { contains: q, mode: "insensitive" } },
+            { contactEmail: { contains: q, mode: "insensitive" } },
+            { bookingNumber: { contains: q, mode: "insensitive" } },
+          ],
+        }
+      : {}),
   });
 
   return (
@@ -66,30 +63,25 @@ export default async function StaffBookingsPage({
               <th>Boekingsnr.</th>
               <th>Reis</th>
               <th>Naam</th>
-              <th>Contact</th>
+              <th>Aankomst</th>
+              <th>Totaal</th>
               <th>Status</th>
-              <th>Betaald</th>
             </tr>
           </thead>
           <tbody>
             {bookings.map((booking) => (
               <tr key={booking.id}>
-                <td>{booking.bookingNumber ?? "—"}</td>
+                <td>{booking.bookingNumber}</td>
                 <td>{booking.trip.title}</td>
                 <td>
                   <Link href={`/staff/${booking.id}`} className={styles.rowLink}>
-                    {booking.name}
+                    {booking.contactName}
                   </Link>
+                  <div className={styles.hint}>{booking.contactEmail}</div>
                 </td>
-                <td>{booking.email}</td>
+                <td>{formatDateShort(booking.arrivalDate)}</td>
+                <td>{formatPrice(booking.totalAmount)}</td>
                 <td>{statusLabel(booking.status)}</td>
-                <td>
-                  {booking.depositPaid && booking.balancePaid
-                    ? "Volledig"
-                    : booking.depositPaid
-                      ? "Aanbetaling"
-                      : "Nog niet"}
-                </td>
               </tr>
             ))}
           </tbody>

@@ -1,34 +1,77 @@
-import type { Sport, Destination, Trip } from "@prisma/client";
+import type { Sport, Destination, Partner, Guide } from "@prisma/client";
 import { RichTextEditor } from "../../RichTextEditor";
 import { ImageUploadField } from "../../ImageUploadField";
 import { GalleryEditor } from "./GalleryEditor";
+import type { PublicTrip, GalleryImage } from "@/lib/content/trips";
+import { LEVELS, levelLabel } from "@/lib/levels";
+import { monthName } from "@/lib/format";
+import { publishProblems } from "@/lib/publish";
 import styles from "../../admin.module.css";
 
-type TripWithGallery = Trip & { galleryImages: unknown };
+const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 
 export function TripForm({
   action,
   trip,
   sports,
   destinations,
+  partners,
+  guides,
 }: {
   action: (formData: FormData) => void;
-  trip?: TripWithGallery;
+  trip?: PublicTrip;
   sports: Sport[];
   destinations: Destination[];
+  partners: Partner[];
+  guides: Guide[];
 }) {
-  const gallery = Array.isArray(trip?.galleryImages) ? (trip.galleryImages as string[]) : [];
+  const gallery = Array.isArray(trip?.galleryImages) ? (trip.galleryImages as unknown as GalleryImage[]) : [];
+  const problems = trip ? publishProblems(trip) : [];
 
   return (
     <form action={action} className={styles.form}>
+      {trip && (
+        <div className={problems.length ? styles.error : styles.notice}>
+          {problems.length === 0
+            ? "Deze reis is compleet en wordt getoond op de site."
+            : `Niet zichtbaar op de site: ${problems.join(" ")}`}
+        </div>
+      )}
+
       <div className={styles.fieldRow}>
         <div className={styles.field}>
           <label className={styles.label} htmlFor="title">Titel</label>
           <input className={styles.input} id="title" name="title" defaultValue={trip?.title} required />
         </div>
         <div className={styles.field}>
-          <label className={styles.label} htmlFor="slug">Slug (in de URL)</label>
+          <label className={styles.label} htmlFor="slug">Slug (in de URL, niet meer wijzigen na publicatie)</label>
           <input className={styles.input} id="slug" name="slug" defaultValue={trip?.slug} required />
+        </div>
+      </div>
+
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="status">Status</label>
+          <select className={styles.select} id="status" name="status" defaultValue={trip?.status ?? "draft"}>
+            <option value="draft">Concept</option>
+            <option value="published">Gepubliceerd</option>
+            <option value="archived">Gearchiveerd</option>
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="type">Type</label>
+          <select className={styles.select} id="type" name="type" defaultValue={trip?.type ?? "individual"}>
+            <option value="individual">Individueel (eigen datum, vlucht op aanvraag)</option>
+            <option value="group">Groepsreis (vaste vertrekken, vlucht inbegrepen)</option>
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="level">Niveau</label>
+          <select className={styles.select} id="level" name="level" defaultValue={trip?.level ?? "all"}>
+            {LEVELS.map((l) => (
+              <option key={l} value={l}>{levelLabel(l)}</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -53,58 +96,94 @@ export function TripForm({
 
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <label className={styles.label} htmlFor="level">Niveau</label>
-          <input className={styles.input} id="level" name="level" defaultValue={trip?.level} required />
+          <label className={styles.label} htmlFor="partnerId">Partner (park; bepaalt de annuleringsstaffel)</label>
+          <select className={styles.select} id="partnerId" name="partnerId" defaultValue={trip?.partnerId} required>
+            {partners.map((partner) => (
+              <option key={partner.id} value={partner.id}>
+                {partner.name}{partner.isActive ? "" : " (inactief)"}
+              </option>
+            ))}
+          </select>
         </div>
         <div className={styles.field}>
-          <label className={styles.label} htmlFor="category">Categorie (bv. &quot;Turkije · wakeboarden&quot;)</label>
-          <input className={styles.input} id="category" name="category" defaultValue={trip?.category} required />
+          <label className={styles.label} htmlFor="guideId">Gids</label>
+          <select className={styles.select} id="guideId" name="guideId" defaultValue={trip?.guideId ?? ""}>
+            <option value="">Geen gids</option>
+            {guides.map((guide) => (
+              <option key={guide.id} value={guide.id}>{guide.name}</option>
+            ))}
+          </select>
         </div>
       </div>
 
+      <h2 className={styles.label}>Seizoen, nachten en prijs (individueel)</h2>
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="seasonStartMonth">Seizoen van</label>
+          <select className={styles.select} id="seasonStartMonth" name="seasonStartMonth" defaultValue={trip?.seasonStartMonth ?? 1}>
+            {MONTHS.map((m) => <option key={m} value={m}>{monthName(m)}</option>)}
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="seasonEndMonth">t/m</label>
+          <select className={styles.select} id="seasonEndMonth" name="seasonEndMonth" defaultValue={trip?.seasonEndMonth ?? 12}>
+            {MONTHS.map((m) => <option key={m} value={m}>{monthName(m)}</option>)}
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="minNights">Min. nachten</label>
+          <input className={styles.input} id="minNights" name="minNights" type="number" min={1} defaultValue={trip?.minNights ?? 7} required />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="maxNights">Max. nachten</label>
+          <input className={styles.input} id="maxNights" name="maxNights" type="number" min={1} defaultValue={trip?.maxNights ?? 7} required />
+        </div>
+      </div>
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="pricePpBase">Prijs p.p. bij min. nachten (€)</label>
+          <input className={styles.input} id="pricePpBase" name="pricePpBase" type="number" step="0.01" min={0} defaultValue={trip?.pricePpBase?.toString() ?? ""} placeholder="bv. 890" />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="pricePerExtraNight">Prijs per extra nacht p.p. (€, leeg = vaste duur)</label>
+          <input className={styles.input} id="pricePerExtraNight" name="pricePerExtraNight" type="number" step="0.01" min={0} defaultValue={trip?.pricePerExtraNight?.toString() ?? ""} />
+        </div>
+      </div>
+      <span className={styles.hint}>Groepsreizen: prijs, data en plekken staan per vertrek (beheer volgt in de admin).</span>
+
+      <h2 className={styles.label}>Inbegrepen / niet inbegrepen</h2>
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="includes">Inbegrepen (één regel per punt)</label>
+          <textarea className={styles.textarea} id="includes" name="includes" rows={6} defaultValue={trip?.includes.join("\n") ?? ""} />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="excludes">Niet inbegrepen (één regel per punt)</label>
+          <textarea className={styles.textarea} id="excludes" name="excludes" rows={6} defaultValue={trip?.excludes.join("\n") ?? ""} />
+        </div>
+      </div>
+
+      <h2 className={styles.label}>Content</h2>
       <RichTextEditor name="text" label="Korte omschrijving (op de kaart)" defaultValue={trip?.text} />
 
       <div className={styles.fieldRow}>
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="duration">Duur</label>
-          <input className={styles.input} id="duration" name="duration" defaultValue={trip?.duration} required />
+        <div style={{ flex: 2 }}>
+          <ImageUploadField name="image" label="Kaart-foto" defaultValue={trip?.image} />
         </div>
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="date">Periode</label>
-          <input className={styles.input} id="date" name="date" defaultValue={trip?.date} required />
+        <div className={styles.field} style={{ flex: 1 }}>
+          <label className={styles.label} htmlFor="imageAlt">Alt-tekst kaart-foto</label>
+          <input className={styles.input} id="imageAlt" name="imageAlt" defaultValue={trip?.imageAlt} required />
         </div>
       </div>
-
       <div className={styles.fieldRow}>
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="price">Prijs</label>
-          <input className={styles.input} id="price" name="price" defaultValue={trip?.price} required />
+        <div style={{ flex: 2 }}>
+          <ImageUploadField name="heroImage" label="Hero-foto" defaultValue={trip?.heroImage} />
         </div>
-        <div className={styles.field}>
-          <label className={styles.label} htmlFor="priceNote">Prijs-toelichting</label>
-          <input className={styles.input} id="priceNote" name="priceNote" defaultValue={trip?.priceNote} required />
+        <div className={styles.field} style={{ flex: 1 }}>
+          <label className={styles.label} htmlFor="heroImageAlt">Alt-tekst hero-foto</label>
+          <input className={styles.input} id="heroImageAlt" name="heroImageAlt" defaultValue={trip?.heroImageAlt} required />
         </div>
       </div>
-
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="fixedDepartureDate">
-          Vaste vertrekdatum (alleen voor groepsreizen)
-        </label>
-        <span className={styles.hint}>
-          Leeg laten: bezoekers kiezen zelf een datum via een kalender. Wel invullen: de reis
-          toont die ene vaste datum in plaats van de kalender.
-        </span>
-        <input
-          className={styles.input}
-          id="fixedDepartureDate"
-          name="fixedDepartureDate"
-          type="date"
-          defaultValue={trip?.fixedDepartureDate ?? ""}
-        />
-      </div>
-
-      <ImageUploadField name="image" label="Kaart-afbeelding" defaultValue={trip?.image} />
-      <ImageUploadField name="heroImage" label="Hero-afbeelding" defaultValue={trip?.heroImage} />
       <RichTextEditor name="heroSubtitle" label="Hero-subtitel" defaultValue={trip?.heroSubtitle} />
 
       <div className={styles.field}>
@@ -119,21 +198,20 @@ export function TripForm({
         />
       </div>
 
-      <RichTextEditor name="included" label="Inbegrepen" defaultValue={trip?.included} />
-      <RichTextEditor name="notIncluded" label="Niet inbegrepen" defaultValue={trip?.notIncluded} />
-
       <div className={styles.field}>
         <label className={styles.label} htmlFor="stayTitle">Titel verblijf-sectie</label>
-        <input
-          className={styles.input}
-          id="stayTitle"
-          name="stayTitle"
-          defaultValue={trip?.stayTitle ?? "Het verblijf"}
-          required
-        />
+        <input className={styles.input} id="stayTitle" name="stayTitle" defaultValue={trip?.stayTitle ?? "Het verblijf"} required />
       </div>
       <RichTextEditor name="stayBody" label="Tekst verblijf-sectie" defaultValue={trip?.stayBody} />
-      <ImageUploadField name="stayImage" label="Verblijf-afbeelding" defaultValue={trip?.stayImage} />
+      <div className={styles.fieldRow}>
+        <div style={{ flex: 2 }}>
+          <ImageUploadField name="stayImage" label="Verblijf-foto" defaultValue={trip?.stayImage} />
+        </div>
+        <div className={styles.field} style={{ flex: 1 }}>
+          <label className={styles.label} htmlFor="stayImageAlt">Alt-tekst verblijf-foto</label>
+          <input className={styles.input} id="stayImageAlt" name="stayImageAlt" defaultValue={trip?.stayImageAlt} />
+        </div>
+      </div>
 
       <GalleryEditor images={gallery} />
 

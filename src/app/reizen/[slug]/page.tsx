@@ -9,10 +9,13 @@ import { RichText } from "@/components/RichText";
 import { ImageSlider } from "@/components/ImageSlider";
 import { ArrowIcon, CompassIcon } from "@/components/icons";
 import { getTripBySlug } from "@/lib/content/trips";
-import type { TripProgramStep } from "@/lib/content/trips";
+import type { TripProgramStep, GalleryImage } from "@/lib/content/trips";
 import { getSiteSettings } from "@/lib/content/settings";
 import { stripHtml } from "@/lib/stripHtml";
-import { createBookingRequestAction } from "./actions";
+import { formatNights, formatSeason } from "@/lib/format";
+import { levelLabel } from "@/lib/levels";
+import { tripFromPrice } from "@/lib/tripCard";
+import { renderCancellationPolicy } from "@/lib/cancellation";
 import styles from "./page.module.css";
 
 export async function generateMetadata({
@@ -29,23 +32,17 @@ export async function generateMetadata({
   };
 }
 
-export default async function TripDetailPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ aangevraagd?: string }>;
-}) {
+export default async function TripDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [trip, settings] = await Promise.all([getTripBySlug(slug), getSiteSettings()]);
   if (!trip) notFound();
-  const { aangevraagd } = await searchParams;
 
   const program = trip.program as unknown as TripProgramStep[];
-  const gallery = trip.galleryImages as unknown as string[];
+  const gallery = trip.galleryImages as unknown as GalleryImage[];
   const summary = program.map((step) => `${step.day} — ${step.text}`).join(". ");
-  const bookAction = createBookingRequestAction.bind(null, slug);
   const phoneHref = `tel:${settings.phone.replace(/\s/g, "")}`;
+  const price = tripFromPrice(trip);
+  const policy = renderCancellationPolicy(trip.partner.cancellationPolicy);
 
   return (
     <div className={styles.page}>
@@ -54,11 +51,11 @@ export default async function TripDetailPage({
         active="reizen"
         height={620}
         image={trip.heroImage}
-        imageAlt={trip.title}
+        imageAlt={trip.heroImageAlt || trip.title}
         eyebrow={`${trip.sport.name} · ${trip.destination.name}`}
         title={trip.title}
         subtitle={trip.heroSubtitle}
-        meta={[trip.duration, trip.date, trip.level]}
+        meta={[formatNights(trip.minNights, trip.maxNights), formatSeason(trip.seasonStartMonth, trip.seasonEndMonth), levelLabel(trip.level)]}
       />
 
       <div className={styles.body}>
@@ -87,78 +84,67 @@ export default async function TripDetailPage({
             </div>
             {isImageUrl(trip.stayImage) && (
               <div className={styles.stayImage}>
-                <SiteImage src={trip.stayImage} alt={`${trip.stayTitle} — ${trip.title}`} />
+                <SiteImage src={trip.stayImage} alt={trip.stayImageAlt || `${trip.stayTitle} — ${trip.title}`} />
               </div>
             )}
           </div>
 
-          {gallery.some(isImageUrl) && (
+          {gallery.some((g) => isImageUrl(g.src)) && (
             <div className={styles.gallerySlider}>
-              <ImageSlider images={gallery} altPrefix={`${trip.title}, foto`} />
+              <ImageSlider images={gallery} />
             </div>
           )}
         </div>
 
         <div className={styles.side}>
           <div className={styles.bookingCard}>
-            {trip.price && (
+            {price && (
               <div>
                 <div className={styles.price}>
-                  {trip.price} <span className={styles.priceUnit}>p.p.</span>
+                  {price.from && <span className={styles.priceUnit}>vanaf </span>}
+                  {price.amount} <span className={styles.priceUnit}>p.p.</span>
                 </div>
-                {trip.priceNote && <div className={styles.priceIncludes}>{trip.priceNote}</div>}
+                <div className={styles.priceIncludes}>
+                  {trip.type === "group"
+                    ? "all-in, inclusief vlucht"
+                    : `bij ${formatNights(trip.minNights, trip.minNights)}`}
+                </div>
               </div>
             )}
             <div className={styles.bookingSection}>
               <div className={styles.bookingSectionLabel}>Inbegrepen</div>
-              <RichText html={trip.included} className={styles.bookingSectionText} />
+              <ul className={styles.bookingList}>
+                {trip.includes.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
             <div className={styles.bookingSection}>
               <div className={styles.bookingSectionLabel}>Niet inbegrepen</div>
-              <RichText html={trip.notIncluded} className={styles.bookingSectionTextMuted} />
+              <ul className={styles.bookingList}>
+                {trip.excludes.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
             <div className={styles.bookingSection}>
               <div className={styles.bookingSectionLabel}>Niveau</div>
-              <p className={styles.bookingSectionText}>{trip.level}</p>
+              <p className={styles.bookingSectionText}>{levelLabel(trip.level)}</p>
             </div>
-
-            {aangevraagd ? (
-              <div className={styles.bookingSuccess}>
-                Bedankt! We hebben je aanvraag ontvangen en nemen binnen 1 werkdag contact op.
-              </div>
-            ) : (
-              <form action={bookAction} className={styles.bookingForm}>
-                <input className={styles.bookingInput} name="name" placeholder="Naam" required />
-                <input
-                  className={styles.bookingInput}
-                  name="email"
-                  type="email"
-                  placeholder="E-mailadres"
-                  required
-                />
-                <input className={styles.bookingInput} name="phone" placeholder="Telefoon (optioneel)" />
-                {trip.fixedDepartureDate ? (
-                  <div className={styles.fixedDateNote}>Vertrek: {trip.fixedDepartureDate}</div>
-                ) : (
-                  <input
-                    className={styles.bookingInput}
-                    name="preferredDate"
-                    type="date"
-                    aria-label="Gewenste vertrekdatum"
-                    required
-                  />
+            {policy && (
+              <div className={styles.bookingSection}>
+                <div className={styles.bookingSectionLabel}>Annuleren</div>
+                <p className={styles.bookingSectionText}>{policy}</p>
+                {trip.partner.cancellationNotes && (
+                  <p className={styles.bookingSectionTextMuted}>{trip.partner.cancellationNotes}</p>
                 )}
-                <textarea
-                  className={styles.bookingTextarea}
-                  name="message"
-                  placeholder="Vraag of opmerking (optioneel)"
-                />
-                <button type="submit" className={styles.bookPrimary}>
-                  Vraag deze reis aan
-                  <ArrowIcon size={15} />
-                </button>
-              </form>
+              </div>
             )}
+
+            <a href={phoneHref} className={styles.bookPrimary}>
+              Bel om te boeken · {settings.phone}
+              <ArrowIcon size={15} />
+            </a>
           </div>
           <a href={phoneHref} className={styles.helpCard}>
             <CompassIcon size={34} color="#C7513C" strokeWidth={2.2} />

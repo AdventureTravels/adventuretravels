@@ -17,7 +17,9 @@ import {
   ARTICLES,
   DESTINATION_TURKIJE,
   FAQS,
+  GUIDE_WOUTER,
   INCLUDED_ITEMS,
+  PARTNER_HIPNOTICS,
   PAGES,
   SITE_SETTINGS,
   SPORT_WAKEBOARDEN,
@@ -67,8 +69,26 @@ async function main() {
     log("skipped", "destination turkije");
   }
 
+  // --- Partner ---
+  let hipnotics = await prisma.partner.findUnique({ where: { slug: PARTNER_HIPNOTICS.slug } });
+  if (!hipnotics) {
+    hipnotics = await prisma.partner.create({ data: PARTNER_HIPNOTICS });
+    log("created", `partner ${PARTNER_HIPNOTICS.slug}`);
+  } else {
+    log("skipped", `partner ${PARTNER_HIPNOTICS.slug}`);
+  }
+
+  // --- Guide ---
+  let wouter = await prisma.guide.findFirst({ where: { name: GUIDE_WOUTER.name } });
+  if (!wouter) {
+    wouter = await prisma.guide.create({ data: GUIDE_WOUTER });
+    log("created", `guide ${GUIDE_WOUTER.name}`);
+  } else {
+    log("skipped", `guide ${GUIDE_WOUTER.name}`);
+  }
+
   // --- Trip ---
-  const tripData = tripWakeboardweekAntalya(wakeboarden.id, turkije.id);
+  const tripData = tripWakeboardweekAntalya(wakeboarden.id, turkije.id, hipnotics.id, wouter.id);
   if (!(await prisma.trip.findUnique({ where: { slug: tripData.slug } }))) {
     await prisma.trip.create({ data: tripData });
     log("created", `trip ${tripData.slug}`);

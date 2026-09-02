@@ -1,25 +1,18 @@
+export const STATUS_OPTIONS = ["pending_payment", "paid", "confirmed", "cancelled", "refunded"] as const;
+export type BookingStatus = (typeof STATUS_OPTIONS)[number];
+
 export const STATUS_LABELS: Record<string, string> = {
-  aangevraagd: "Aangevraagd",
-  bevestigd: "Bevestigd",
-  aanbetaling_voldaan: "Aanbetaling voldaan",
-  volledig_betaald: "Volledig betaald",
-  afgerond: "Afgerond",
-  geannuleerd: "Geannuleerd",
-  // legacy values from before the booking portal existed
-  new: "Aangevraagd",
-  contacted: "Contact gehad",
-  done: "Afgerond",
+  pending_payment: "Wacht op betaling",
+  paid: "Betaald",
+  confirmed: "Bevestigd",
+  cancelled: "Geannuleerd",
+  refunded: "Terugbetaald",
 };
 
 export function statusLabel(status: string) {
   return STATUS_LABELS[status] ?? status;
 }
 
-export const STATUS_OPTIONS = [
-  "aangevraagd",
-  "bevestigd",
-  "aanbetaling_voldaan",
-  "volledig_betaald",
-  "afgerond",
-  "geannuleerd",
-];
+export function isBookingStatus(value: string): value is BookingStatus {
+  return (STATUS_OPTIONS as readonly string[]).includes(value);
+}

@@ -43,39 +43,80 @@ export const DESTINATION_TURKIJE = {
   order: 0,
 };
 
-/** Afbeeldingen blijven leeg: een reis zonder echte foto's is niet publiceerbaar. */
-export function tripWakeboardweekAntalya(sportId: string, destinationId: string) {
+export const PARTNER_HIPNOTICS = {
+  id: "partner_hipnotics",
+  slug: "hipnotics-cable-park",
+  name: "Hipnotics Cable Park",
+  type: "park",
+  country: "Turkije",
+  city: "Antalya",
+  commissionPct: "15.00",
+  // Staffel wordt in /admin ingevuld; tot die tijd is de partner inactief en blijft de reis draft.
+  cancellationPolicy: [] as { daysBefore: number; pct: number }[],
+  cancellationNotes:
+    "Een bijgeboekte vlucht valt buiten deze staffel en is na uitgifte van het ticket niet restitueerbaar.",
+  isActive: false,
+};
+
+export const GUIDE_WOUTER = {
+  name: "Wouter",
+  bio: "Vijftien jaar op de kabel, kent de parken en de mensen erachter. Belt je terug als je twijfelt over je niveau of je board.",
+  photo: "",
+  photoAlt: "Wouter, gids van AdventureTravels",
+  phone: "", // in /admin invullen; leeg = niet tonen
+  livesIn: "Apeldoorn",
+  sports: ["wakeboarden"],
+};
+
+export const TRIP_ANTALYA_INCLUDES = [
+  "Verblijf bij het park",
+  "Ontbijt & diner",
+  "Gids ter plaatse",
+  "Parkpas",
+  "Transfer luchthaven Antalya – verblijf en terug",
+];
+export const TRIP_ANTALYA_EXCLUDES = ["Vlucht", "Reisverzekering", "Persoonlijke uitgaven"];
+
+/** Afbeeldingen en prijs blijven leeg: een reis zonder echte foto's en prijs is niet publiceerbaar. */
+export function tripWakeboardweekAntalya(sportId: string, destinationId: string, partnerId: string, guideId: string | null) {
   return {
     slug: "wakeboardweek-antalya",
     title: "Wakeboardweek Antalya",
+    type: "individual",
+    status: "draft",
+    level: "all",
     image: "",
-    level: "Beginner tot gevorderd",
-    category: "Turkije · wakeboarden",
+    imageAlt: "Wakeboardweek Antalya",
     text: p("Vijf dagen op de kabel, verblijf bij het park inbegrepen."),
-    duration: "7 dagen",
-    date: "April — oktober",
-    price: "",
-    priceNote: "",
     heroImage: "",
+    heroImageAlt: "Wakeboardweek Antalya",
     heroSubtitle: p("Vijf dagen op de kabel, twee weken zonder jetlag terugkomen."),
     program: [
       { day: "DAG 1", text: "Aankomst & intake niveau" },
       { day: "DAG 2–6", text: "Dagelijkse sessies op de kabel, avonden vrij" },
       { day: "DAG 7", text: "Vertrek" },
     ] as Prisma.InputJsonValue,
-    included: p("Verblijf · ontbijt & diner · cable park-pas · transfer"),
-    notIncluded: p("Vlucht · reisverzekering · persoonlijke uitgaven"),
     stayTitle: "Het verblijf",
     stayBody: ps([
       "Accommodatie direct aan het park, zelf getest door het team voordat de reis werd toegevoegd.",
       "Eigen kamer, ontbijt inbegrepen, en avonden met een gezamenlijk diner in het dorp.",
     ]),
     stayImage: "",
+    stayImageAlt: "",
     galleryImages: [] as Prisma.InputJsonValue,
-    fixedDepartureDate: null,
+    includes: TRIP_ANTALYA_INCLUDES,
+    excludes: TRIP_ANTALYA_EXCLUDES,
+    seasonStartMonth: 3,
+    seasonEndMonth: 11,
+    minNights: 6,
+    maxNights: 6,
+    pricePpBase: null,
+    pricePerExtraNight: null,
     order: 0,
     sportId,
     destinationId,
+    partnerId,
+    guideId,
   };
 }
 

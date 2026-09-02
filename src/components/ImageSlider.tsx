@@ -5,11 +5,13 @@ import { SiteImage, isImageUrl } from "./SiteImage";
 import { PrevArrowIcon, ArrowIcon } from "./icons";
 import styles from "./ImageSlider.module.css";
 
+export type SliderImage = { src: string; alt: string };
+
 /** Fotogalerij. Alleen echte uploads worden getoond; zonder foto's rendert
  * de component niets. */
-export function ImageSlider({ images, altPrefix }: { images: string[]; altPrefix: string }) {
+export function ImageSlider({ images }: { images: SliderImage[] }) {
   const [index, setIndex] = useState(0);
-  const photos = images.filter(isImageUrl);
+  const photos = images.filter((img) => isImageUrl(img.src));
   if (photos.length === 0) return null;
 
   const current = Math.min(index, photos.length - 1);
@@ -19,7 +21,7 @@ export function ImageSlider({ images, altPrefix }: { images: string[]; altPrefix
   return (
     <div className={styles.slider}>
       <div className={styles.viewport}>
-        <SiteImage src={photos[current]} alt={`${altPrefix} ${current + 1}`} />
+        <SiteImage src={photos[current].src} alt={photos[current].alt} />
         {photos.length > 1 && (
           <>
             <button type="button" className={`${styles.control} ${styles.controlPrev}`} onClick={prev} aria-label="Vorige foto">
@@ -31,7 +33,7 @@ export function ImageSlider({ images, altPrefix }: { images: string[]; altPrefix
             <div className={styles.dots}>
               {photos.map((image, i) => (
                 <button
-                  key={image + i}
+                  key={image.src + i}
                   type="button"
                   className={i === current ? `${styles.dot} ${styles.dotActive}` : styles.dot}
                   onClick={() => setIndex(i)}

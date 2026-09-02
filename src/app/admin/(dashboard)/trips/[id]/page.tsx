@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { getTripById } from "@/lib/content/trips";
 import { getSports } from "@/lib/content/sports";
 import { getDestinations } from "@/lib/content/destinations";
+import { getPartners } from "@/lib/content/partners";
+import { getGuides } from "@/lib/content/guides";
 import { updateTripAction } from "../actions";
 import { TripForm } from "../TripForm";
 import styles from "../../../admin.module.css";
@@ -11,12 +13,18 @@ export default async function EditTripPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ saved?: string }>;
 }) {
   const { id } = await params;
-  const [trip, sports, destinations] = await Promise.all([getTripById(id), getSports(), getDestinations()]);
+  const [trip, sports, destinations, partners, guides] = await Promise.all([
+    getTripById(id),
+    getSports(),
+    getDestinations(),
+    getPartners(),
+    getGuides(),
+  ]);
   if (!trip) notFound();
-  const { error } = await searchParams;
+  const { saved } = await searchParams;
 
   const action = updateTripAction.bind(null, id);
 
@@ -25,9 +33,9 @@ export default async function EditTripPage({
       <div className={styles.pageHead}>
         <h1 className={styles.pageTitle}>{trip.title} bewerken</h1>
       </div>
-      {error === "json" && <div className={styles.error}>Programma is geen geldige JSON.</div>}
+      {saved && <div className={styles.notice}>Opgeslagen.</div>}
       <div className={styles.card} style={{ marginTop: 16 }}>
-        <TripForm action={action} trip={trip} sports={sports} destinations={destinations} />
+        <TripForm action={action} trip={trip} sports={sports} destinations={destinations} partners={partners} guides={guides} />
       </div>
     </div>
   );

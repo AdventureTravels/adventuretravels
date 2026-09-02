@@ -2,17 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { getCustomerEmail } from "@/lib/customerAuth";
-import { getBookingRequestById, setBookingParticipants } from "@/lib/content/bookings";
-import { indexedRowsInOrder } from "@/lib/adminFormSections";
+import { getBookingById, setBookingParticipants } from "@/lib/content/bookings";
+import { participantsFromForm } from "@/lib/participantsForm";
 
 export async function updateOwnParticipantsAction(id: string, formData: FormData) {
   const email = await getCustomerEmail();
-  const booking = await getBookingRequestById(id);
-  if (!email || !booking || booking.email.toLowerCase() !== email.toLowerCase()) return;
+  const booking = await getBookingById(id);
+  if (!email || !booking || booking.contactEmail.toLowerCase() !== email.toLowerCase()) return;
 
-  const rows = indexedRowsInOrder(formData, "participants")
-    .map((row) => ({ name: row.name?.trim() ?? "", birthdate: row.birthdate?.trim(), dietaryNotes: row.dietaryNotes?.trim() }))
-    .filter((row) => row.name);
-  await setBookingParticipants(id, rows);
+  await setBookingParticipants(id, participantsFromForm(formData));
   revalidatePath(`/boekingen/${id}`);
 }

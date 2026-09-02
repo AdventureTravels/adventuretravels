@@ -20,6 +20,8 @@ export type SiteSettingsInput = {
   programCtaEyebrow: string;
   programCtaTitle: string;
   programCtaBody: string;
+  programPdfUrl: string;
+  infoFormPdfUrl: string;
   footerTagline: string;
 };
 

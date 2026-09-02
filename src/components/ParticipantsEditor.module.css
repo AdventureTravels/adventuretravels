@@ -56,3 +56,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+.static {
+  font-size: 14px;
+  color: var(--text-secondary);
+  align-self: center;
+}

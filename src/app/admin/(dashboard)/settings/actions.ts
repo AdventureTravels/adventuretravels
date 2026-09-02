@@ -23,6 +23,8 @@ export async function updateSiteSettingsAction(formData: FormData) {
     programCtaEyebrow: text(formData, "programCtaEyebrow"),
     programCtaTitle: text(formData, "programCtaTitle"),
     programCtaBody: text(formData, "programCtaBody"),
+    programPdfUrl: text(formData, "programPdfUrl"),
+    infoFormPdfUrl: text(formData, "infoFormPdfUrl"),
     footerTagline: text(formData, "footerTagline"),
   });
 

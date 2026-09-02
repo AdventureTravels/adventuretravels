@@ -52,6 +52,22 @@ npm run db:cleanup-v5
 
 Het script raakt alleen rijen die aantoonbaar uit de oude seed komen of een oude claim bevatten; handmatig ingevoerde content blijft staan.
 
+### Volgorde bij de v5-upgrade van een bestaande database
+
+1. `npx prisma migrate resolve --applied 0_init` (eenmalig, vóór de eerste deploy).
+2. Deploy. `migrate deploy` past `20260902100000_fase1_site_settings` en `20260902120000_fase2_datamodel` toe. De Fase 2-migratie zet alle oude `BookingRequest`-rijen om naar `Booking` met status `cancelled` en een notitie "v4-aanvraag, gemigreerd …", maakt de partner Hipnotics aan (inactief, lege staffel) en koppelt bestaande reizen daaraan. De oude `Review`-tabel (vrije invoer) wordt vervangen; reviews ontstaan voortaan alleen uit boekingen.
+3. `npm run db:cleanup-v5` (na de deploy, met de nieuwe Prisma-client).
+4. In `/admin`: staffel van Hipnotics invullen en de partner op actief zetten, prijs en foto's van de Antalya-reis invullen, status op "Gepubliceerd". De reis verschijnt pas op de site als `publishProblems()` leeg is; het reisformulier toont wat er nog mist.
+
+## Datamodel (v5)
+
+- `Partner` (park/gym/accommodatie) draagt de annuleringsstaffel; `src/lib/cancellation.ts` valideert en rendert die overal (reispagina, checkout, mail, portaal).
+- `Trip` is `individual` (eigen aankomstdatum, nachten, prijs p.p. bij `minNights` + extra nacht) of `group` (vaste `TripDeparture`s, all-in incl. vlucht). `TripExtra` = bijboekbare extra's.
+- `Booking` vervangt `BookingRequest`: 100% betaling via Mollie (`Payment`), prijsopbouw en staffel als snapshot, voorwaarden-acceptatie met tijdstip. `Invoice` blijft voor handmatige vluchtfacturen.
+- `Review` hangt altijd aan een `Booking` (token-flow), `Lead` vangt pdf-aanvragen, gids-terugbelverzoeken en groepsaanvragen.
+- Publicatiecheck: `isTripPublishable()` in `src/lib/publish.ts`; alle publieke queries in `src/lib/content/trips.ts` filteren erop.
+- Bedragen zijn `Decimal`; formattering via `formatPrice()` in `src/lib/format.ts`.
+
 ## Beelden
 
 Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.

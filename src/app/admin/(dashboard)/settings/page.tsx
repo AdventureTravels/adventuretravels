@@ -2,6 +2,7 @@ import { getSiteSettings } from "@/lib/content/settings";
 import { updateSiteSettingsAction } from "./actions";
 import { RichTextEditor } from "../../RichTextEditor";
 import { ImageUploadField } from "../../ImageUploadField";
+import { FileUploadField } from "@/components/FileUploadField";
 import styles from "../../admin.module.css";
 
 export default async function AdminSettingsPage({
@@ -75,6 +76,14 @@ export default async function AdminSettingsPage({
             <input className={styles.input} id="programCtaTitle" name="programCtaTitle" defaultValue={settings.programCtaTitle} required />
           </div>
           <RichTextEditor name="programCtaBody" label="Programma-cta tekst" defaultValue={settings.programCtaBody} />
+          <div className={styles.field}>
+            <label className={styles.label}>Programma-pdf (zonder pdf wordt het blok niet getoond)</label>
+            <FileUploadField name="programPdfUrl" defaultValue={settings.programPdfUrl} />
+          </div>
+          <div className={styles.field}>
+            <label className={styles.label}>Standaardinformatieformulier pakketreis (pdf, verplicht in de checkout en bevestigingsmail)</label>
+            <FileUploadField name="infoFormPdfUrl" defaultValue={settings.infoFormPdfUrl} />
+          </div>
 
           <div className={styles.field}>
             <label className={styles.label} htmlFor="footerTagline">Footer-tagline</label>

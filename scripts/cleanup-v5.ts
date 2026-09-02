@@ -10,17 +10,21 @@
  * Draai met DRY_RUN=1 om alleen te zien wat er zou gebeuren.
  */
 import { PrismaClient, type Prisma } from "@prisma/client";
-import { FAQS, PAGES, SITE_SETTINGS, TRIP_TYPES, SPORT_WAKEBOARDEN } from "../prisma/seedContent";
+import {
+  FAQS,
+  GUIDE_WOUTER,
+  PAGES,
+  SITE_SETTINGS,
+  SPORT_WAKEBOARDEN,
+  TRIP_ANTALYA_EXCLUDES,
+  TRIP_ANTALYA_INCLUDES,
+  TRIP_TYPES,
+} from "../prisma/seedContent";
 
 const prisma = new PrismaClient();
 const DRY_RUN = process.env.DRY_RUN === "1";
 
 const OLD_CLAIMS = /15%|45 dagen|SGR|ANVR|Calamiteitenfonds|aangesloten bij (de Stichting Garantiefonds voor Reisgelden )?VZR Garant/i;
-const SEED_REVIEW_AUTHORS = [
-  "Sanne T. — Gardameer, juni 2026",
-  "Joost & Maaike — Slovenië, juli 2026",
-  "Ewout D. — Costa Blanca, april 2026",
-];
 const OLD_FAQ_QUESTIONS = ["Hoe werkt de aanbetaling?", "Kan ik kosteloos annuleren?"];
 
 function isImageUrl(value: unknown): boolean {
@@ -38,11 +42,7 @@ function act(label: string, fn: () => Promise<unknown>) {
 }
 
 async function main() {
-  // Reviews uit de oude seed
-  const fakeReviews = await prisma.review.findMany({ where: { author: { in: SEED_REVIEW_AUTHORS } } });
-  for (const r of fakeReviews) {
-    await act(`- review "${r.author}"`, () => prisma.review.delete({ where: { id: r.id } }));
-  }
+  // Reviews uit de oude seed zijn al vervallen: de Fase 2-migratie vervangt de Review-tabel.
 
   // FAQ: oude vragen weg, nieuwe erbij als ze ontbreken
   const oldFaqs = await prisma.faqItem.findMany({ where: { question: { in: OLD_FAQ_QUESTIONS } } });
@@ -125,6 +125,31 @@ async function main() {
     );
   }
 
+  // Fase 2: Antalya-reis inrichten volgens de antwoorden van 2 september 2026
+  const antalya = await prisma.trip.findUnique({ where: { slug: "wakeboardweek-antalya" } });
+  if (antalya) {
+    let guide = await prisma.guide.findFirst({ where: { name: GUIDE_WOUTER.name } });
+    if (!guide) {
+      await act(`+ guide ${GUIDE_WOUTER.name}`, async () => {
+        guide = await prisma.guide.create({ data: GUIDE_WOUTER });
+      });
+    }
+    const patch: Prisma.TripUpdateInput = {};
+    if (antalya.level !== "all") patch.level = "all";
+    if (antalya.seasonStartMonth !== 3 || antalya.seasonEndMonth !== 11) {
+      patch.seasonStartMonth = 3;
+      patch.seasonEndMonth = 11;
+    }
+    if (antalya.includes.join("|") !== TRIP_ANTALYA_INCLUDES.join("|")) patch.includes = TRIP_ANTALYA_INCLUDES;
+    if (antalya.excludes.join("|") !== TRIP_ANTALYA_EXCLUDES.join("|")) patch.excludes = TRIP_ANTALYA_EXCLUDES;
+    if (!antalya.guideId && guide) patch.guide = { connect: { id: guide.id } };
+    if (Object.keys(patch).length > 0) {
+      await act(`~ trip wakeboardweek-antalya: ${Object.keys(patch).join(", ")}`, () =>
+        prisma.trip.update({ where: { id: antalya.id }, data: patch })
+      );
+    }
+  }
+
   // Placeholder-labels in beeldvelden leegmaken (SiteImage toont ze toch niet)
   for (const s of await prisma.sport.findMany()) {
     const data = { heroImage: cleanImage(s.heroImage), cardImage: cleanImage(s.cardImage) };
@@ -139,7 +164,8 @@ async function main() {
     }
   }
   for (const t of await prisma.trip.findMany()) {
-    const gallery = (t.galleryImages as unknown as string[]).filter(isImageUrl);
+    const rawGallery = t.galleryImages as unknown as { src: string; alt: string }[];
+    const gallery = rawGallery.filter((g) => isImageUrl(g?.src));
     const data = {
       image: cleanImage(t.image),
       heroImage: cleanImage(t.heroImage),
@@ -150,7 +176,7 @@ async function main() {
       data.image !== t.image ||
       data.heroImage !== t.heroImage ||
       data.stayImage !== t.stayImage ||
-      gallery.length !== (t.galleryImages as unknown as string[]).length;
+      gallery.length !== rawGallery.length;
     if (changed) {
       await act(`~ trip ${t.slug}: beeldlabels leeg`, () => prisma.trip.update({ where: { id: t.id }, data }));
     }

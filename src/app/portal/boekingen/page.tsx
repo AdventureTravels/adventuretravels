@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getCustomerEmail } from "@/lib/customerAuth";
 import { getBookingsByEmail } from "@/lib/content/bookings";
 import { statusLabel } from "@/lib/bookingStatus";
+import { formatDate } from "@/lib/format";
 import { customerLogoutAction } from "./actions";
 import styles from "../portal.module.css";
 
@@ -30,14 +31,15 @@ export default async function CustomerBookingsPage() {
           </div>
         ) : (
           bookings.map((booking) => {
-            const fullyPaid = booking.depositPaid && booking.balancePaid;
+            const paid = booking.status === "paid" || booking.status === "confirmed";
             return (
               <a key={booking.id} href={`/boekingen/${booking.id}`} className={styles.bookingCard}>
                 <div className={styles.bookingCardTitle}>{booking.trip.title}</div>
                 <div className={styles.bookingCardMeta}>
-                  {booking.bookingNumber ?? booking.id} — vertrek: {booking.preferredDate}
+                  {booking.bookingNumber} — aankomst {formatDate(booking.arrivalDate)}, {booking.nights}{" "}
+                  {booking.nights === 1 ? "nacht" : "nachten"}
                 </div>
-                <span className={`${styles.badge} ${fullyPaid ? styles.badgePaid : ""}`}>
+                <span className={`${styles.badge} ${paid ? styles.badgePaid : ""}`}>
                   {statusLabel(booking.status)}
                 </span>
               </a>

@@ -6,6 +6,8 @@ import styles from "../admin.module.css";
 const NAV = [
   { href: "/admin", label: "Overzicht" },
   { href: "/admin/trips", label: "Reizen" },
+  { href: "/admin/partners", label: "Partners" },
+  { href: "/admin/guides", label: "Gidsen" },
   { href: "/admin/sports", label: "Sporten" },
   { href: "/admin/destinations", label: "Bestemmingen" },
   { href: "/admin/articles", label: "Journal" },
