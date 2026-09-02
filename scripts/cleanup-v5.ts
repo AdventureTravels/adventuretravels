@@ -13,6 +13,7 @@ import { PrismaClient, type Prisma } from "@prisma/client";
 import {
   FAQS,
   GUIDE_WOUTER,
+  INCLUDED_ITEMS,
   PAGES,
   SITE_SETTINGS,
   SPORT_WAKEBOARDEN,
@@ -24,7 +25,8 @@ import {
 const prisma = new PrismaClient();
 const DRY_RUN = process.env.DRY_RUN === "1";
 
-const OLD_CLAIMS = /15%|45 dagen|SGR|ANVR|Calamiteitenfonds|aangesloten bij (de Stichting Garantiefonds voor Reisgelden )?VZR Garant/i;
+// Hoofdlettergevoelig met woordgrenzen: "aanvraag" bevat "anvr" en mag niet matchen.
+const OLD_CLAIMS = /15%|45 dagen|\bSGR\b|\bANVR\b|Calamiteitenfonds|aangesloten bij (de Stichting Garantiefonds voor Reisgelden )?VZR Garant/;
 const OLD_FAQ_QUESTIONS = ["Hoe werkt de aanbetaling?", "Kan ik kosteloos annuleren?"];
 
 function isImageUrl(value: unknown): boolean {
@@ -86,10 +88,25 @@ async function main() {
     }
   }
 
-  // Trip-types met verzonnen aantallen of prijzen
+  // Inbegrepen-items uit de oude seed (materiaal, diners) vervangen door de bevestigde set
+  const OLD_INCLUDED_TITLES = ["Verblijf", "Gids ter plaatse", "Materiaal", "Transfers & diners"];
+  const oldIncluded = await prisma.includedItem.findMany({ where: { title: { in: OLD_INCLUDED_TITLES } } });
+  const oldSeedIncluded = oldIncluded.filter((i) => /Zelf getest, eigen kamer, ontbijt|rijdt en vaart|Boards, bikes|vijf diners/.test(i.bodyHtml));
+  for (const i of oldSeedIncluded) {
+    await act(`- includedItem "${i.title}" (oude seed)`, () => prisma.includedItem.delete({ where: { id: i.id } }));
+  }
+  for (let i = 0; i < INCLUDED_ITEMS.length; i++) {
+    const item = INCLUDED_ITEMS[i];
+    const existing = await prisma.includedItem.findFirst({ where: { title: item.title } });
+    if (existing && !oldSeedIncluded.some((o) => o.id === existing.id)) continue;
+    await act(`+ includedItem "${item.title}"`, () => prisma.includedItem.create({ data: { ...item, order: i } }));
+  }
+
+  // Trip-types met verzonnen aantallen, prijzen of dubbelingen uit de oude seed
+  const OLD_TRIP_TYPE_TITLES = ["Watersport", "Mountainbike", "Bergsport", "Bestemmingen", "Seizoenen", "Vlucht & transfer"];
   const tripTypes = await prisma.tripType.findMany();
   for (const t of tripTypes) {
-    if (/\d/.test(t.meta)) {
+    if (/\d/.test(t.meta) || OLD_TRIP_TYPE_TITLES.includes(t.title)) {
       await act(`- tripType "${t.title}" (${t.meta})`, () => prisma.tripType.delete({ where: { id: t.id } }));
     }
   }
@@ -128,6 +145,11 @@ async function main() {
   // Fase 2: Antalya-reis inrichten volgens de antwoorden van 2 september 2026
   const antalya = await prisma.trip.findUnique({ where: { slug: "wakeboardweek-antalya" } });
   if (antalya) {
+    if (/Vanaf € ?890 p\.p\./.test(antalya.text)) {
+      await act(`~ trip wakeboardweek-antalya: prijs uit kaarttekst (staat nu in het prijsveld)`, () =>
+        prisma.trip.update({ where: { id: antalya.id }, data: { text: antalya.text.replace(/\s*Vanaf € ?890 p\.p\./, "") } })
+      );
+    }
     let guide = await prisma.guide.findFirst({ where: { name: GUIDE_WOUTER.name } });
     if (!guide) {
       await act(`+ guide ${GUIDE_WOUTER.name}`, async () => {

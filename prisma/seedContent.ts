@@ -430,10 +430,11 @@ export const PAGES = [
 ];
 
 export const INCLUDED_ITEMS = [
-  { icon: "house", title: "Verblijf", bodyHtml: p("Zelf getest, eigen kamer, ontbijt inbegrepen.") },
+  { icon: "house", title: "Verblijf", bodyHtml: p("Zelf getest, eigen kamer, direct bij het park.") },
+  { icon: "calendar", title: "Ontbijt & diner", bodyHtml: p("Ontbijt bij het verblijf, 's avonds samen aan tafel in het dorp.") },
   { icon: "compass", title: "Gids ter plaatse", bodyHtml: p("Woont in het gebied en rijdt er het hele seizoen.") },
   { icon: "wave", title: "Parkpas", bodyHtml: p("Toegang tot het cable park voor de hele week.") },
-  { icon: "pin", title: "Transfer", bodyHtml: p("Vervoer tussen het vliegveld en het verblijf.") },
+  { icon: "pin", title: "Transfer", bodyHtml: p("Van de luchthaven naar het verblijf en terug.") },
 ];
 
 export const TRIP_TYPES = [
