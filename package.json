@@ -13,7 +13,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:cleanup-v5": "tsx scripts/cleanup-v5.ts",
-    "db:verify": "tsx scripts/db-verify.ts"
+    "db:verify": "tsx scripts/db-verify.ts",
+    "journal:import": "tsx scripts/import-articles.ts"
   },
   "dependencies": {
     "@mollie/api-client": "^4.6.0",

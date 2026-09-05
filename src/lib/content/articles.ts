@@ -13,7 +13,9 @@ export function getArticleById(id: string) {
   return prisma.article.findUnique({ where: { id } });
 }
 
-export type ArticleSection = { number?: string; title: string; bodyHtml: string; quoteHtml?: string };
+export type ArticleFaq = { question: string; answer: string };
+/** Een sectie met `faq` wordt als vraag-en-antwoordblok gerenderd én als FAQPage-structured data uitgestuurd. */
+export type ArticleSection = { number?: string; title: string; bodyHtml: string; quoteHtml?: string; faq?: ArticleFaq[] };
 
 export type ArticleInput = {
   slug: string;

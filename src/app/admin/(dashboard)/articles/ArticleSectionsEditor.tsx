@@ -58,6 +58,18 @@ export function ArticleSectionsEditor({ sections }: { sections: ArticleSection[]
             label="Quote (optioneel)"
             defaultValue={section.quoteHtml}
           />
+          <div className={styles.field}>
+            <label className={styles.label} htmlFor={`section-faq-${section.key}`}>
+              Veelgestelde vragen (optioneel): per blok eerst de vraag, daaronder het antwoord; blokken gescheiden door een lege regel
+            </label>
+            <textarea
+              className={styles.textarea}
+              id={`section-faq-${section.key}`}
+              name={`sections[${i}].faq`}
+              rows={6}
+              defaultValue={(section.faq ?? []).map((f) => `${f.question}\n${f.answer.replace(/<[^>]+>/g, "")}`).join("\n\n")}
+            />
+          </div>
           <div className={styles.actions}>
             <button type="button" className={styles.buttonDanger} onClick={() => removeSection(section.key)}>
               Sectie verwijderen

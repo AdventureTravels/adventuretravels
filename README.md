@@ -124,6 +124,10 @@ npm run db:verify -- after
 3. Maak Custom Event-triggers voor `view_trip`, `begin_checkout`, `add_payment_info`, `purchase` en `generate_lead`, met dataLayer-variabelen `trip_slug`, `value`, `currency`, `transaction_id`, `lead_type`.
 4. Controle in een schone browser: vóór een klik op de banner mogen geen `_ga`, `_fbp`, `_gcl_au` of `_clck`-cookies bestaan; na "Weigeren" ook niet.
 
+## Journal (SEO + GEO)
+
+Artikelen staan als markdown in `content/journal/` en gaan met `npm run journal:import -- --write` de database in; conventies en de `[CHECK]`-regel staan in `content/journal/README.md`. Elke artikelpagina stuurt `Article`- en `FAQPage`-structured data, canonical en Open Graph uit; FAQ-blokken zijn in de admin per sectie te bewerken.
+
 ## Beelden
 
 Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.

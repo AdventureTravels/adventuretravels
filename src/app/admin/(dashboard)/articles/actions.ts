@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createArticle, updateArticle, deleteArticle } from "@/lib/content/articles";
 import type { ArticleSection } from "@/lib/content/articles";
 import { indexedRowsInOrder } from "@/lib/adminFormSections";
+import { parseFaq } from "@/lib/articleFaq";
 
 function fromForm(formData: FormData) {
   const sections: ArticleSection[] = indexedRowsInOrder(formData, "sections").map((row) => ({
@@ -12,6 +13,7 @@ function fromForm(formData: FormData) {
     bodyHtml: row.bodyHtml ?? "",
     number: row.number?.trim() || undefined,
     quoteHtml: row.quoteHtml?.trim() || undefined,
+    faq: parseFaq(row.faq),
   }));
   const calloutLabel = String(formData.get("calloutLabel") ?? "").trim();
   const calloutText = String(formData.get("calloutText") ?? "").trim();

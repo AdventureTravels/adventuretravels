@@ -12,6 +12,9 @@ import type { ArticleSection } from "@/lib/content/articles";
 import { getTrips } from "@/lib/content/trips";
 import { toTripCardData } from "@/lib/tripCard";
 import { RichText } from "@/components/RichText";
+import { SITE_URL } from "@/lib/siteUrl";
+import { stripHtml } from "@/lib/stripHtml";
+import { isImageUrl } from "@/components/SiteImage";
 import styles from "./page.module.css";
 
 export async function generateMetadata({
@@ -25,6 +28,8 @@ export async function generateMetadata({
   return {
     title: `${article.title} — AdventureTravels Journal`,
     description: article.excerpt,
+    alternates: { canonical: `/journal/${article.slug}` },
+    openGraph: { type: "article", title: article.title, description: article.excerpt, url: `${SITE_URL}/journal/${article.slug}` },
   };
 }
 
@@ -35,9 +40,39 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
 
   const sections = article.sections as unknown as ArticleSection[];
   const trips = await getTrips();
+  const faqs = sections.flatMap((s) => s.faq ?? []);
+
+  // Structured data voor zoekmachines en AI-antwoorden: Article + FAQPage (alleen als er vragen zijn).
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: article.title,
+      description: article.excerpt,
+      inLanguage: "nl",
+      url: `${SITE_URL}/journal/${article.slug}`,
+      ...(isImageUrl(article.heroImage) ? { image: article.heroImage } : {}),
+      author: { "@type": "Organization", name: "AdventureTravels", url: SITE_URL },
+      publisher: { "@type": "Organization", name: "AdventureTravels", url: SITE_URL },
+    },
+    ...(faqs.length
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((f) => ({
+              "@type": "Question",
+              name: f.question,
+              acceptedAnswer: { "@type": "Answer", text: stripHtml(f.answer) },
+            })),
+          },
+        ]
+      : []),
+  ];
 
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Topbar />
       <Nav variant="solid" active="journal" />
       <HeroBanner
@@ -58,8 +93,20 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
                 {section.number && <span className={styles.sectionNumber}>{section.number}</span>}
                 <h2 className={styles.sectionTitle}>{section.title}</h2>
               </div>
-              <RichText html={section.bodyHtml} className={styles.sectionText} />
+              {section.bodyHtml && <RichText html={section.bodyHtml} className={styles.sectionText} />}
               {section.quoteHtml && <RichText html={section.quoteHtml} className={styles.quote} />}
+              {section.faq && section.faq.length > 0 && (
+                <dl className={styles.faq}>
+                  {section.faq.map((f) => (
+                    <div key={f.question} className={styles.faqItem}>
+                      <dt className={styles.faqQuestion}>{f.question}</dt>
+                      <dd className={styles.faqAnswer}>
+                        <RichText html={f.answer} />
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
             </div>
           ))}
           {article.calloutLabel && article.calloutText && (
