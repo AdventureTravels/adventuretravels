@@ -26,18 +26,17 @@
   color: var(--text-secondary);
 }
 
-/* Zelf-vullend raster: elk aantal items past, lege cellen tonen geen vlak.
-   Lijnen via outline, zodat ze in de 1px-gap precies één keer overlappen. */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1px;
-  padding: 1px;
+/* Kaarten in de slider (zie Slider.tsx / TripSlider.module.css voor de track). */
+.slide {
+  width: 300px;
 }
 
 .item {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 220px;
   background: var(--white);
-  outline: 1px solid var(--line);
+  border: 1px solid var(--line);
   padding: 30px 26px;
   display: flex;
   flex-direction: column;
@@ -61,14 +60,10 @@
   .section {
     padding: 56px 24px;
   }
-
-  .grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
 }
 
 @media (max-width: 560px) {
-  .grid {
-    grid-template-columns: 1fr;
+  .slide {
+    width: 82vw;
   }
 }
