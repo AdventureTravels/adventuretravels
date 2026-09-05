@@ -148,7 +148,8 @@ async function main() {
     const data = parse(md);
     if (PARSE_ONLY) {
       const secs = data.sections as unknown as Section[];
-      console.log(`· ${file}: ${data.slug} — intro ${data.intro.length} tekens, ${secs.length} secties, callout ${data.calloutText ? "ja" : "nee"}`);
+      const faqN = secs.reduce((n, s) => n + (s.faq?.length ?? 0), 0);
+      console.log(`· ${file}: ${data.slug} — intro ${data.intro.length} tekens, ${secs.length} secties, ${faqN} FAQ-vragen, callout ${data.calloutText ? "ja" : "nee"}`);
       if (process.argv.includes("--verbose")) console.log(JSON.stringify(data, null, 1).slice(0, 1600));
       continue;
     }
