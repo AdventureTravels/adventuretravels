@@ -27,7 +27,7 @@ Zie `.env.example` voor de volledige lijst variabelen.
 De database is de enige bron van waarheid voor content, prijzen en voorwaarden. Een deploy verandert nooit content.
 
 - Schema: `prisma/schema.prisma`. Wijzigingen gaan altijd via een migratie: `npm run db:migrate` (lokaal, maakt een map aan onder `prisma/migrations/`).
-- Deploy: `vercel-build` draait `prisma migrate deploy && next build`. Er draait **geen** `db push` en **geen** seed meer tijdens een build.
+- Deploy: `vercel-build` draait `prisma migrate deploy && next build` (met 60 s wachttijd op de migratie-lock en één herkansing, voor als twee deploys elkaar raken). Er draait **geen** `db push` en **geen** seed meer tijdens een build.
 - Seed: `npm run db:seed` is alleen bedoeld voor een lege database. Hij maakt uitsluitend aan wat nog niet bestaat en overschrijft nooit bestaande rijen. Zet `SEED_ADMIN_PASSWORD` om een eerste admin aan te maken.
 
 ### Eenmalig: bestaande database baselinen
