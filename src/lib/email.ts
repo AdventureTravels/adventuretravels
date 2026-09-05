@@ -6,8 +6,7 @@ import { formatDate, formatPrice } from "@/lib/format";
 import type { BankTransferDetails } from "@/lib/mollie";
 
 const FROM = "AdventureTravels <boekingen@adventuretravels.nl>";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adventuretravels.nl";
-const PORTAL_URL = process.env.PORTAL_URL ?? "https://mijn.adventuretravels.nl";
+import { SITE_URL, PORTAL_URL } from "@/lib/siteUrl";
 
 export function isEmailConfigured() {
   return Boolean(process.env.RESEND_API_KEY);

@@ -7,7 +7,7 @@ import { createReviewToken } from "@/lib/reviewToken";
 import { tripEndDate } from "@/lib/bookingDates";
 
 const DAY = 24 * 60 * 60 * 1000;
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adventuretravels.nl";
+import { SITE_URL } from "@/lib/siteUrl";
 
 /**
  * Dagelijks (Vercel Cron): 3 dagen na thuiskomst één reviewmail per betaalde

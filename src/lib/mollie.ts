@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { BOOKING_INCLUDE, type BookingWithRelations } from "@/lib/content/bookings";
 import { sendBookingConfirmation, sendAdminBookingNotification, sendBankTransferInstructions } from "@/lib/email";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adventuretravels.nl";
+import { SITE_URL } from "@/lib/siteUrl";
 
 /** Beleid: 100% vooruit via iDEAL, creditcard of bankoverschrijving. Andere methoden
  * uit het Mollie-profiel (bv. Klarna) worden niet aangeboden. */

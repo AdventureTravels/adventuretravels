@@ -6,7 +6,7 @@ import { sendMagicLinkEmail } from "@/lib/email";
 
 export const CUSTOMER_SESSION_COOKIE = "at_customer_session";
 const TOKEN_TTL_MINUTES = 30;
-const PORTAL_URL = process.env.PORTAL_URL || "http://localhost:3000";
+import { PORTAL_URL } from "@/lib/siteUrl";
 
 export async function requestMagicLink(email: string) {
   const normalized = email.trim().toLowerCase();

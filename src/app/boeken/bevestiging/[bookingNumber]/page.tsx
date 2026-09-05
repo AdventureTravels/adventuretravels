@@ -14,7 +14,7 @@ import styles from "../../[slug]/checkout.module.css";
 
 export const metadata: Metadata = { title: "Je boeking — AdventureTravels", robots: { index: false } };
 
-const PORTAL_URL = process.env.PORTAL_URL ?? "https://mijn.adventuretravels.nl";
+import { PORTAL_URL } from "@/lib/siteUrl";
 
 export default async function ConfirmationPage({
   params,

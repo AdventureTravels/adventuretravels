@@ -3,8 +3,8 @@ import Script from "next/script";
 import { headers } from "next/headers";
 import { Archivo, Michroma } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/siteUrl";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://adventuretravels.nl";
 
 const archivo = Archivo({
   variable: "--font-archivo",
