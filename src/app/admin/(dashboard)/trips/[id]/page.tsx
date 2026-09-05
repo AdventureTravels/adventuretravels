@@ -7,6 +7,7 @@ import { getGuides } from "@/lib/content/guides";
 import { publishContext } from "@/lib/content/trips";
 import { updateTripAction } from "../actions";
 import { TripForm } from "../TripForm";
+import { DeparturesEditor } from "../DeparturesEditor";
 import styles from "../../../admin.module.css";
 
 export default async function EditTripPage({
@@ -14,7 +15,7 @@ export default async function EditTripPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ saved?: string }>;
+  searchParams: Promise<{ saved?: string; error?: string }>;
 }) {
   const { id } = await params;
   const [trip, sports, destinations, partners, guides] = await Promise.all([
@@ -25,7 +26,7 @@ export default async function EditTripPage({
     getGuides(),
   ]);
   if (!trip) notFound();
-  const { saved } = await searchParams;
+  const { saved, error } = await searchParams;
 
   const action = updateTripAction.bind(null, id);
 
@@ -35,9 +36,11 @@ export default async function EditTripPage({
         <h1 className={styles.pageTitle}>{trip.title} bewerken</h1>
       </div>
       {saved && <div className={styles.notice}>Opgeslagen.</div>}
+      {error && <div className={styles.error}>{error}</div>}
       <div className={styles.card} style={{ marginTop: 16 }}>
         <TripForm action={action} trip={trip} sports={sports} destinations={destinations} partners={partners} guides={guides} publishContext={await publishContext()} />
       </div>
+      <DeparturesEditor tripId={trip.id} tripType={trip.type} departures={trip.departures} extras={trip.extras} guides={guides} />
     </div>
   );
 }

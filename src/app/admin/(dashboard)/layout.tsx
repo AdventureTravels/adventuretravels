@@ -6,6 +6,8 @@ import styles from "../admin.module.css";
 const NAV = [
   { href: "/admin", label: "Overzicht" },
   { href: "/admin/trips", label: "Reizen" },
+  { href: "/admin/bookings", label: "Boekingen" },
+  { href: "/admin/leads", label: "Leads" },
   { href: "/admin/partners", label: "Partners" },
   { href: "/admin/guides", label: "Gidsen" },
   { href: "/admin/sports", label: "Sporten" },
@@ -40,9 +42,6 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
             {item.label}
           </Link>
         ))}
-        <a href="https://mijn.adventuretravels.nl/staff" className={styles.navLink}>
-          Boekingen beheren ↗
-        </a>
         <div className={styles.sidebarSpacer} />
         <form action={logout} className={styles.logoutForm}>
           <button type="submit">Uitloggen ({email})</button>

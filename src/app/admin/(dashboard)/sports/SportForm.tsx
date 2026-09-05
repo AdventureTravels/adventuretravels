@@ -1,6 +1,7 @@
 import type { Sport } from "@prisma/client";
 import { RichTextEditor } from "../../RichTextEditor";
 import { ImageUploadField } from "../../ImageUploadField";
+import { ICON_OPTIONS, renderIcon } from "@/lib/iconLookup";
 import styles from "../../admin.module.css";
 
 export function SportForm({ action, sport }: { action: (formData: FormData) => void; sport?: Sport }) {
@@ -26,6 +27,17 @@ export function SportForm({ action, sport }: { action: (formData: FormData) => v
       <div className={styles.field}>
         <label className={styles.label} htmlFor="caption">Bijschrift</label>
         <input className={styles.input} id="caption" name="caption" defaultValue={sport?.caption} required />
+      </div>
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="icon">Icoon (op reiskaarten en labels)</label>
+        <select className={styles.select} id="icon" name="icon" defaultValue={sport?.icon ?? "wave"}>
+          {ICON_OPTIONS.map((key) => (
+            <option key={key} value={key}>{key}</option>
+          ))}
+        </select>
+        <span className={styles.hint} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+          Nu: {renderIcon(sport?.icon ?? "wave", { size: 18 })}
+        </span>
       </div>
       <div className={styles.field}>
         <label className={styles.label} htmlFor="order">Volgorde</label>

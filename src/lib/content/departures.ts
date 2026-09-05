@@ -27,3 +27,44 @@ export async function getOpenDeparturesWithAvailability(tripId: string, departur
     return { ...d, booked: b, seatsLeft: Math.max(0, d.maxParticipants - b) };
   });
 }
+
+// ---------------------------------------------------------------------------
+// Admin: vertrekken en extra's per reis
+// ---------------------------------------------------------------------------
+
+export type DepartureInput = {
+  departureDate: Date;
+  returnDate: Date;
+  pricePpAllIn: string;
+  maxParticipants: number;
+  minParticipants: number;
+  bookingDeadline: Date;
+  guideId: string | null;
+  status: string;
+};
+
+export function createDeparture(tripId: string, data: DepartureInput) {
+  return prisma.tripDeparture.create({ data: { ...data, tripId } });
+}
+
+export function updateDeparture(id: string, data: DepartureInput) {
+  return prisma.tripDeparture.update({ where: { id }, data });
+}
+
+export function deleteDeparture(id: string) {
+  return prisma.tripDeparture.delete({ where: { id } });
+}
+
+export type ExtraInput = { name: string; description: string | null; pricePp: string; isPerNight: boolean; order: number };
+
+export function createExtra(tripId: string, data: ExtraInput) {
+  return prisma.tripExtra.create({ data: { ...data, tripId } });
+}
+
+export function updateExtra(id: string, data: ExtraInput) {
+  return prisma.tripExtra.update({ where: { id }, data });
+}
+
+export function deleteExtra(id: string) {
+  return prisma.tripExtra.delete({ where: { id } });
+}

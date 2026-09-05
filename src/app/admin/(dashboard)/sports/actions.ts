@@ -14,6 +14,7 @@ function fromForm(formData: FormData) {
     heroSubtitle: String(formData.get("heroSubtitle") ?? "").trim(),
     cardImage: String(formData.get("cardImage") ?? "").trim(),
     caption: String(formData.get("caption") ?? "").trim(),
+    icon: String(formData.get("icon") ?? "wave").trim() || "wave",
     order: Number(formData.get("order") ?? 0),
   };
 }
@@ -33,7 +34,7 @@ export async function createSportAction(formData: FormData) {
   const sport = await createSport(data);
   await ensureMailerliteGroup(sport.id, sport.name);
   revalidatePath("/admin/sports");
-  revalidatePath("/sporten");
+  revalidatePath("/", "layout");
   redirect("/admin/sports");
 }
 
@@ -42,12 +43,12 @@ export async function updateSportAction(id: string, formData: FormData) {
   await updateSport(id, data);
   await ensureMailerliteGroup(id, data.name);
   revalidatePath("/admin/sports");
-  revalidatePath("/sporten");
+  revalidatePath("/", "layout");
   redirect("/admin/sports");
 }
 
 export async function deleteSportAction(id: string) {
   await deleteSport(id);
   revalidatePath("/admin/sports");
-  revalidatePath("/sporten");
+  revalidatePath("/", "layout");
 }

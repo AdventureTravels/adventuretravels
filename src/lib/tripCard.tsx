@@ -1,22 +1,18 @@
 import type { ReactNode } from "react";
-import { WaveIcon, MountainBikeIcon } from "@/components/icons";
+import type { Sport } from "@prisma/client";
+import { renderIcon } from "@/lib/iconLookup";
 import type { Trip as TripCardData } from "@/components/TripCard";
 import type { PublicTrip } from "@/lib/content/trips";
 import { formatNights, formatPrice, formatSeason } from "@/lib/format";
 import { levelLabel } from "@/lib/levels";
 import { openDepartures } from "@/lib/publish";
 
-const SPORT_ICONS: Record<string, (props: { size?: number; color?: string; strokeWidth?: number }) => ReactNode> = {
-  wakeboarden: WaveIcon,
-  mountainbike: MountainBikeIcon,
-};
-
+/** Icoon van een sport, ingesteld in /admin/sports (iconLookup-sleutel). */
 export function tripSportIcon(
-  sportSlug: string,
+  sport: Pick<Sport, "icon">,
   { size = 17, color = "#23261F", strokeWidth = 2.6 }: { size?: number; color?: string; strokeWidth?: number } = {}
 ): ReactNode {
-  const Icon = SPORT_ICONS[sportSlug] ?? WaveIcon;
-  return <Icon size={size} color={color} strokeWidth={strokeWidth} />;
+  return renderIcon(sport.icon, { size, color, strokeWidth });
 }
 
 /** Laagste prijs p.p. voor een kaart: individueel bij minNights, groep het goedkoopste open vertrek. */
@@ -39,7 +35,7 @@ export function toTripCardData(trip: PublicTrip): TripCardData {
     image: trip.image,
     imageAlt: trip.imageAlt || trip.title,
     level: levelLabel(trip.level),
-    icon: tripSportIcon(trip.sport.slug),
+    icon: tripSportIcon(trip.sport),
     label: `${trip.sport.name} · ${trip.destination.name}`,
     title: trip.title,
     text: trip.text,

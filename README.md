@@ -105,6 +105,12 @@ npm run db:verify -- after
 - `/api/cron/review-requests` (dagelijks 09:00) mailt 3 dagen na thuiskomst (retourdatum, of aankomst + nachten) één keer per betaalde of bevestigde boeking een link `/review/[token]`. Het token is een gesigneerd boekings-id (`src/lib/reviewToken.ts`); `Booking.reviewRequestedAt` voorkomt dubbele mails.
 - De reviewpagina vraagt score, tekst, voornaam en woonplaats en toestemming; de review komt binnen als `pending`. Alleen `approved` reviews staan op de site (homepage sitebreed, reispagina per reis; gemiddelde pas vanaf 10). Goedkeuren in `/admin/reviews`; vrije invoer bestaat niet meer.
 
+## Admin (v5)
+
+- `/admin/trips`: reisformulier met publicatieproblemen bovenaan; onder het formulier vertrekken (groepsreizen) en extra's per reis.
+- `/admin/partners` (staffel-editor met validatie), `/admin/guides`, `/admin/sports` (met icoon), `/admin/bookings` (zelfde schermen als het staff-portaal op mijn.adventuretravels.nl/staff), `/admin/leads` (afhandelen), `/admin/reviews` (goedkeuren), `/admin/settings` (USP's, foto's, programma-pdf, standaardinformatieformulier).
+- Nieuwe sport, partner en reis zijn zonder code toe te voegen; een reis staat pas op de site als het formulier geen problemen meer meldt.
+
 ## Beelden
 
 Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.

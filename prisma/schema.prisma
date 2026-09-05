@@ -23,6 +23,7 @@ model Sport {
   heroSubtitle      String // rich text (HTML)
   cardImage         String
   caption           String
+  icon              String  @default("wave") // sleutel uit src/lib/iconLookup.tsx
   order             Int     @default(0)
   mailerliteGroupId String? // auto-created MailerLite group id for this sport's segment
 
@@ -246,12 +247,12 @@ model Review {
 }
 
 model Lead {
-  id               String   @id @default(cuid())
+  id               String    @id @default(cuid())
   type             String // "pdf_request" | "guide_callback" | "group_inquiry"
   name             String
   email            String
   phone            String?
-  trip             Trip?    @relation(fields: [tripId], references: [id])
+  trip             Trip?     @relation(fields: [tripId], references: [id])
   tripId           String?
   preferredDay     String? // gids-terugbelverzoek
   preferredDaypart String?
@@ -261,9 +262,10 @@ model Lead {
   period           String?
   subject          String? // contactformulier
   message          String?
-  newsletterOptIn  Boolean  @default(false)
+  newsletterOptIn  Boolean   @default(false)
   sourceUrl        String?
-  createdAt        DateTime @default(now())
+  handledAt        DateTime? // afgehandeld in /admin/leads
+  createdAt        DateTime  @default(now())
 }
 
 model CustomerMagicLinkToken {

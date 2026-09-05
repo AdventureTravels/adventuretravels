@@ -37,7 +37,7 @@ export default async function SportenPage() {
             href={`/sporten/${sport.slug}`}
             image={sport.cardImage}
             imageAlt={sport.name}
-            icon={tripSportIcon(sport.slug, { size: 24, color: "#FFFFFF" })}
+            icon={tripSportIcon(sport, { size: 24, color: "#FFFFFF" })}
             name={sport.name}
             nameSize={20}
             caption={sport.caption}

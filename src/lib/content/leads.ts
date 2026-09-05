@@ -31,3 +31,11 @@ export function getLeads(type?: LeadType) {
     include: { trip: { select: { title: true, slug: true } } },
   });
 }
+
+export function setLeadHandled(id: string, handled: boolean) {
+  return prisma.lead.update({ where: { id }, data: { handledAt: handled ? new Date() : null } });
+}
+
+export function deleteLead(id: string) {
+  return prisma.lead.delete({ where: { id } });
+}
