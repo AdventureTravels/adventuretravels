@@ -329,6 +329,7 @@ model SiteSettings {
   heroHeading       String
   heroSubheading    String
   heroImage         String   @default("") // Blob-URL; leeg = geen foto in de homepage-hero
+  heroVideoUrl      String   @default("") // Blob-URL van de sitebrede hero-video (mp4, H.264); leeg = alleen foto
   usps              String[] @default([]) // drie feitelijke USP's zonder getallen (homepage + strips)
   dayImage          String   @default("") // Blob-URL, homepage dag/avond-blok
   eveningImage      String   @default("")

@@ -2,6 +2,7 @@ import { getSiteSettings } from "@/lib/content/settings";
 import { updateSiteSettingsAction } from "./actions";
 import { RichTextEditor } from "../../RichTextEditor";
 import { ImageUploadField } from "../../ImageUploadField";
+import { VideoUploadField } from "../../VideoUploadField";
 import { FileUploadField } from "@/components/FileUploadField";
 import styles from "../../admin.module.css";
 
@@ -52,6 +53,12 @@ export default async function AdminSettingsPage({
           </div>
           <RichTextEditor name="heroSubheading" label="Hero-subtitel" defaultValue={settings.heroSubheading} />
           <ImageUploadField name="heroImage" label="Hero-foto" defaultValue={settings.heroImage} />
+          <VideoUploadField
+            name="heroVideoUrl"
+            label="Hero-video (sitebreed)"
+            hint="Stille, loopende mp4 (H.264, max. 60MB; hou het onder de 10MB). Speelt in de hero van de homepage én van alle binnenpagina's over de foto heen. De foto blijft de fallback (poster, trage verbinding, 'verminder beweging')."
+            defaultValue={settings.heroVideoUrl}
+          />
 
           <h2 className={styles.label} style={{ marginTop: 8 }}>USP&apos;s (drie feiten, zonder getallen)</h2>
           <p className={styles.hint}>Worden getoond onder de hero en boven de footer. Leeg = de balk wordt niet getoond.</p>

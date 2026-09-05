@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Fragment } from "react";
 import { SiteImage } from "./SiteImage";
+import { HeroVideo } from "./HeroVideo";
 import { Nav } from "./Nav";
 import { RichText } from "./RichText";
 import { TripSlider } from "./TripSlider";
@@ -8,8 +9,9 @@ import type { Trip as TripCardData } from "./TripCard";
 import { getSiteSettings } from "@/lib/content/settings";
 import styles from "./Hero.module.css";
 
-/** Homepage-hero: copy uit SiteSettings, daaronder een slider met álle
- * gepubliceerde reizen. Geen zoekveld, filters of tellingen. */
+/** Homepage-hero: copy, foto en optionele achtergrondvideo uit SiteSettings,
+ * daaronder een slider met álle gepubliceerde reizen. Geen zoekveld, filters of
+ * tellingen. */
 export async function Hero({ trips }: { trips: TripCardData[] }) {
   const settings = await getSiteSettings();
   const headingLines = settings.heroHeading.split("\n");
@@ -19,6 +21,7 @@ export async function Hero({ trips }: { trips: TripCardData[] }) {
       <section className={styles.hero}>
         <div className={styles.imageLayer}>
           <SiteImage src={settings.heroImage} alt="" loading="eager" />
+          <HeroVideo src={settings.heroVideoUrl} poster={settings.heroImage} />
         </div>
         <div className={styles.gradient} />
 

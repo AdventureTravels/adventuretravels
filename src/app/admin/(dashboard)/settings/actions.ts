@@ -17,6 +17,7 @@ export async function updateSiteSettingsAction(formData: FormData) {
     heroHeading: text(formData, "heroHeading"),
     heroSubheading: text(formData, "heroSubheading"),
     heroImage: text(formData, "heroImage"),
+    heroVideoUrl: text(formData, "heroVideoUrl"),
     usps,
     dayImage: text(formData, "dayImage"),
     eveningImage: text(formData, "eveningImage"),

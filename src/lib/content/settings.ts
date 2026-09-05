@@ -1,10 +1,13 @@
+import { cache } from "react";
 import { prisma } from "@/lib/db";
 
 const SINGLETON_ID = "singleton";
 
-export function getSiteSettings() {
-  return prisma.siteSettings.findUniqueOrThrow({ where: { id: SINGLETON_ID } });
-}
+/** Per request gededupliceerd (React cache): Hero, HeroBanner, Topbar en Footer
+ * lezen dezelfde rij. */
+export const getSiteSettings = cache(() =>
+  prisma.siteSettings.findUniqueOrThrow({ where: { id: SINGLETON_ID } }),
+);
 
 export type SiteSettingsInput = {
   topbarTagline: string;
@@ -14,6 +17,7 @@ export type SiteSettingsInput = {
   heroHeading: string;
   heroSubheading: string;
   heroImage: string;
+  heroVideoUrl: string;
   usps: string[];
   dayImage: string;
   eveningImage: string;
