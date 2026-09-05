@@ -26,16 +26,18 @@
   color: var(--text-secondary);
 }
 
+/* Zelf-vullend raster: elk aantal items past, lege cellen tonen geen vlak.
+   Lijnen via outline, zodat ze in de 1px-gap precies één keer overlappen. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  padding: 1px;
 }
 
 .item {
   background: var(--white);
+  outline: 1px solid var(--line);
   padding: 30px 26px;
   display: flex;
   flex-direction: column;
@@ -61,7 +63,7 @@
   }
 
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 
