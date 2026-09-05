@@ -1,8 +1,9 @@
 ---
 slug: wakeboard-helm-vest-wetsuit
 title: Wakeboard helm, vest en wetsuit: wat je nodig hebt en wanneer
-tag: Materiaal · 5 min
+tag: 5 min
 excerpt: Welke helm en welk vest je op een cable park nodig hebt, wanneer een wetsuit zin heeft, en wat je beter huurt dan koopt.
+category: materiaal
 publishedAt: 6 september 2026
 order: 8
 ---

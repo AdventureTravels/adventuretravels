@@ -29,7 +29,7 @@ export default async function Home() {
 
   const journalTeasers: JournalTeaser[] = articles.slice(0, 4).map((article) => ({
     href: `/journal/${article.slug}`,
-    tag: article.tag,
+    tag: [article.category?.name, article.tag].filter(Boolean).join(" · "),
     title: article.title,
     text: article.excerpt,
   }));

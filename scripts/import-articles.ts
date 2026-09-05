@@ -18,6 +18,25 @@ import { join } from "node:path";
 
 const prisma = new PrismaClient();
 const DIR = join(process.cwd(), "content", "journal");
+
+/** Categorieën die het script aanmaakt als ze nog niet bestaan (slug → naam, intro). */
+const CATEGORIES: Record<string, { name: string; description: string; order: number }> = {
+  leren: { name: "Leren & techniek", description: "Van je eerste start tot obstakels: hoe wakeboarden werkt en hoe je sneller vooruitgaat.", order: 0 },
+  materiaal: { name: "Materiaal", description: "Boards, bindingen, helm, vest en wetsuit: wat je nodig hebt, wanneer, en wat je beter huurt.", order: 1 },
+  turkije: { name: "Turkije & Antalya", description: "Het weer, het park en de omgeving van onze reizen aan de Turkse Riviera.", order: 2 },
+  reizen: { name: "Reizen & seizoen", description: "Sportvakanties kiezen, het beste moment om te gaan en wat er in een reis zit.", order: 3 },
+  nederland: { name: "Nederland", description: "Cable parks en wakeboarden dicht bij huis.", order: 4 },
+};
+
+async function categoryId(slug: string | undefined): Promise<string | null> {
+  if (!slug) return null;
+  const existing = await prisma.articleCategory.findUnique({ where: { slug } });
+  if (existing) return existing.id;
+  const def = CATEGORIES[slug];
+  if (!def) throw new Error(`Onbekende categorie "${slug}"; maak hem eerst aan in /admin/journal-categorieen`);
+  if (!WRITE) return null;
+  return (await prisma.articleCategory.create({ data: { slug, ...def } })).id;
+}
 const WRITE = process.argv.includes("--write");
 const UPDATE = process.argv.includes("--update");
 const PARSE_ONLY = process.argv.includes("--parse-only");
@@ -133,6 +152,7 @@ function parse(md: string) {
     calloutText: callout ? `<p>${inline(callout)}</p>` : null,
     publishedAt: fm.publishedAt,
     order: Number(fm.order ?? 0),
+    categorySlug: fm.category || undefined,
   };
 }
 
@@ -145,7 +165,7 @@ async function main() {
       console.log(`! ${file}: bevat [CHECK]-markeringen, eerst feiten controleren; overgeslagen`);
       continue;
     }
-    const data = parse(md);
+    const { categorySlug, ...data } = parse(md);
     if (PARSE_ONLY) {
       const secs = data.sections as unknown as Section[];
       const faqN = secs.reduce((n, s) => n + (s.faq?.length ?? 0), 0);
@@ -160,10 +180,11 @@ async function main() {
       console.log(`= ${file}: bestaat al (${data.slug}); gebruik --update om te overschrijven`);
       continue;
     }
-    console.log(`${existing ? "~" : "+"} ${file}: ${data.title} — ${sectionCount} secties, ${faqCount} FAQ-vragen`);
+    console.log(`${existing ? "~" : "+"} ${file}: ${data.title} — ${sectionCount} secties, ${faqCount} FAQ-vragen, categorie ${categorySlug ?? "geen"}`);
     if (!WRITE) continue;
-    if (existing) await prisma.article.update({ where: { slug: data.slug }, data });
-    else await prisma.article.create({ data });
+    const payload = { ...data, categoryId: await categoryId(categorySlug) };
+    if (existing) await prisma.article.update({ where: { slug: data.slug }, data: payload });
+    else await prisma.article.create({ data: payload });
   }
 }
 

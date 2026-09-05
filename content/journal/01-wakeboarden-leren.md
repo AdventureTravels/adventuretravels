@@ -1,8 +1,9 @@
 ---
 slug: wakeboarden-leren
 title: Wakeboarden leren: van je eerste start tot rondjes op de kabel
-tag: Leren · 7 min
+tag: 7 min
 excerpt: Hoe je in één week van je eerste start naar zelfstandig rondjes op de kabel gaat, en welke drie fouten bijna iedereen maakt.
+category: leren
 publishedAt: 6 september 2026
 order: 2
 ---

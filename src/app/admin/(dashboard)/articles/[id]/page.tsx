@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getArticleById } from "@/lib/content/articles";
 import { updateArticleAction } from "../actions";
 import { ArticleForm } from "../ArticleForm";
+import { getArticleCategories } from "@/lib/content/articles";
 import styles from "../../../admin.module.css";
 
 export default async function EditArticlePage({
@@ -25,7 +26,7 @@ export default async function EditArticlePage({
       </div>
       {error === "json" && <div className={styles.error}>Secties zijn geen geldige JSON.</div>}
       <div className={styles.card} style={{ marginTop: 16 }}>
-        <ArticleForm action={action} article={article} />
+        <ArticleForm action={action} article={article} categories={await getArticleCategories()} />
       </div>
     </div>
   );

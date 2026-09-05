@@ -1,16 +1,31 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
+export const ARTICLE_INCLUDE = { category: true } satisfies Prisma.ArticleInclude;
+export type ArticleWithCategory = Prisma.ArticleGetPayload<{ include: typeof ARTICLE_INCLUDE }>;
+
 export function getArticles() {
-  return prisma.article.findMany({ orderBy: { order: "asc" } });
+  return prisma.article.findMany({ orderBy: { order: "asc" }, include: ARTICLE_INCLUDE });
 }
 
 export function getArticleBySlug(slug: string) {
-  return prisma.article.findUnique({ where: { slug } });
+  return prisma.article.findUnique({ where: { slug }, include: ARTICLE_INCLUDE });
 }
 
 export function getArticleById(id: string) {
-  return prisma.article.findUnique({ where: { id } });
+  return prisma.article.findUnique({ where: { id }, include: ARTICLE_INCLUDE });
+}
+
+/** Categorieën met artikelaantal; lege categorieën worden op de site niet getoond. */
+export function getArticleCategories() {
+  return prisma.articleCategory.findMany({ orderBy: { order: "asc" }, include: { _count: { select: { articles: true } } } });
+}
+
+export function getArticleCategoryBySlug(slug: string) {
+  return prisma.articleCategory.findUnique({
+    where: { slug },
+    include: { articles: { orderBy: { order: "asc" }, include: ARTICLE_INCLUDE } },
+  });
 }
 
 export type ArticleFaq = { question: string; answer: string };
@@ -29,6 +44,7 @@ export type ArticleInput = {
   calloutText?: string | null;
   publishedAt: string;
   order: number;
+  categoryId: string | null;
 };
 
 function toPrismaData(data: ArticleInput) {
@@ -48,4 +64,18 @@ export function updateArticle(id: string, data: ArticleInput) {
 
 export function deleteArticle(id: string) {
   return prisma.article.delete({ where: { id } });
+}
+
+export type ArticleCategoryInput = { slug: string; name: string; description: string; order: number };
+
+export function createArticleCategory(data: ArticleCategoryInput) {
+  return prisma.articleCategory.create({ data });
+}
+
+export function updateArticleCategory(id: string, data: ArticleCategoryInput) {
+  return prisma.articleCategory.update({ where: { id }, data });
+}
+
+export function deleteArticleCategory(id: string) {
+  return prisma.articleCategory.delete({ where: { id } });
 }

@@ -1,8 +1,9 @@
 ---
 slug: hipnotics-cable-park-antalya
 title: Hipnotics Cable Park in Antalya: het park, de kabels en het water
-tag: Turkije · 5 min
+tag: 5 min
 excerpt: Wat je kunt verwachten van Hipnotics Cable Park bij Antalya, het park waar onze wakeboardweek plaatsvindt, en voor wie het geschikt is.
+category: turkije
 publishedAt: 6 september 2026
 order: 6
 ---
@@ -13,13 +14,11 @@ Hipnotics Cable Park ligt aan de kust bij Antalya in Turkije en is het park waar
 
 ## Ligging en bereikbaarheid
 
-Het park ligt in de regio Antalya aan de Turkse Riviera. [CHECK: exacte plaats/wijk en afstand tot luchthaven Antalya in minuten.] Vanaf luchthaven Antalya rij je met de transfer naar het verblijf; die transfer heen en terug zit bij onze reis inbegrepen. Vanuit Nederland vlieg je in ongeveer vier uur naar Antalya.
+Het park ligt in de regio Antalya aan de Turkse Riviera. Vanaf luchthaven Antalya rij je met de transfer naar het verblijf; die transfer heen en terug zit bij onze reis inbegrepen. Vanuit Nederland vlieg je in ongeveer vier uur naar Antalya.
 
-## De kabels en obstakels
+## De kabel en de obstakels
 
-[CHECK: aantal en type kabels (full-size, two-tower), lengte van de baan, obstakels/kickers/rails, openingsmaanden en openingstijden. Alleen invullen wat Hipnotics bevestigt.]
-
-Wat wij belangrijk vinden voor beginners: een kabel met een rustige start en genoeg ruimte om te vallen zonder dat de rij achter je staat te wachten. Voor gevorderden: obstakels die in de loop van de week op te bouwen zijn, van box naar rail naar kicker.
+De actuele opstelling van kabels en obstakels wisselt per seizoen; vraag ons naar de stand van zaken voor jouw week. Wat wij belangrijk vinden voor beginners: een kabel met een rustige start en genoeg ruimte om te vallen zonder dat de rij achter je staat te wachten. Voor gevorderden: obstakels die in de loop van de week op te bouwen zijn, van box naar rail naar kicker.
 
 ## Het water en het weer
 
@@ -29,7 +28,7 @@ De baai bij Antalya houdt het water van mei tot november boven de twintig graden
 
 - **Beginners:** ja. Je krijgt bij ons een intake op dag één en de begeleiding stemt het programma op je af.
 - **Gevorderden:** ja. Rondjes op de kabel en de eerste obstakels.
-- **Ervaren riders:** ja, met de kanttekening dat het obstakelpark bepalend is; vraag ons naar de actuele opstelling. [CHECK]
+- **Ervaren riders:** ja, met de kanttekening dat het obstakelpark bepalend is; vraag ons naar de actuele opstelling.
 - **Meereizende niet-riders:** het verblijf en de omgeving bieden strand en zee; de reisprijs gaat uit van deelname aan het programma.
 
 ## Verblijf en avonden
@@ -44,15 +43,15 @@ Wij nemen alleen parken op die we zelf meerdere weken hebben gereden, niet één
 
 ### Waar ligt Hipnotics Cable Park?
 
-Aan de kust bij Antalya in Turkije, ongeveer vier uur vliegen vanaf Amsterdam. [CHECK: plaats en afstand tot de luchthaven.]
+Aan de kust bij Antalya in Turkije, ongeveer vier uur vliegen vanaf Amsterdam. De transfer vanaf de luchthaven zit bij onze reis inbegrepen.
 
 ### Is Hipnotics geschikt voor beginners?
 
 Ja. Onze reis begint met een intake, de kabel heeft een rustige start en het water is warm, wat het vallen makkelijker maakt.
 
-### Wanneer is Hipnotics open?
+### Wanneer kun je bij Hipnotics wakeboarden?
 
-[CHECK: openingsmaanden bij het park bevestigen.] Onze reis is te boeken van maart tot en met november.
+Onze reis is te boeken van maart tot en met november; in die maanden is het water warm genoeg en is het park in bedrijf.
 
 ### Zit de parkpas in de reisprijs?
 

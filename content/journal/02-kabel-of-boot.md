@@ -1,8 +1,9 @@
 ---
 slug: wakeboarden-kabel-of-boot
 title: Kabel of boot: het verschil bij wakeboarden en wat bij jou past
-tag: Techniek · 6 min
+tag: 6 min
 excerpt: Cable park of achter een boot? Het verschil in leercurve, kosten, sprongen en gevoel, en waarom wij met de kabel beginnen.
+category: leren
 publishedAt: 6 september 2026
 order: 3
 ---

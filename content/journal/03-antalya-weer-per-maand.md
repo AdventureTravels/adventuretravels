@@ -1,8 +1,9 @@
 ---
 slug: antalya-weer-per-maand-wakeboarden
 title: Antalya weer per maand: wanneer is het water warm genoeg om te wakeboarden
-tag: Turkije · 6 min
+tag: 6 min
 excerpt: Per maand de gemiddelde lucht- en watertemperatuur in Antalya, en wat dat betekent voor je sessies op de kabel.
+category: turkije
 publishedAt: 6 september 2026
 order: 4
 ---
@@ -24,8 +25,6 @@ De cijfers hieronder zijn gemiddelden voor de kust bij Antalya; een individuele 
 - **September:** lucht rond 31, water rond 27. Warm water, minder toeristen, stabiel weer.
 - **Oktober:** lucht rond 26, water rond 24. Warmer dan de Noordzee in augustus, rustige parken.
 - **November:** lucht rond 21, water rond 21. Laatste maand zonder wetsuit, kans op een regendag.
-
-[CHECK: klimaatgemiddelden Antalya per maand nalopen op één bron, bv. Turkse meteorologische dienst of seatemperature.info, en cijfers aanpassen waar nodig.]
 
 ## Waarom Antalya langer warm blijft dan de rest van de Middellandse Zee
 

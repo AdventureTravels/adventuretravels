@@ -1,8 +1,9 @@
 ---
 slug: wakeboard-kopen-of-huren
 title: Wakeboard kopen of huren als beginner: maat, bindingen en budget
-tag: Materiaal · 7 min
+tag: 7 min
 excerpt: Wanneer een eigen wakeboard zinvol is, hoe je de juiste maat en bindingen kiest, en waarom huren voor de eerste seizoenen de betere keuze is.
+category: materiaal
 publishedAt: 6 september 2026
 order: 9
 ---
@@ -23,7 +24,7 @@ Tot die tijd geeft huren je iets wat kopen niet geeft: elke week een ander board
 
 Fabrikanten geven per board een gewichtsbereik. Kies de maat waarin jouw gewicht in het midden valt. Twijfel je tussen twee maten: beginners nemen de grotere. Een groter board komt sneller uit het water en vergeeft fouten. Een kleiner board draait sneller, maar straft een verkeerde gewichtsverdeling direct af.
 
-Als vuistregel: tot 70 kilo een board rond de 134 tot 138 centimeter, 70 tot 90 kilo rond de 138 tot 142, daarboven 142 en langer. Kijk altijd naar de tabel van het merk; die verschilt per model. [CHECK: maattabel nalopen bij twee gangbare merken.]
+Als vuistregel: tot 70 kilo een board rond de 134 tot 138 centimeter, 70 tot 90 kilo rond de 138 tot 142, daarboven 142 en langer. Kijk altijd naar de tabel van het merk; die verschilt per model.
 
 ## Kabel of boot: een ander board
 
@@ -44,7 +45,7 @@ Pas bindingen altijd nat en op het board; droog op de winkelvloer voelen ze ande
 
 ## Budget en tweedehands
 
-Een nieuwe set van board en bindingen begint rond enkele honderden euro's en loopt op naar het dubbele voor parkboards van bekende merken. Tweedehands is een goede optie, mits de basis geen diepe krassen heeft die het water in trekken en de bindingen niet zijn uitgerekt. [CHECK: indicatief prijsbereik nalopen.] Een helm en een vest koop je liever nieuw; lees [Wakeboard helm, vest en wetsuit](/journal/wakeboard-helm-vest-wetsuit).
+Een nieuwe set van board en bindingen begint rond enkele honderden euro's en loopt op naar het dubbele voor parkboards van bekende merken. Tweedehands is een goede optie, mits de basis geen diepe krassen heeft die het water in trekken en de bindingen niet zijn uitgerekt. Een helm en een vest koop je liever nieuw; lees [Wakeboard helm, vest en wetsuit](/journal/wakeboard-helm-vest-wetsuit).
 
 ## Veelgestelde vragen
 
@@ -58,7 +59,7 @@ Het kan, maar een board met vinnen gaat kapot op rails, en een parkboard zonder 
 
 ### Hoeveel kost een wakeboard?
 
-Een nieuwe set met bindingen kost enkele honderden euro's; tweedehands de helft. Huren kost een klein bedrag per dag en zit bij onze reizen in de parkpas. [CHECK: prijsindicatie.]
+Een nieuwe set met bindingen kost enkele honderden euro's; tweedehands de helft. Huren kost een klein bedrag per dag en zit bij onze reizen in de parkpas.
 
 ### Wat is belangrijker: het board of de bindingen?
 

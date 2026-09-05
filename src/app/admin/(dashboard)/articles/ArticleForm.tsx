@@ -1,11 +1,11 @@
-import type { Article } from "@prisma/client";
+import type { Article, ArticleCategory } from "@prisma/client";
 import type { ArticleSection } from "@/lib/content/articles";
 import { RichTextEditor } from "../../RichTextEditor";
 import { ImageUploadField } from "../../ImageUploadField";
 import { ArticleSectionsEditor } from "./ArticleSectionsEditor";
 import styles from "../../admin.module.css";
 
-export function ArticleForm({ action, article }: { action: (formData: FormData) => void; article?: Article }) {
+export function ArticleForm({ action, article, categories }: { action: (formData: FormData) => void; article?: Article; categories: ArticleCategory[] }) {
   const sections = article ? (article.sections as unknown as ArticleSection[]) : [];
 
   return (
@@ -22,7 +22,16 @@ export function ArticleForm({ action, article }: { action: (formData: FormData) 
       </div>
       <div className={styles.fieldRow}>
         <div className={styles.field}>
-          <label className={styles.label} htmlFor="tag">Tag (bv. &quot;Turkije · 5 min&quot;)</label>
+          <label className={styles.label} htmlFor="categoryId">Categorie</label>
+          <select className={styles.select} id="categoryId" name="categoryId" defaultValue={article?.categoryId ?? ""}>
+            <option value="">Geen categorie</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="tag">Leestijd (bv. &quot;5 min&quot;)</label>
           <input className={styles.input} id="tag" name="tag" defaultValue={article?.tag} required />
         </div>
         <div className={styles.field}>

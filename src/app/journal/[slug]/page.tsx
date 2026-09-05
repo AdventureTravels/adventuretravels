@@ -52,6 +52,7 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
       inLanguage: "nl",
       url: `${SITE_URL}/journal/${article.slug}`,
       ...(isImageUrl(article.heroImage) ? { image: article.heroImage } : {}),
+      ...(article.category ? { articleSection: article.category.name } : {}),
       author: { "@type": "Organization", name: "AdventureTravels", url: SITE_URL },
       publisher: { "@type": "Organization", name: "AdventureTravels", url: SITE_URL },
     },
@@ -80,7 +81,7 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
         height={480}
         image={article.heroImage}
         imageAlt={article.title}
-        eyebrow={`${article.tag} · ${article.publishedAt}`}
+        eyebrow={[article.category?.name, article.tag, article.publishedAt].filter(Boolean).join(" · ")}
         title={article.title}
       />
 

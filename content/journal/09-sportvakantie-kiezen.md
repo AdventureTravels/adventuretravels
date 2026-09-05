@@ -1,8 +1,9 @@
 ---
 slug: sportvakantie-kiezen
 title: Sportvakantie kiezen: wat een actieve vakantie echt actief maakt
-tag: Reizen · 6 min
+tag: 6 min
 excerpt: Waar je op let als je een sportvakantie of actieve vakantie kiest: uren op het water, begeleiding, groepsgrootte, en wat er wel en niet in de prijs zit.
+category: reizen
 publishedAt: 6 september 2026
 order: 10
 ---

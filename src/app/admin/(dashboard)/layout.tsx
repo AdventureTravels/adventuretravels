@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/sports", label: "Sporten" },
   { href: "/admin/destinations", label: "Bestemmingen" },
   { href: "/admin/articles", label: "Journal" },
+  { href: "/admin/journal-categorieen", label: "Journal-categorieën" },
   { href: "/admin/reviews", label: "Reviews" },
   { href: "/admin/faq", label: "Veelgestelde vragen" },
   { href: "/admin/included", label: "Inbegrepen (homepage)" },

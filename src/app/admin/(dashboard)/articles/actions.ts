@@ -29,25 +29,26 @@ function fromForm(formData: FormData) {
     calloutText: calloutText || null,
     publishedAt: String(formData.get("publishedAt") ?? "").trim(),
     order: Number(formData.get("order") ?? 0),
+    categoryId: String(formData.get("categoryId") ?? "").trim() || null,
   };
 }
 
 export async function createArticleAction(formData: FormData) {
   await createArticle(fromForm(formData));
   revalidatePath("/admin/articles");
-  revalidatePath("/journal");
+  revalidatePath("/journal", "layout");
   redirect("/admin/articles");
 }
 
 export async function updateArticleAction(id: string, formData: FormData) {
   await updateArticle(id, fromForm(formData));
   revalidatePath("/admin/articles");
-  revalidatePath("/journal");
+  revalidatePath("/journal", "layout");
   redirect("/admin/articles");
 }
 
 export async function deleteArticleAction(id: string) {
   await deleteArticle(id);
   revalidatePath("/admin/articles");
-  revalidatePath("/journal");
+  revalidatePath("/journal", "layout");
 }

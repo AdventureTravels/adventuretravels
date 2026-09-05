@@ -1,8 +1,9 @@
 ---
 slug: zonvakantie-oktober-november-sporten
 title: Zonvakantie in oktober of november: waar kun je nog sporten in de zon
-tag: Seizoen · 6 min
+tag: 6 min
 excerpt: Waar in oktober en november het water nog boven de twintig graden is, en waarom de Turkse Riviera dan de beste kaarten heeft voor een actieve week.
+category: reizen
 publishedAt: 6 september 2026
 order: 5
 ---
@@ -22,8 +23,6 @@ Voor een strandvakantie is 22 graden buitenlucht al fijn. Voor sporten op het wa
 - **Canarische Eilanden.** Lucht rond de 25 graden, water rond de 22. Uitstekend voor surfen en kitesurfen; voor kabel-wakeboarden zijn er weinig opties.
 - **Zuid-Spanje en Griekenland.** Tot half oktober prima, daarna koelt het water snel af naar onder de twintig graden en worden de dagen wisselvallig.
 - **Egypte (Rode Zee).** Warm en droog, maar ruim vijf uur vliegen en een ander prijsniveau voor verblijf.
-
-[CHECK: watertemperaturen Cyprus, Canarische Eilanden en Zuid-Spanje voor oktober/november nalopen op één bron.]
 
 ## Waarom oktober vaak beter is dan augustus
 

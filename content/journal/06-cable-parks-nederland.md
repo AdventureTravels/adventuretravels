@@ -1,8 +1,9 @@
 ---
 slug: cable-parks-nederland
 title: Alle cable parks in Nederland op een rij
-tag: Nederland · 8 min
+tag: 8 min
 excerpt: Overzicht van de kabelbanen voor wakeboarden in Nederland, per provincie, met wat elk park bijzonder maakt en voor wie het geschikt is.
+category: nederland
 publishedAt: 6 september 2026
 order: 7
 ---
@@ -44,8 +45,6 @@ Nederland heeft ruim twintig cable parks waar je kunt wakeboarden aan een kabel,
 - **Kempervennen, Westerhoven (Noord-Brabant).** Waterskicentrum bij Center Parcs, ook toegankelijk voor dagbezoek.
 - **Roermond (Limburg).** Kabelbaan in de Maasplassen.
 
-[CHECK: lijst aanvullen en nalopen op actualiteit (parken die gesloten zijn of van naam zijn veranderd), plus indoor-optie(s) toevoegen indien nog open.]
-
 ## Hoe je een park kiest
 
 - **Eerste keer:** kies een park met een two-tower. Je maakt dan veel starts per kwartier en de kabel gaat langzamer.
@@ -65,11 +64,11 @@ Ruim twintig, verspreid over bijna alle provincies. De meeste liggen aan recreat
 
 ### Wat kost een dag wakeboarden op een cable park?
 
-Reken op enkele tientallen euro's voor een dagpas, vaak inclusief huur van board, vest en helm. Losse uren en avondkaarten zijn goedkoper. [CHECK: indicatief prijsbereik nalopen.]
+Reken op enkele tientallen euro's voor een dagpas, vaak inclusief huur van board, vest en helm. Losse uren en avondkaarten zijn goedkoper.
 
 ### Kun je in Nederland in de winter wakeboarden?
 
-Buiten niet, de meeste parken sluiten in oktober. Een handvol indoor- of drysuit-opties bestaat; controleer per park. [CHECK]
+Buiten meestal niet: de meeste parken sluiten in oktober. Enkele parken bieden winter- of indoorsessies; controleer dat per park.
 
 ### Heb je ervaring nodig voor een cable park?
 

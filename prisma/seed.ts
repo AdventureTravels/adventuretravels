@@ -14,6 +14,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {
+  ARTICLE_CATEGORIES,
   ARTICLES,
   DESTINATION_TURKIJE,
   FAQS,
@@ -96,7 +97,17 @@ async function main() {
     log("skipped", `trip ${tripData.slug}`);
   }
 
-  // --- Articles ---
+  // --- Journal-categorieën ---
+  for (const cat of ARTICLE_CATEGORIES) {
+    if (await prisma.articleCategory.findUnique({ where: { slug: cat.slug } })) {
+      log("skipped", `category ${cat.slug}`);
+      continue;
+    }
+    await prisma.articleCategory.create({ data: cat });
+    log("created", `category ${cat.slug}`);
+  }
+
+  // --- Articles (zonder categorie; de bronbestanden in content/journal zetten die via journal:import) ---
   for (const article of ARTICLES) {
     if (await prisma.article.findUnique({ where: { slug: article.slug } })) {
       log("skipped", `article ${article.slug}`);

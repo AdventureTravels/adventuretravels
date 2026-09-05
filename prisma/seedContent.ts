@@ -120,6 +120,14 @@ export function tripWakeboardweekAntalya(sportId: string, destinationId: string,
   };
 }
 
+export const ARTICLE_CATEGORIES = [
+  { slug: "leren", name: "Leren & techniek", description: "Van je eerste start tot obstakels: hoe wakeboarden werkt en hoe je sneller vooruitgaat.", order: 0 },
+  { slug: "materiaal", name: "Materiaal", description: "Boards, bindingen, helm, vest en wetsuit: wat je nodig hebt, wanneer, en wat je beter huurt.", order: 1 },
+  { slug: "turkije", name: "Turkije & Antalya", description: "Het weer, het park en de omgeving van onze reizen aan de Turkse Riviera.", order: 2 },
+  { slug: "reizen", name: "Reizen & seizoen", description: "Sportvakanties kiezen, het beste moment om te gaan en wat er in een reis zit.", order: 3 },
+  { slug: "nederland", name: "Nederland", description: "Cable parks en wakeboarden dicht bij huis.", order: 4 },
+];
+
 export const ARTICLES = [
   {
     slug: "antalya-warm-water",

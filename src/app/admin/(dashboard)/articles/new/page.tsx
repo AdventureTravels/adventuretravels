@@ -1,5 +1,6 @@
 import { createArticleAction } from "../actions";
 import { ArticleForm } from "../ArticleForm";
+import { getArticleCategories } from "@/lib/content/articles";
 import styles from "../../../admin.module.css";
 
 export default async function NewArticlePage({
@@ -15,7 +16,7 @@ export default async function NewArticlePage({
       </div>
       {error === "json" && <div className={styles.error}>Secties zijn geen geldige JSON.</div>}
       <div className={styles.card} style={{ marginTop: 16 }}>
-        <ArticleForm action={createArticleAction} />
+        <ArticleForm action={createArticleAction} categories={await getArticleCategories()} />
       </div>
     </div>
   );

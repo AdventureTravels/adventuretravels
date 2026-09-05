@@ -278,8 +278,8 @@ model CustomerMagicLinkToken {
 }
 
 model Article {
-  id           String  @id @default(cuid())
-  slug         String  @unique
+  id           String           @id @default(cuid())
+  slug         String           @unique
   tag          String
   title        String
   excerpt      String
@@ -289,7 +289,18 @@ model Article {
   calloutLabel String?
   calloutText  String?
   publishedAt  String
-  order        Int     @default(0)
+  order        Int              @default(0)
+  category     ArticleCategory? @relation(fields: [categoryId], references: [id])
+  categoryId   String?
+}
+
+model ArticleCategory {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  description String    @default("") // intro op de categoriepagina
+  order       Int       @default(0)
+  articles    Article[]
 }
 
 model FaqItem {

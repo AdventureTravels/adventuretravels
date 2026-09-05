@@ -1,8 +1,9 @@
 ---
 slug: wat-te-doen-in-antalya-vrije-middag
 title: Wat te doen in Antalya op je vrije middag
-tag: Turkije · 6 min
+tag: 6 min
 excerpt: Zeven dingen die je vanaf het park in een halve dag doet: oude stad, watervallen, strand en eten, gekozen op afstand en op wat ze waard zijn na een ochtend op de kabel.
+category: turkije
 publishedAt: 6 september 2026
 order: 11
 ---
@@ -13,7 +14,7 @@ Op onze wakeboardweek is elke middag vrij, en Antalya is een stad waar een halve
 
 ## Kaleiçi, de oude stad
 
-De ommuurde oude stad van Antalya is een wirwar van smalle straten, Ottomaanse huizen en restaurants rond een kleine jachthaven. Ga aan het eind van de middag, als de hitte zakt, en blijf voor het eten. De Hadrianuspoort is de ingang, de haven het eindpunt. [CHECK: reistijd vanaf het park in minuten.]
+De ommuurde oude stad van Antalya is een wirwar van smalle straten, Ottomaanse huizen en restaurants rond een kleine jachthaven. Ga aan het eind van de middag, als de hitte zakt, en blijf voor het eten. De Hadrianuspoort is de ingang, de haven het eindpunt.
 
 ## Düden-watervallen
 

@@ -4,17 +4,19 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
 import { PageIntro } from "@/components/PageIntro";
-import { ArticleCard } from "@/components/ArticleCard";
-import { getArticles } from "@/lib/content/articles";
+import { JournalCategoryNav } from "@/components/JournalCategoryNav";
+import { JournalGrid } from "@/components/JournalGrid";
+import { getArticles, getArticleCategories } from "@/lib/content/articles";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Journal — AdventureTravels",
-  description: "Verhalen van onderweg.",
+  description: "Leren wakeboarden, materiaal, het weer in Antalya en het kiezen van een sportvakantie: praktische artikelen van het team.",
+  alternates: { canonical: "/journal" },
 };
 
 export default async function JournalPage() {
-  const articles = await getArticles();
+  const [articles, categories] = await Promise.all([getArticles(), getArticleCategories()]);
 
   return (
     <div className={styles.page}>
@@ -22,25 +24,13 @@ export default async function JournalPage() {
       <Nav variant="solid" active="journal" />
 
       <PageIntro
-        eyebrow="Verhalen"
-        title="Verhalen van onderweg."
-        subtitle="Praktische inzichten en reisverhalen van het team en van gasten."
+        eyebrow="Journal"
+        title="Praktische antwoorden van mensen die zelf rijden."
+        subtitle="Over leren, materiaal, het seizoen en de plekken waar we komen."
       />
 
-      {articles.length > 0 && (
-        <div className={styles.grid}>
-          {articles.map((article) => (
-            <ArticleCard
-              key={article.id}
-              href={`/journal/${article.slug}`}
-              image={article.heroImage}
-              tag={article.tag}
-              title={article.title}
-              text={article.excerpt}
-            />
-          ))}
-        </div>
-      )}
+      <JournalCategoryNav categories={categories.map((c) => ({ slug: c.slug, name: c.name, count: c._count.articles }))} />
+      <JournalGrid articles={articles} />
 
       <TrustStripSimple />
       <Footer />
