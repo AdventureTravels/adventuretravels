@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
-import { Nav } from "@/components/Nav";
 import { HeroBanner } from "@/components/HeroBanner";
 import { Footer } from "@/components/Footer";
 import { TrustStripSimple } from "@/components/TrustStripSimple";
@@ -75,7 +74,6 @@ export default async function JournalArticlePage({ params }: { params: Promise<{
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Topbar />
-      <Nav variant="solid" active="journal" />
       <HeroBanner
         active="journal"
         height={480}
