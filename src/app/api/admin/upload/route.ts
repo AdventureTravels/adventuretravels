@@ -4,6 +4,7 @@ import { writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { put } from "@vercel/blob";
 import { getSessionEmail } from "@/lib/auth";
+import { hasBlobStorage } from "@/lib/blob";
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 const MAX_SIZE = 8 * 1024 * 1024;
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Ongeldig bestandstype. Gebruik JPG, PNG, WEBP, GIF, SVG, PDF of MP4." }, { status: 400 });
   }
   const isVideo = file.type === "video/mp4";
-  if (isVideo && process.env.BLOB_READ_WRITE_TOKEN) {
+  if (isVideo && hasBlobStorage()) {
     return NextResponse.json({ error: "Upload video via de video-uploader (rechtstreeks naar Blob)." }, { status: 400 });
   }
   if (file.size > (isVideo ? MAX_VIDEO_SIZE : MAX_SIZE)) {
@@ -44,8 +45,9 @@ export async function POST(request: Request) {
 
   const filename = `${randomUUID()}.${ext}`;
 
-  // On Vercel, the filesystem is read-only/ephemeral, so uploads go to Blob storage instead.
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  // Op Vercel is het bestandssysteem read-only/vluchtig: uploads gaan naar Blob
+  // (token óf OIDC, zie lib/blob.ts).
+  if (hasBlobStorage()) {
     const blob = await put(`uploads/${filename}`, file, {
       access: "public",
       contentType: file.type,

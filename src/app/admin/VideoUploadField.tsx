@@ -1,15 +1,16 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { upload } from "@vercel/blob/client";
+import { upload, uploadPresigned } from "@vercel/blob/client";
 import styles from "./admin.module.css";
 
 const MAX_MB = 60;
 
 /**
  * Upload van een mp4 voor de hero. Op Vercel gaat het bestand rechtstreeks
- * van de browser naar Blob (token via /api/admin/upload-video); lokaal, zonder
- * Blob-token, via /api/admin/upload naar public/uploads.
+ * van de browser naar Blob (token of presigned URL via /api/admin/upload-video,
+ * afhankelijk van hoe de store is gekoppeld); lokaal, zonder Blob, via
+ * /api/admin/upload naar public/uploads.
  */
 export function VideoUploadField({
   name,
@@ -41,22 +42,27 @@ export function VideoUploadField({
     }
     setProgress(0);
     try {
-      const mode = await fetch("/api/admin/upload-video").then((r) => r.json());
-      if (mode.clientUploads) {
-        const blob = await upload(`uploads/${crypto.randomUUID()}.mp4`, file, {
-          access: "public",
+      const res = await fetch("/api/admin/upload-video");
+      if (!res.ok) throw new Error(res.status === 401 ? "Sessie verlopen, log opnieuw in." : "Upload-configuratie ophalen mislukt");
+      const { mode } = (await res.json()) as { mode: "token" | "oidc" | "local" };
+      if (mode !== "local") {
+        const options = {
+          access: "public" as const,
           contentType: "video/mp4",
           handleUploadUrl: "/api/admin/upload-video",
           multipart: true,
-          onUploadProgress: ({ percentage }) => setProgress(Math.round(percentage)),
-        });
+          onUploadProgress: ({ percentage }: { percentage: number }) => setProgress(Math.round(percentage)),
+        };
+        const pathname = `uploads/${crypto.randomUUID()}.mp4`;
+        const blob = mode === "token" ? await upload(pathname, file, options) : await uploadPresigned(pathname, file, options);
         setValue(blob.url);
       } else {
         const formData = new FormData();
         formData.append("file", file);
-        const res = await fetch("/api/admin/upload", { method: "POST", body: formData });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error ?? "Upload mislukt");
+        const up = await fetch("/api/admin/upload", { method: "POST", body: formData });
+        if (up.status === 413) throw new Error("Bestand te groot voor deze server (max. 4,5 MB zonder Blob-opslag).");
+        const data = await up.json();
+        if (!up.ok) throw new Error(data.error ?? "Upload mislukt");
         setValue(data.path);
       }
     } catch (e) {
