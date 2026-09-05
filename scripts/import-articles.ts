@@ -137,7 +137,7 @@ function parse(md: string) {
 }
 
 async function main() {
-  const files = readdirSync(DIR).filter((f) => f.endsWith(".md")).sort();
+  const files = readdirSync(DIR).filter((f) => f.endsWith(".md") && f !== "README.md").sort();
   console.log(`${files.length} bestand(en) in content/journal${WRITE ? "" : " (dry-run; gebruik --write)"}`);
   for (const file of files) {
     const md = readFileSync(join(DIR, file), "utf8");
