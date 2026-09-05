@@ -10,6 +10,8 @@ import { bookingSummary } from "@/lib/bookingSummary";
 import { formatDate, formatPrice } from "@/lib/format";
 import { isMollieConfigured, syncPaymentFromMollie, type BankTransferDetails } from "@/lib/mollie";
 import { retryPaymentAction } from "./actions";
+import { TrackEvent } from "@/components/TrackEvent";
+import { amountToNumber } from "@/lib/format";
 import styles from "../../[slug]/checkout.module.css";
 
 export const metadata: Metadata = { title: "Je boeking — AdventureTravels", robots: { index: false } };
@@ -51,6 +53,12 @@ export default async function ConfirmationPage({
 
   return (
     <div className={styles.page}>
+      {paid && (
+        <TrackEvent
+          onceKey={`purchase:${booking.bookingNumber}`}
+          payload={{ event: "purchase", transaction_id: booking.bookingNumber, value: amountToNumber(booking.totalAmount), currency: "EUR", trip_slug: booking.trip.slug }}
+        />
+      )}
       <Topbar />
       <Nav variant="solid" />
       <div className={styles.wrap}>

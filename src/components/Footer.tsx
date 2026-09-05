@@ -4,6 +4,7 @@ import { getSiteSettings } from "@/lib/content/settings";
 import { getSports } from "@/lib/content/sports";
 import { getDestinations } from "@/lib/content/destinations";
 import { VzrGarant } from "./VzrGarant";
+import { CookieSettingsLink } from "./CookieSettingsLink";
 import styles from "./Footer.module.css";
 
 const COMPANY = [
@@ -71,6 +72,7 @@ export async function Footer() {
           <Link href="/voorwaarden">Voorwaarden</Link>
           <Link href="/privacy">Privacy</Link>
           <Link href="/annuleringsvoorwaarden">Annuleringsvoorwaarden</Link>
+          <CookieSettingsLink />
         </div>
       </div>
     </div>

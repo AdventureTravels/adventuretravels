@@ -1,15 +1,19 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import Link from "next/link";
 import { requestProgramPdfAction, type ProgramPdfState } from "@/lib/actions/programPdf";
 import { ArrowIcon } from "./icons";
+import { track } from "@/lib/analytics";
 import { Turnstile } from "./Turnstile";
 import { SourceUrlField } from "./SourceUrlField";
 import styles from "./ProgramCta.module.css";
 
 export function ProgramCtaForm({ siteKey }: { siteKey: string | null }) {
   const [state, formAction, pending] = useActionState<ProgramPdfState, FormData>(requestProgramPdfAction, null);
+  useEffect(() => {
+    if (state?.ok) track({ event: "generate_lead", lead_type: "pdf_request" });
+  }, [state?.ok]);
 
   if (state?.ok) {
     return <p className={styles.success}>De pdf is onderweg naar je inbox.</p>;

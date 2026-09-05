@@ -111,6 +111,19 @@ npm run db:verify -- after
 - `/admin/partners` (staffel-editor met validatie), `/admin/guides`, `/admin/sports` (met icoon), `/admin/bookings` (zelfde schermen als het staff-portaal op mijn.adventuretravels.nl/staff), `/admin/leads` (afhandelen), `/admin/reviews` (goedkeuren), `/admin/settings` (USP's, foto's, programma-pdf, standaardinformatieformulier).
 - Nieuwe sport, partner en reis zijn zonder code toe te voegen; een reis staat pas op de site als het formulier geen problemen meer meldt.
 
+## Tracking en consent (v5)
+
+- Cookiebanner (`src/components/Consent.tsx`) met Accepteren en Weigeren gelijkwaardig op de eerste laag. Keuze in cookie `at_consent` (180 dagen); de footer-link "Cookie-instellingen" opent de banner opnieuw.
+- Vóór een keuze laadt niets. Na een keuze: Consent Mode v2 `default` (alles denied) + `update` met de keuze, event `consent_update` met `consent_analytics` en `consent_marketing`, daarna pas het GTM-script. Microsoft Clarity laadt alleen bij "granted". Tag-id's: `NEXT_PUBLIC_GTM_ID` en `NEXT_PUBLIC_CLARITY_ID` (leeg = niet laden).
+- Events op de dataLayer (`src/lib/analytics.ts`): `view_trip`, `begin_checkout`, `add_payment_info`, `purchase` (transaction_id = boekingsnummer, value = totaal, één keer per boeking), `generate_lead` (lead_type: guide_callback, group_inquiry, contact, pdf_request).
+
+### In GTM instellen
+
+1. Zet in de container **Consent Overview** aan en geef elke tag een ingebouwde consent-eis: GA4-tags `analytics_storage`, advertentietags (Google Ads, Meta) `ad_storage` + `ad_user_data` + `ad_personalization`. Tags met een consent-eis vuren dan alleen als de status "granted" is, ook bij een pageview.
+2. Maak een trigger **Custom Event** `consent_update` met voorwaarde `consent_analytics equals granted` (voor GA4-configuratie) en één met `consent_marketing equals granted` (voor advertentietags). Gebruik die als trigger voor de configuratietags, zodat ze na een latere "Accepteren" alsnog starten zonder herlaad.
+3. Maak Custom Event-triggers voor `view_trip`, `begin_checkout`, `add_payment_info`, `purchase` en `generate_lead`, met dataLayer-variabelen `trip_slug`, `value`, `currency`, `transaction_id`, `lead_type`.
+4. Controle in een schone browser: vóór een klik op de banner mogen geen `_ga`, `_fbp`, `_gcl_au` of `_clck`-cookies bestaan; na "Weigeren" ook niet.
+
 ## Beelden
 
 Alle beeldvelden bevatten een Blob-URL of zijn leeg. Een leeg veld betekent: het element wordt niet getoond. Er bestaan geen placeholders meer; een reis zonder echte foto's is niet publiceerbaar.

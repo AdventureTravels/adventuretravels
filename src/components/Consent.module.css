@@ -1,0 +1,73 @@
+.banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 50;
+  margin: 0 auto;
+  max-width: 760px;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: var(--white);
+  color: var(--departure-black);
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 44px rgba(20, 23, 15, 0.18);
+  font-family: var(--font-body);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.text p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.text a {
+  text-decoration: underline;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  flex: none;
+}
+
+/* Beide knoppen gelijkwaardig: zelfde maat, zelfde gewicht, zelfde kleur. */
+.button {
+  padding: 14px 22px;
+  border: 1px solid var(--departure-black);
+  background: var(--white);
+  color: var(--departure-black);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--departure-black);
+  color: var(--white);
+}
+
+@media (max-width: 640px) {
+  .banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

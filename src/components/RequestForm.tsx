@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { submitGroupInquiryAction, type LeadFormState } from "@/lib/actions/leads";
+import { track } from "@/lib/analytics";
 import { Turnstile } from "./Turnstile";
 import { FormPrivacy } from "./FormPrivacy";
 import { SourceUrlField } from "./SourceUrlField";
@@ -22,6 +23,9 @@ export type GroupInquiryConfig = {
 /** Aanvraagformulier Groepen & bedrijven → Lead(type=group_inquiry). */
 export function RequestForm({ config, siteKey }: { config: GroupInquiryConfig; siteKey: string | null }) {
   const [state, formAction, pending] = useActionState<LeadFormState, FormData>(submitGroupInquiryAction, null);
+  useEffect(() => {
+    if (state?.ok) track({ event: "generate_lead", lead_type: "group_inquiry" });
+  }, [state?.ok]);
 
   if (state?.ok) {
     return (

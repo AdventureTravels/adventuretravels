@@ -11,6 +11,8 @@ import { ImageSlider } from "@/components/ImageSlider";
 import { Reviews } from "@/components/Reviews";
 import { PaymentMethods } from "@/components/PaymentMethods";
 import { VzrGarant } from "@/components/VzrGarant";
+import { TrackEvent } from "@/components/TrackEvent";
+import { amountToNumber } from "@/lib/format";
 import { ArrowIcon, CompassIcon } from "@/components/icons";
 import { getTripBySlug } from "@/lib/content/trips";
 import type { TripProgramStep, GalleryImage } from "@/lib/content/trips";
@@ -54,6 +56,16 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <div className={styles.page}>
+      <TrackEvent
+        payload={{
+          event: "view_trip",
+          trip_slug: trip.slug,
+          trip_title: trip.title,
+          trip_type: trip.type,
+          value: trip.pricePpBase ? amountToNumber(trip.pricePpBase) : undefined,
+          currency: "EUR",
+        }}
+      />
       <Topbar />
       <HeroBanner
         active="reizen"

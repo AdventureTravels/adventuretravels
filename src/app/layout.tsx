@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { headers } from "next/headers";
 import { Archivo, Michroma } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/siteUrl";
+import { Consent } from "@/components/Consent";
 
+/** Tag-id's zijn configuratie; leeg = niet laden. */
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID ?? "GTM-PW3ZRN99";
+const CLARITY_ID = process.env.NEXT_PUBLIC_CLARITY_ID ?? "yaxo0wd1xa";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -34,31 +37,11 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <head>
         <link rel="alternate" hrefLang="nl" href={pageUrl} />
         <link rel="alternate" hrefLang="x-default" href={pageUrl} />
-        <Script id="microsoft-clarity" strategy="afterInteractive">
-          {`(function(c,l,a,r,i,t,y){
-              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "yaxo0wd1xa");`}
-        </Script>
-        <Script id="gtm" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','GTM-PW3ZRN99');`}
-        </Script>
       </head>
       <body>
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-PW3ZRN99"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
         {children}
+        {/* Niets vuurt vóór consent: GTM en Clarity laden pas na een keuze in de banner. */}
+        <Consent gtmId={GTM_ID} clarityId={CLARITY_ID} />
       </body>
     </html>
   );

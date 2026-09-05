@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { submitContactAction, type LeadFormState } from "@/lib/actions/leads";
+import { track } from "@/lib/analytics";
 import { Turnstile } from "@/components/Turnstile";
 import { FormPrivacy } from "@/components/FormPrivacy";
 import { SourceUrlField } from "@/components/SourceUrlField";
@@ -10,6 +11,9 @@ import styles from "./page.module.css";
 
 export function ContactForm({ siteKey }: { siteKey: string | null }) {
   const [state, formAction, pending] = useActionState<LeadFormState, FormData>(submitContactAction, null);
+  useEffect(() => {
+    if (state?.ok) track({ event: "generate_lead", lead_type: "contact" });
+  }, [state?.ok]);
 
   if (state?.ok) {
     return (

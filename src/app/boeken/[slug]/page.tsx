@@ -6,6 +6,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { PaymentMethods } from "@/components/PaymentMethods";
 import { Turnstile } from "@/components/Turnstile";
+import { TrackEvent } from "@/components/TrackEvent";
 import { turnstileSiteKey } from "@/lib/turnstile";
 import { getTripBySlug } from "@/lib/content/trips";
 import { getOpenDeparturesWithAvailability } from "@/lib/content/departures";
@@ -84,6 +85,10 @@ export default async function CheckoutPage({
           <h1 className={styles.title}>{trip.title}</h1>
         </div>
         <CheckoutSteps current={step} slug={slug} maxReached={maxReached} />
+        {step === 1 && (
+          <TrackEvent payload={{ event: "begin_checkout", trip_slug: slug, value: summary ? summary.totalCents / 100 : 0, currency: "EUR", persons: draft.step1?.persons ?? 1 }} />
+        )}
+        {step === 3 && summary && <TrackEvent payload={{ event: "add_payment_info", trip_slug: slug, value: summary.totalCents / 100, currency: "EUR" }} />}
 
         {step === 1 && (
           <Step1Form

@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { submitGuideCallbackAction, type LeadFormState } from "@/lib/actions/leads";
+import { track } from "@/lib/analytics";
 import { Turnstile } from "@/components/Turnstile";
 import { FormPrivacy } from "@/components/FormPrivacy";
 import { SourceUrlField } from "@/components/SourceUrlField";
@@ -13,6 +14,9 @@ const DAYPARTS = ["Ochtend (9–12)", "Middag (12–17)", "Avond (17–20)"];
 
 export function GuideForm({ tripId, tripTitle, siteKey }: { tripId: string | null; tripTitle: string | null; siteKey: string | null }) {
   const [state, formAction, pending] = useActionState<LeadFormState, FormData>(submitGuideCallbackAction, null);
+  useEffect(() => {
+    if (state?.ok) track({ event: "generate_lead", lead_type: "guide_callback" });
+  }, [state?.ok]);
 
   if (state?.ok) {
     return (
