@@ -126,6 +126,7 @@ export type TripInput = {
   seasonEndMonth: number;
   minNights: number;
   maxNights: number;
+  minPersons: number;
   pricePpBase: string | null;
   pricePerExtraNight: string | null;
   sportId: string;

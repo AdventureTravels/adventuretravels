@@ -119,6 +119,7 @@ model Trip {
   seasonEndMonth     Int      @default(12)
   minNights          Int      @default(7)
   maxNights          Int      @default(7)
+  minPersons         Int      @default(1) // minimale bezetting, bv. 2 per bungalow
   pricePpBase        Decimal? @db.Decimal(10, 2) // prijs p.p. bij minNights
   pricePerExtraNight Decimal? @db.Decimal(10, 2)
 

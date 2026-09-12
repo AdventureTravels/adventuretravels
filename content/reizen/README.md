@@ -24,7 +24,7 @@ De database blijft de bron van waarheid: het script zet de reis erin, daarna beh
 | `## CTA: <titel>` | blok onderaan de pagina |
 
 Frontmatter: `slug`, `title`, `sport`, `destination`, `partner`, `guide`, `type`, `status`, `level`,
-`seasonStartMonth`, `seasonEndMonth`, `minNights`, `maxNights`, `pricePpBase`, `pricePerExtraNight`,
+`seasonStartMonth`, `seasonEndMonth`, `minNights`, `maxNights`, `minPersons`, `pricePpBase`, `pricePerExtraNight`,
 `priceNote`, `stayTitle`, `metaTitle`, `metaDescription`, `order`.
 
 Foto's staan niet in het bestand: die upload je in de admin (Vercel Blob).

@@ -30,6 +30,7 @@ export function publishProblems(trip: PublishableTripInput, ctx?: PublishContext
   } else if (trip.minNights < 1 || trip.maxNights < trip.minNights) {
     problems.push("Aantal nachten klopt niet (min ≥ 1, max ≥ min).");
   }
+  if (trip.minPersons < 1 || trip.minPersons > 12) problems.push("Minimale bezetting moet tussen 1 en 12 personen liggen.");
   if (trip.includes.length === 0) problems.push("Geen 'inbegrepen'-regels.");
   if (trip.excludes.length === 0) problems.push("Geen 'niet inbegrepen'-regels.");
   if (!isImageUrl(trip.heroImage)) problems.push("Geen echte hero-foto geüpload.");

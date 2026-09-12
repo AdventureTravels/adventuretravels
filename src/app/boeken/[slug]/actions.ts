@@ -6,7 +6,7 @@ import { getOpenDeparturesWithAvailability } from "@/lib/content/departures";
 import { getSiteSettings } from "@/lib/content/settings";
 import { createBooking, type BookingAddress } from "@/lib/content/bookings";
 import { readCheckoutDraft, writeCheckoutDraft, clearCheckoutDraft, type CheckoutStep1, type CheckoutStep2 } from "@/lib/checkoutSession";
-import { calculateBreakdown, isDateInSeason } from "@/lib/pricing";
+import { calculateBreakdown, isDateInSeason, minPersonsMessage } from "@/lib/pricing";
 import { pricingTripFrom } from "@/lib/pricingTrip";
 import { parseCancellationPolicy } from "@/lib/cancellation";
 import { participantsFromForm } from "@/lib/participantsForm";
@@ -32,6 +32,7 @@ export async function saveStep1Action(slug: string, formData: FormData) {
   const pricing = pricingTripFrom(trip, departures);
 
   const persons = Math.max(1, Math.min(12, Number(formData.get("persons") ?? 1)));
+  if (persons < trip.minPersons) fail(slug, 1, minPersonsMessage(trip.minPersons));
   const levels = Array.from({ length: persons }, (_, i) => text(formData, `levels[${i}]`));
   if (levels.some((l) => !(PARTICIPANT_LEVELS as readonly string[]).includes(l))) fail(slug, 1, "Kies voor elke persoon een niveau.");
 

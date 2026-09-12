@@ -11,6 +11,7 @@ seasonStartMonth: 11
 seasonEndMonth: 3
 minNights: 7
 maxNights: 7
+minPersons: 2
 order: 20
 stayTitle: Slapen aan het water
 priceNote: p.p. inclusief verblijf en weekpas voor de kabel

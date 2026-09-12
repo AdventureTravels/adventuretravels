@@ -151,6 +151,10 @@ export function TripForm({
           <input className={styles.input} id="pricePerExtraNight" name="pricePerExtraNight" type="number" step="0.01" min={0} defaultValue={trip?.pricePerExtraNight?.toString() ?? ""} />
         </div>
         <div className={styles.field}>
+          <label className={styles.label} htmlFor="minPersons">Min. personen per boeking</label>
+          <input className={styles.input} id="minPersons" name="minPersons" type="number" min={1} max={12} defaultValue={trip?.minPersons ?? 1} required />
+        </div>
+        <div className={styles.field}>
           <label className={styles.label} htmlFor="priceNote">Regel onder de prijs (leeg = niets)</label>
           <input className={styles.input} id="priceNote" name="priceNote" defaultValue={trip?.priceNote ?? ""} placeholder="bv. incl. weekpas en transfers" />
         </div>

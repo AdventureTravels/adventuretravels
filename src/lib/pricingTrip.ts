@@ -12,6 +12,7 @@ export function pricingTripFrom(trip: PublicTrip, departures: DepartureAvailabil
     pricePerExtraNightCents: toCents(trip.pricePerExtraNight),
     minNights: trip.minNights,
     maxNights: trip.maxNights,
+    minPersons: trip.minPersons,
     seasonStartMonth: trip.seasonStartMonth,
     seasonEndMonth: trip.seasonEndMonth,
     extras: trip.extras.map((e) => ({

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { calculateBreakdown, formatCents, formatIsoDate, isDateInSeason, type PricingTrip } from "@/lib/pricing";
+import { calculateBreakdown, formatCents, formatIsoDate, isDateInSeason, minPersonsMessage, type PricingTrip } from "@/lib/pricing";
 import { formatSeason } from "@/lib/format";
 import { PARTICIPANT_LEVELS, levelLabel } from "@/lib/levels";
 import type { CheckoutStep1 } from "@/lib/checkoutSession";
@@ -30,13 +30,18 @@ export function Step1Form({
   const [arrivalDate, setArrivalDate] = useState(initial.arrivalDate ?? "");
   const [nights, setNights] = useState(initial.nights);
   const [persons, setPersons] = useState(initial.persons);
-  const [levels, setLevels] = useState<string[]>(initial.levels);
+  // Eén niveau-veld per persoon, ook als een oude sessie minder niveaus bevat.
+  const [levels, setLevels] = useState<string[]>(() =>
+    Array.from({ length: Math.max(1, initial.persons) }, (_, i) => initial.levels[i] ?? "")
+  );
   const [extraIds, setExtraIds] = useState<string[]>(initial.extraIds);
   const [flight, setFlight] = useState(initial.flightRequested);
   const [airport, setAirport] = useState(initial.departureAirport);
 
   const departure = trip.departures.find((d) => d.id === departureId);
   const maxPersons = isGroup ? Math.min(MAX_PERSONS, departure?.seatsLeft ?? MAX_PERSONS) : MAX_PERSONS;
+  const minPersons = Math.min(Math.max(1, trip.minPersons), maxPersons);
+  const personOptions = Array.from({ length: Math.max(0, maxPersons - minPersons + 1) }, (_, i) => minPersons + i);
 
   const breakdown = useMemo(() => {
     try {
@@ -48,7 +53,7 @@ export function Step1Form({
 
   const dateOk = isGroup || (arrivalDate !== "" && isDateInSeason(arrivalDate, trip) && arrivalDate >= minDate);
   const setPersonCount = (n: number) => {
-    const count = Math.min(maxPersons, Math.max(1, n));
+    const count = Math.min(maxPersons, Math.max(minPersons, n));
     setPersons(count);
     setLevels((prev) => Array.from({ length: count }, (_, i) => prev[i] ?? ""));
   };
@@ -116,10 +121,11 @@ export function Step1Form({
             <div className={styles.field}>
               <label className={styles.label} htmlFor="persons">Aantal personen</label>
               <select className={styles.select} id="persons" name="persons" value={persons} onChange={(e) => setPersonCount(Number(e.target.value))}>
-                {Array.from({ length: maxPersons }, (_, i) => i + 1).map((n) => (
+                {personOptions.map((n) => (
                   <option key={n} value={n}>{n}</option>
                 ))}
               </select>
+              {minPersons > 1 && <p className={styles.hint}>{minPersonsMessage(minPersons)}</p>}
             </div>
           </div>
           <div className={styles.fieldRow}>

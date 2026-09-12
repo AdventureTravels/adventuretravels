@@ -57,6 +57,7 @@ function fromForm(formData: FormData) {
     seasonEndMonth: Number(formData.get("seasonEndMonth") ?? 12),
     minNights: Math.max(1, Number(formData.get("minNights") ?? 7)),
     maxNights: Math.max(1, Number(formData.get("maxNights") ?? 7)),
+    minPersons: Math.min(12, Math.max(1, Number(formData.get("minPersons") ?? 1))),
     pricePpBase: money(formData, "pricePpBase"),
     pricePerExtraNight: money(formData, "pricePerExtraNight"),
     sportId: text(formData, "sportId"),

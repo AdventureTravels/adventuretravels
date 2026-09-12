@@ -24,6 +24,7 @@ export type PricingTrip = {
   pricePerExtraNightCents: number | null;
   minNights: number;
   maxNights: number;
+  minPersons: number;
   seasonStartMonth: number;
   seasonEndMonth: number;
   extras: PricingExtra[];
@@ -70,6 +71,11 @@ export function isDateInSeason(isoDate: string, trip: Pick<PricingTrip, "seasonS
   return isMonthInSeason(Number(m[2]), trip.seasonStartMonth, trip.seasonEndMonth);
 }
 
+/** Reis die per twee (of meer) wordt verkocht: één zin, overal dezelfde. */
+export function minPersonsMessage(minPersons: number): string {
+  return `Deze reis boek je vanaf ${minPersons} personen.`;
+}
+
 export type Breakdown = { lines: PriceLine[]; totalCents: number; total: string; perPersonCents: number };
 
 const line = (label: string, qty: number, unitCents: number): PriceLine => ({
@@ -82,6 +88,7 @@ const line = (label: string, qty: number, unitCents: number): PriceLine => ({
 /** Prijsopbouw per regel en per persoon; totaal = som van de regels. Gooit bij een onmogelijke selectie. */
 export function calculateBreakdown(trip: PricingTrip, sel: Selection): Breakdown {
   const persons = Math.max(1, Math.floor(sel.persons));
+  if (persons < trip.minPersons) throw new Error(minPersonsMessage(trip.minPersons));
   const lines: PriceLine[] = [];
   let nights = sel.nights;
 

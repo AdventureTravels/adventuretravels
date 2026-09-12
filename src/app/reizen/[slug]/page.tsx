@@ -13,6 +13,7 @@ import { PaymentMethods } from "@/components/PaymentMethods";
 import { VzrGarant } from "@/components/VzrGarant";
 import { TrackEvent } from "@/components/TrackEvent";
 import { amountToNumber } from "@/lib/format";
+import { minPersonsMessage } from "@/lib/pricing";
 import { ArrowIcon, CompassIcon } from "@/components/icons";
 import { getTripBySlug, tripFaq, tripSections } from "@/lib/content/trips";
 import type { TripProgramStep, GalleryImage } from "@/lib/content/trips";
@@ -249,6 +250,13 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
                 <p className={styles.bookingSectionText}>
                   Vlucht niet inbegrepen. Wij boeken je vlucht bij op aanvraag; je ontvangt binnen 24 uur een prijs.
                 </p>
+              </div>
+            )}
+
+            {trip.minPersons > 1 && (
+              <div className={styles.bookingSection}>
+                <div className={styles.bookingSectionLabel}>Bezetting</div>
+                <p className={styles.bookingSectionText}>{minPersonsMessage(trip.minPersons)}</p>
               </div>
             )}
 

@@ -253,6 +253,7 @@ async function main() {
       seasonEndMonth: Number(meta.seasonEndMonth ?? 12),
       minNights: Number(meta.minNights ?? 7),
       maxNights: Number(meta.maxNights ?? 7),
+      minPersons: Number(meta.minPersons ?? 1),
       pricePpBase: money(meta.pricePpBase),
       pricePerExtraNight: money(meta.pricePerExtraNight),
     };
