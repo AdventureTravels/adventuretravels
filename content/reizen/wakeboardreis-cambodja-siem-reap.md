@@ -39,9 +39,11 @@ Het ritme van de week volgt de hitte. Je rijdt 's ochtends en aan het eind van d
 
 placement: top
 
-De kabel is elke dag open van 9:00 tot 21:00, dus je rijdt vroeg, laat, en als je wilt onder verlichting. Bij een kaartje horen een instructeur, een basisboard, waterski, kneeboard, helm en zwemvest. Het huurboard is een basismodel: rijd je al een paar seizoenen, neem dan je eigen board en bindingen mee.
+Het park opende in 2020 als ICF Wake Park en heet sinds juni 2023 Wake Park Cambodia, onder twee Zwitserse families: de Reuters en de Wunderli's, die er eerder als vrijwilliger werkten. Nadia en Leo Reuter runnen het park dagelijks, met een team van 45 lokale medewerkers.
 
-Naast de kabel heeft het park een strand aan een natuurlijk zwemmeer met Khmer bamboehutten, een restaurant met Khmer en westerse gerechten, een waterspeelpark (Aqua Land) en een paintballveld. Dat betekent ook: het park is een dagbestemming voor gezinnen uit Siem Reap, en op het strand en in Aqua Land is het niet elke dag even rustig.
+De kabel is een WakeparX-systeem met tien units en loopt om een eiland in het midden van het meer, waardoor er zones met vlak water zijn. Elke dag open van 9:00 tot 21:00. Bij een kaartje horen een instructeur, een basisboard, waterski, kneeboard, helm en zwemvest. Het huurboard is een basismodel: rijd je al een paar seizoenen, neem dan je eigen board en bindingen mee.
+
+Naast de kabel heeft het park een strand aan een natuurlijk zwemmeer met vijf Khmer bamboehutten en een jungle gym, een restaurant met Khmer en westerse gerechten, een waterspeelpark (Aqua Land) en een paintballarena van 4.500 m². Dat betekent ook: het park is een dagbestemming voor gezinnen uit Siem Reap, en op het strand en in Aqua Land is het niet elke dag even rustig.
 
 ## Programma
 
@@ -58,12 +60,14 @@ Het programma is een richtlijn. Met een weekpas bepaal je zelf hoeveel en wannee
 
 ## Verblijf
 
-Het park heeft acht bungalows direct aan het meer, in te richten als tweepersoonskamer of twin. Het park omschrijft ze zelf als eenvoudig en gezellig, en dat is een eerlijke omschrijving: dit is geen resort, wel een kamer waar je om zeven uur 's ochtends vanaf je terras het water ziet.
+Het park heeft acht bungalows direct aan het meer, in te richten als tweepersoonskamer of twin, met plek voor maximaal vier personen. Het park omschrijft ze zelf als eenvoudig en gezellig, en dat is een eerlijke omschrijving: dit is geen resort, wel een kamer waar je om zeven uur 's ochtends vanaf je terras het water ziet. Een bungalow gaat vanaf twee personen; daarom boek je deze reis ook met minimaal twee.
 
 - **Lakeside Bungalow** — 36 m², queensize bed of twin, buitenlounge, snel internet.
 - **Lakeside Pool Bungalow** — 54 m², eigen zwembad met terras, binnenlounge met airco, snel internet.
 
 Voor deze reis adviseren we de poolbungalow. Het verschil zit in de middaguren: met airco en een eigen zwembad is de hitte tussen twaalf en vier een pauze in plaats van een probleem.
+
+Als gast van het park krijg je 15% korting op alle tickets. Dat scheelt als je Aqua Land of paintball wilt doen, of iemand die niet rijdt een dagkaart wil.
 
 ## Inbegrepen
 
@@ -110,6 +114,8 @@ Wij bieden deze week aan van november tot en met maart.
 
 **Gezondheid.** Laat je ruim voor vertrek adviseren over vaccinaties, bijvoorbeeld bij de GGD.
 
+**Op het park betaal je in dollars.** Het restaurant is elke dag open van 9:00 tot 21:00. Aqua Land, paintball en de privéhutten op het strand kosten apart; op het strand geldt een minimale besteding per volwassene. Als gast van het park krijg je 15% korting op tickets. Die tarieven zijn van het park zelf en kunnen wijzigen.
+
 ## FAQ
 
 ### Ik heb nog nooit gewakeboard. Kan ik mee?
@@ -131,6 +137,14 @@ Ja. Er is een zwembad, een strand aan het meer, de stad op korte afstand, en de 
 ### Kan ik langer blijven dan een week?
 
 Ja. Het park heeft ook maandpassen. Geef het aan bij je aanvraag, dan maken we een voorstel.
+
+### Wat is er nog meer te doen op het park?
+
+Een waterspeelpark (Aqua Land), paintball in een arena van 4.500 m², een strand aan een natuurlijk zwemmeer en een restaurant met Khmer en westerse gerechten. Die activiteiten zitten niet in de reissom; als gast van het park krijg je er 15% korting op.
+
+### Met hoeveel personen kunnen we in één bungalow?
+
+Twee tot vier. Een bungalow wordt vanaf twee personen verhuurd en is in te richten als tweepersoonskamer of twin.
 
 ### Kunnen jullie de vlucht regelen?
 
