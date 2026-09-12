@@ -150,6 +150,10 @@ export function TripForm({
           <label className={styles.label} htmlFor="pricePerExtraNight">Prijs per extra nacht p.p. (€, leeg = vaste duur)</label>
           <input className={styles.input} id="pricePerExtraNight" name="pricePerExtraNight" type="number" step="0.01" min={0} defaultValue={trip?.pricePerExtraNight?.toString() ?? ""} />
         </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="priceNote">Regel onder de prijs (leeg = niets)</label>
+          <input className={styles.input} id="priceNote" name="priceNote" defaultValue={trip?.priceNote ?? ""} placeholder="bv. incl. weekpas en transfers" />
+        </div>
       </div>
       <span className={styles.hint}>Groepsreizen: prijs, data en plekken staan per vertrek (beheer volgt in de admin).</span>
 
@@ -188,6 +192,8 @@ export function TripForm({
       </div>
       <RichTextEditor name="heroSubtitle" label="Hero-subtitel" defaultValue={trip?.heroSubtitle} />
 
+      <RichTextEditor name="introBody" label="Intro (boven het programma; leeg = geen intro)" defaultValue={trip?.introBody} />
+
       <div className={styles.field}>
         <label className={styles.label} htmlFor="program">Programma (JSON: [{`{ day, text }`}])</label>
         <textarea
@@ -215,7 +221,52 @@ export function TripForm({
         </div>
       </div>
 
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="sections">
+          Vrije secties (JSON: [{`{ title, bodyHtml, placement }`}], placement &quot;top&quot; = vóór het programma)
+        </label>
+        <textarea
+          className={styles.textarea}
+          id="sections"
+          name="sections"
+          rows={8}
+          defaultValue={trip ? JSON.stringify(trip.sections, null, 2) : "[]"}
+        />
+        <span className={styles.hint}>bodyHtml mag &lt;p&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;strong&gt;, &lt;em&gt;, &lt;a&gt;, &lt;h3&gt;. Een sectie zonder titel of tekst wordt overgeslagen.</span>
+      </div>
+
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="faq">Veelgestelde vragen (JSON: [{`{ question, answer }`}])</label>
+        <textarea
+          className={styles.textarea}
+          id="faq"
+          name="faq"
+          rows={8}
+          defaultValue={trip ? JSON.stringify(trip.faq, null, 2) : "[]"}
+        />
+        <span className={styles.hint}>Deze vragen komen ook als FAQ-structured data in de pagina.</span>
+      </div>
+
       <GalleryEditor images={gallery} />
+
+      <h2 className={styles.label}>Blok onderaan (alleen zichtbaar met titel én tekst)</h2>
+      <div className={styles.field}>
+        <label className={styles.label} htmlFor="ctaTitle">Titel</label>
+        <input className={styles.input} id="ctaTitle" name="ctaTitle" defaultValue={trip?.ctaTitle ?? ""} />
+      </div>
+      <RichTextEditor name="ctaBody" label="Tekst" defaultValue={trip?.ctaBody} />
+
+      <h2 className={styles.label}>Zoekmachines</h2>
+      <div className={styles.fieldRow}>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="metaTitle">Meta title (leeg = &quot;{trip?.title ?? "Titel"} — AdventureTravels&quot;)</label>
+          <input className={styles.input} id="metaTitle" name="metaTitle" defaultValue={trip?.metaTitle ?? ""} />
+        </div>
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="metaDescription">Meta description (leeg = hero-subtitel)</label>
+          <input className={styles.input} id="metaDescription" name="metaDescription" defaultValue={trip?.metaDescription ?? ""} />
+        </div>
+      </div>
 
       <div className={styles.field}>
         <label className={styles.label} htmlFor="order">Volgorde</label>

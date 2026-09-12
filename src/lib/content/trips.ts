@@ -68,6 +68,30 @@ export function getTripById(id: string) {
 
 export type TripProgramStep = { day: string; text: string };
 export type GalleryImage = { src: string; alt: string };
+/** Vrije sectie op de reispagina; "top" staat vóór het programma, "bottom" (standaard) erna. */
+export type TripSection = { title: string; bodyHtml: string; placement?: "top" | "bottom" };
+export type TripFaqItem = { question: string; answer: string };
+
+export function tripSections(value: unknown): TripSection[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((row) => ({
+      title: String((row as TripSection)?.title ?? "").trim(),
+      bodyHtml: String((row as TripSection)?.bodyHtml ?? "").trim(),
+      placement: (row as TripSection)?.placement === "top" ? ("top" as const) : ("bottom" as const),
+    }))
+    .filter((row) => row.title && row.bodyHtml);
+}
+
+export function tripFaq(value: unknown): TripFaqItem[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((row) => ({
+      question: String((row as TripFaqItem)?.question ?? "").trim(),
+      answer: String((row as TripFaqItem)?.answer ?? "").trim(),
+    }))
+    .filter((row) => row.question && row.answer);
+}
 
 export type TripInput = {
   slug: string;
@@ -90,6 +114,14 @@ export type TripInput = {
   includes: string[];
   excludes: string[];
   order: number;
+  introBody: string;
+  sections: TripSection[];
+  faq: TripFaqItem[];
+  priceNote: string;
+  ctaTitle: string;
+  ctaBody: string;
+  metaTitle: string;
+  metaDescription: string;
   seasonStartMonth: number;
   seasonEndMonth: number;
   minNights: number;
@@ -107,6 +139,8 @@ function toPrismaData(data: TripInput) {
     ...data,
     program: data.program as unknown as Prisma.InputJsonValue,
     galleryImages: data.galleryImages as unknown as Prisma.InputJsonValue,
+    sections: data.sections as unknown as Prisma.InputJsonValue,
+    faq: data.faq as unknown as Prisma.InputJsonValue,
   };
 }
 

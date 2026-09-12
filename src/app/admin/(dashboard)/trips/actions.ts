@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createTrip, updateTrip, deleteTrip } from "@/lib/content/trips";
+import { createTrip, updateTrip, deleteTrip, tripFaq, tripSections } from "@/lib/content/trips";
 import { indexedRowsInOrder } from "@/lib/adminFormSections";
 
 const text = (formData: FormData, key: string) => String(formData.get(key) ?? "").trim();
@@ -18,6 +18,8 @@ const money = (formData: FormData, key: string) => {
 
 function fromForm(formData: FormData) {
   const program = JSON.parse(text(formData, "program") || "[]");
+  const sections = tripSections(JSON.parse(text(formData, "sections") || "[]"));
+  const faq = tripFaq(JSON.parse(text(formData, "faq") || "[]"));
   const gallery = indexedRowsInOrder(formData, "gallery")
     .map((row) => ({ src: row.src?.trim() ?? "", alt: row.alt?.trim() ?? "" }))
     .filter((img) => img.src);
@@ -43,6 +45,14 @@ function fromForm(formData: FormData) {
     includes: lines(formData, "includes"),
     excludes: lines(formData, "excludes"),
     order: Number(formData.get("order") ?? 0),
+    introBody: text(formData, "introBody"),
+    sections,
+    faq,
+    priceNote: text(formData, "priceNote"),
+    ctaTitle: text(formData, "ctaTitle"),
+    ctaBody: text(formData, "ctaBody"),
+    metaTitle: text(formData, "metaTitle"),
+    metaDescription: text(formData, "metaDescription"),
     seasonStartMonth: Number(formData.get("seasonStartMonth") ?? 1),
     seasonEndMonth: Number(formData.get("seasonEndMonth") ?? 12),
     minNights: Math.max(1, Number(formData.get("minNights") ?? 7)),

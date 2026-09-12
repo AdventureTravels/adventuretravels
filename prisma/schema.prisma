@@ -104,6 +104,16 @@ model Trip {
   excludes      String[] @default([])
   order         Int      @default(0)
 
+  // Vrije secties op de reispagina. Leeg veld = het blok rendert niet.
+  introBody       String @default("") // rich text (HTML), boven het programma
+  sections        Json   @default("[]") // [{ title, bodyHtml, placement?: "top" | "bottom" }] — "top" staat vóór het programma
+  faq             Json   @default("[]") // [{ question, answer }] — ook FAQPage-structured data
+  priceNote       String @default("") // extra regel onder de prijs, bv. "incl. weekpas en transfers"
+  ctaTitle        String @default("") // blok onderaan; titel én tekst nodig, anders rendert het niet
+  ctaBody         String @default("") // rich text (HTML)
+  metaTitle       String @default("") // SEO; leeg = "<titel> — AdventureTravels"
+  metaDescription String @default("") // SEO; leeg = hero-subtitel zonder opmaak
+
   // Individueel: seizoen, nachten en prijs
   seasonStartMonth   Int      @default(1)
   seasonEndMonth     Int      @default(12)

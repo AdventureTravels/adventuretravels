@@ -14,7 +14,8 @@
     "db:seed": "prisma db seed",
     "db:cleanup-v5": "tsx scripts/cleanup-v5.ts",
     "db:verify": "tsx scripts/db-verify.ts",
-    "journal:import": "tsx scripts/import-articles.ts"
+    "journal:import": "tsx scripts/import-articles.ts",
+    "trips:import": "tsx scripts/import-trips.ts"
   },
   "dependencies": {
     "@mollie/api-client": "^4.6.0",

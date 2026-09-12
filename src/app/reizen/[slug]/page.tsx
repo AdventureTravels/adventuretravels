@@ -14,7 +14,7 @@ import { VzrGarant } from "@/components/VzrGarant";
 import { TrackEvent } from "@/components/TrackEvent";
 import { amountToNumber } from "@/lib/format";
 import { ArrowIcon, CompassIcon } from "@/components/icons";
-import { getTripBySlug } from "@/lib/content/trips";
+import { getTripBySlug, tripFaq, tripSections } from "@/lib/content/trips";
 import type { TripProgramStep, GalleryImage } from "@/lib/content/trips";
 import { getOpenDeparturesWithAvailability } from "@/lib/content/departures";
 import { getSiteSettings } from "@/lib/content/settings";
@@ -23,6 +23,7 @@ import { formatDate, formatNights, formatPrice, formatSeason } from "@/lib/forma
 import { levelLabel } from "@/lib/levels";
 import { renderCancellationPolicy } from "@/lib/cancellation";
 import { CHECKOUT_ENABLED } from "@/lib/flags";
+import { SITE_URL } from "@/lib/siteUrl";
 import styles from "./page.module.css";
 
 export async function generateMetadata({
@@ -34,8 +35,8 @@ export async function generateMetadata({
   const trip = await getTripBySlug(slug);
   if (!trip) return {};
   return {
-    title: `${trip.title} — AdventureTravels`,
-    description: stripHtml(trip.heroSubtitle),
+    title: trip.metaTitle || `${trip.title} — AdventureTravels`,
+    description: trip.metaDescription || stripHtml(trip.heroSubtitle),
     alternates: { canonical: `/reizen/${trip.slug}` },
   };
 }
@@ -53,6 +54,25 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
   const departures = isGroup ? await getOpenDeparturesWithAvailability(trip.id, trip.departures) : [];
   const policy = renderCancellationPolicy(trip.partner.cancellationPolicy, isGroup ? "vertrek" : "aankomst");
   const guide = trip.guide;
+  const sections = tripSections(trip.sections);
+  const topSections = sections.filter((s) => s.placement === "top");
+  const bottomSections = sections.filter((s) => s.placement !== "top");
+  const faq = tripFaq(trip.faq);
+
+  // Structured data: alleen de vragen die echt op de pagina staan.
+  const jsonLd = faq.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        inLanguage: "nl",
+        url: `${SITE_URL}/reizen/${trip.slug}`,
+        mainEntity: faq.map((f) => ({
+          "@type": "Question",
+          name: f.question,
+          acceptedAnswer: { "@type": "Answer", text: stripHtml(f.answer) },
+        })),
+      }
+    : null;
 
   return (
     <div className={styles.page}>
@@ -82,8 +102,19 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
         }
       />
 
+      {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
+
       <div className={styles.body}>
         <div className={styles.main}>
+          {trip.introBody && <RichText html={trip.introBody} className={styles.intro} />}
+
+          {topSections.map((section) => (
+            <div key={section.title} className={styles.block}>
+              <h2 className={styles.blockTitle}>{section.title}</h2>
+              <RichText html={section.bodyHtml} className={styles.blockText} />
+            </div>
+          ))}
+
           <div className={styles.block}>
             <h2 className={styles.blockTitle}>Programma</h2>
             <p className={styles.blockText}>{summary}</p>
@@ -116,6 +147,29 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
           {gallery.some((g) => isImageUrl(g.src)) && (
             <div className={styles.gallerySlider}>
               <ImageSlider images={gallery} />
+            </div>
+          )}
+
+          {bottomSections.map((section) => (
+            <div key={section.title} className={styles.block}>
+              <h2 className={styles.blockTitle}>{section.title}</h2>
+              <RichText html={section.bodyHtml} className={styles.blockText} />
+            </div>
+          ))}
+
+          {faq.length > 0 && (
+            <div className={styles.block}>
+              <h2 className={styles.blockTitle}>Veelgestelde vragen</h2>
+              <dl className={styles.faq}>
+                {faq.map((item) => (
+                  <div key={item.question} className={styles.faqItem}>
+                    <dt className={styles.faqQuestion}>{item.question}</dt>
+                    <dd className={styles.faqAnswer}>
+                      <RichText html={item.answer} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           )}
 
@@ -155,6 +209,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
                   bij {formatNights(trip.minNights, trip.minNights)}
                   {trip.pricePerExtraNight !== null && `, elke extra nacht ${formatPrice(trip.pricePerExtraNight)} p.p.`}
                 </div>
+                {trip.priceNote && <div className={styles.priceIncludes}>{trip.priceNote}</div>}
               </div>
             )}
             {isGroup && departures.length > 0 && (
@@ -165,6 +220,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
                   <span className={styles.priceUnit}>p.p.</span>
                 </div>
                 <div className={styles.priceIncludes}>all-in, inclusief vlucht en gids</div>
+                {trip.priceNote && <div className={styles.priceIncludes}>{trip.priceNote}</div>}
               </div>
             )}
 
@@ -278,6 +334,31 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
           </Link>
         </div>
       </div>
+
+      {trip.ctaTitle && trip.ctaBody && (
+        <div className={styles.cta}>
+          <div className={styles.ctaInner}>
+            <h2 className={styles.ctaTitle}>{trip.ctaTitle}</h2>
+            <RichText html={trip.ctaBody} className={styles.ctaText} />
+            <div className={styles.ctaActions}>
+              {CHECKOUT_ENABLED ? (
+                <Link href={`/boeken/${trip.slug}`} className={styles.bookPrimary}>
+                  Boek deze reis
+                  <ArrowIcon size={15} />
+                </Link>
+              ) : (
+                <a href={phoneHref} className={styles.bookPrimary}>
+                  Bel om te boeken · {settings.phone}
+                  <ArrowIcon size={15} />
+                </a>
+              )}
+              <Link href={`/spreek-een-gids?reis=${trip.slug}`} className={styles.bookSecondary}>
+                Vraag beschikbaarheid aan
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       <TrustStripSimple />
       <Footer />

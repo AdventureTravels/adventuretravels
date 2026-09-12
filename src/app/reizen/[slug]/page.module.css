@@ -438,3 +438,85 @@
     padding: 24px;
   }
 }
+
+/* Intro, vrije secties, FAQ en het CTA-blok onderaan. */
+.intro {
+  max-width: 720px;
+  font-size: 19px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.faq {
+  margin: 8px 0 0;
+  max-width: 720px;
+  border-top: 1px solid var(--line);
+}
+
+.faqItem {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.faqQuestion {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.faqAnswer {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.cta {
+  background: var(--departure-black);
+  color: var(--canvas-sand);
+  padding: 72px 48px;
+}
+
+.ctaInner {
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ctaTitle {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.ctaText {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--dark-text-secondary);
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cta .bookSecondary {
+  border-color: var(--canvas-sand);
+  color: var(--canvas-sand);
+}
+
+.cta .bookSecondary:hover {
+  background: var(--canvas-sand);
+  color: var(--departure-black);
+}
+
+@media (max-width: 900px) {
+  .cta {
+    padding: 48px 24px;
+  }
+}
