@@ -93,6 +93,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
         height={620}
         image={trip.heroImage}
         imageAlt={trip.heroImageAlt || trip.title}
+        video={trip.heroVideoUrl}
         eyebrow={`${trip.sport.name} · ${trip.destination.name}`}
         title={trip.title}
         subtitle={trip.heroSubtitle}

@@ -35,6 +35,7 @@ function fromForm(formData: FormData) {
     text: text(formData, "text"),
     heroImage: text(formData, "heroImage"),
     heroImageAlt: text(formData, "heroImageAlt"),
+    heroVideoUrl: text(formData, "heroVideoUrl"),
     heroSubtitle: text(formData, "heroSubtitle"),
     program,
     stayTitle: text(formData, "stayTitle") || "Het verblijf",

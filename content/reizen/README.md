@@ -22,9 +22,14 @@ De database blijft de bron van waarheid: het script zet de reis erin, daarna beh
 | `## Inbegrepen` / `## Niet inbegrepen` | lijsten met `- ` |
 | `## FAQ` | `### vraag` + antwoord; komt ook als FAQ-structured data op de pagina |
 | `## CTA: <titel>` | blok onderaan de pagina |
+| `## Galerij` | `- /images/... \| alt-tekst` per foto (`galleryImages`) |
+| `## Extra's` | `- Naam \| prijs \| eenmalig of per nacht \| omschrijving`; vervangt bij `--update` alle extra's |
 
 Frontmatter: `slug`, `title`, `sport`, `destination`, `partner`, `guide`, `type`, `status`, `level`,
 `seasonStartMonth`, `seasonEndMonth`, `minNights`, `maxNights`, `minPersons`, `pricePpBase`, `pricePerExtraNight`,
 `priceNote`, `stayTitle`, `metaTitle`, `metaDescription`, `order`.
 
-Foto's staan niet in het bestand: die upload je in de admin (Vercel Blob).
+Beeld kan op twee manieren: uploaden in de admin (Vercel Blob), of meeleveren in de repo onder
+`public/images/reizen/<bestemming>/` en in de frontmatter zetten (`image`, `heroImage`, `heroVideo`, `stayImage`
++ de `*Alt`-velden) en onder `## Galerij`. Alleen velden die in het bestand staan worden overschreven.
+Hou de hero-video onder de 10MB (H.264, geen geluid).

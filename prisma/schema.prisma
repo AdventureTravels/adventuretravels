@@ -93,6 +93,7 @@ model Trip {
   text          String   @default("") // rich text (HTML), korte omschrijving op de kaart
   heroImage     String   @default("")
   heroImageAlt  String   @default("")
+  heroVideoUrl  String   @default("") // eigen hero-video (mp4, H.264); leeg = sitebrede video uit SiteSettings
   heroSubtitle  String   @default("") // rich text (HTML)
   program       Json     @default("[]") // [{ day, text }]
   stayTitle     String   @default("Het verblijf")

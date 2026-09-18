@@ -7,74 +7,81 @@ partner: wake-park-cambodia
 type: individual
 status: draft
 level: all
-seasonStartMonth: 11
-seasonEndMonth: 3
+seasonStartMonth: 4
+seasonEndMonth: 12
 minNights: 7
 maxNights: 7
 minPersons: 2
+pricePpBase: 419
 order: 20
-stayTitle: Slapen aan het water
-priceNote: p.p. inclusief verblijf en weekpas voor de kabel
+stayTitle: Slapen op het park
+priceNote: p.p. in een Base Room op basis van 2 personen, met volpension, weekpas en transfers
+image: /images/reizen/cambodja/kaart-kicker.jpg
+imageAlt: Rider springt over een kicker op de kabelbaan van Wake Park Cambodia
+heroImage: /images/reizen/cambodja/hero.jpg
+heroImageAlt: Rider op de kabel voor het bord van Wake Park Cambodia
+heroVideo: /images/reizen/cambodja/hero.mp4
+stayImage: /images/reizen/cambodja/base-room.jpg
+stayImageAlt: Base Room met tweepersoonsbed en schuifpui naar het terras
 metaTitle: "Wakeboardreis Cambodja: een week kabel in Siem Reap"
-metaDescription: "Zeven nachten aan het meer bij de enige full-size kabelbaan van Cambodja, met een weekpas voor onbeperkt rijden."
+metaDescription: "Zeven nachten op het park bij de enige full-size kabelbaan van Cambodja: volpension, een weekpas voor de kabel en transfers van en naar de luchthaven."
 ---
 
 ## Kaart
 
-Rijden op de enige full-size kabel van Cambodja, slapen aan het meer.
+Een week op de enige full-size kabel van Cambodja, met volpension en transfers.
 
 ## Hero
 
-Een week op de enige full-size kabelbaan van Cambodja. Slapen aan het meer, met de tempels van Angkor op je rustdag.
+Zeven nachten op het park, drie maaltijden per dag en een weekpas voor de enige full-size kabelbaan van Cambodja.
 
 ## Intro
 
-Aan de rand van Siem Reap ligt een meer met de enige full-size kabelbaan van Cambodja. Wake Park Cambodia draait op een WakeparX-systeem en heeft obstakels voor verschillende niveaus, dus je eerste rondje en je eerste kicker gebeuren op dezelfde plek.
+Aan de rand van Siem Reap ligt een meer met de enige full-size kabelbaan van Cambodja. Wake Park Cambodia draait op een WakeparX-systeem met obstakels voor verschillende niveaus, dus je eerste rondje en je eerste kicker gebeuren op dezelfde plek.
 
-Je slaapt op het park zelf. De bungalows staan aan het water en bij de poolvariant loopt je eigen zwembad richting het meer. Tussen de kabel, je bed en de veranda van het restaurant zit geen transfer.
+Je slaapt op het park zelf, en je eet er ook: ontbijt, lunch en diner zitten in de reis, plus elke dag een koffie van de barista. Je wordt van de luchthaven gehaald en weer teruggebracht. Tussen de kabel, je bed en je bord zit dus geen taxi, geen rekening en geen planning.
 
-Het ritme van de week volgt de hitte. Je rijdt 's ochtends en aan het eind van de middag, als de zon laag staat. Midden op de dag lig je in het zwembad of in de schaduw. 's Avonds eet je Khmer in de stad, of je blijft op het park en kijkt naar de laatste riders.
+Het ritme van de week volgt de hitte. Je rijdt 's ochtends en aan het eind van de middag, als de zon laag staat. Midden op de dag lig je op het strand of in de schaduw, en 's avonds kijk je vanaf het restaurant naar de laatste riders.
 
 ## Sectie: Het park
 
 placement: top
 
-Het park opende in 2020 als ICF Wake Park en heet sinds juni 2023 Wake Park Cambodia, onder twee Zwitserse families: de Reuters en de Wunderli's, die er eerder als vrijwilliger werkten. Nadia en Leo Reuter runnen het park dagelijks, met een team van 45 lokale medewerkers.
+Het park opende in 2020 als ICF Wake Park en heet sinds juni 2023 Wake Park Cambodia, onder twee Zwitserse families: de Reuters en de Wunderli's. Nadia en Leo Reuter runnen het park dagelijks, met een team van 45 lokale medewerkers.
 
-De kabel is een WakeparX-systeem met tien units en loopt om een eiland in het midden van het meer, waardoor er zones met vlak water zijn. Elke dag open van 9:00 tot 21:00. Bij een kaartje horen een instructeur, een basisboard, waterski, kneeboard, helm en zwemvest. Het huurboard is een basismodel: rijd je al een paar seizoenen, neem dan je eigen board en bindingen mee.
+De kabel is een WakeparX-systeem met tien units en is elke dag open van 9:00 tot 21:00. Rijd je al een paar seizoenen, neem dan je eigen board en bindingen mee; een beter huurboard kost op het park vanaf $8 per twee uur.
 
-Naast de kabel heeft het park een strand aan een natuurlijk zwemmeer met vijf Khmer bamboehutten en een jungle gym, een restaurant met Khmer en westerse gerechten, een waterspeelpark (Aqua Land) en een paintballarena van 4.500 m². Dat betekent ook: het park is een dagbestemming voor gezinnen uit Siem Reap, en op het strand en in Aqua Land is het niet elke dag even rustig.
+Naast de kabel heeft het park een strand aan een natuurlijk zwemmeer met Khmer bamboehutten en een jungle gym, een restaurant met Khmer en westerse gerechten, een waterspeelpark (Aqua Land) en een paintballarena van 4.500 m². Dat betekent ook: het park is een dagbestemming voor gezinnen uit Siem Reap, en op het strand en in Aqua Land is het niet elke dag even rustig.
 
 ## Programma
 
-- Dag 1 · Aankomst — Je komt aan op het park en checkt in in je bungalow aan het meer. Wie nog energie heeft, rijdt een paar rondjes voor zonsondergang.
-- Dag 2 · Eerste kabeldag — Ochtendsessie met een instructeur, die je niveau inschat en je startpositie en eerste bochten doorneemt. Middag in het zwembad of op het strand, tweede sessie als het koeler wordt.
+- Dag 1 · Aankomst — Je wordt opgehaald op Siem Reap Angkor International Airport en naar het park gebracht. Inchecken kan vanaf 14:00. Wie nog energie heeft, rijdt een paar rondjes voor zonsondergang.
+- Dag 2 · Eerste kabeldag — Ochtendsessie om je startpositie en eerste bochten onder de knie te krijgen. Middag op het strand, tweede sessie als het koeler wordt.
 - Dag 3 · Rijden — Twee sessies, zelfde ritme. Beginners werken aan volledige rondes, gevorderden aan de obstakels.
-- Dag 4 · Angkor — Vroeg op, met een gids naar Angkor Wat voor zonsopgang, daarna Bayon en Ta Prohm. Rond het middaguur terug op het park. Na twee kabeldagen hebben je benen deze rustdag nodig.
-- Dag 5 · Rijden — Ochtend- en middagsessie, avond vrij in Siem Reap.
+- Dag 4 · Rustdag — Na drie dagen kabel hebben je armen een dag nodig. Tijd voor Angkor Wat, Bayon en Ta Prohm; die dagtrip zit niet in de reissom.
+- Dag 5 · Rijden — Ochtend- en middagsessie, avond vrij.
 - Dag 6 · Rijden — De dag waarop het meestal klikt: langere rondes, eerste sprongetjes over een obstakel.
-- Dag 7 · Laatste kabeldag — Rij zoveel als je wilt, en sluit de week 's avonds samen af.
-- Dag 8 · Vertrek — Afhankelijk van je vluchttijd nog een ochtendsessie, daarna vertrek naar de luchthaven.
+- Dag 7 · Laatste kabeldag — Rij zoveel als je wilt, en sluit de week 's avonds af aan het meer.
+- Dag 8 · Vertrek — Uitchecken voor 10:00, daarna brengt je transfer je naar de luchthaven.
 
 Het programma is een richtlijn. Met een weekpas bepaal je zelf hoeveel en wanneer je rijdt.
 
 ## Verblijf
 
-Het park heeft acht bungalows direct aan het meer, in te richten als tweepersoonskamer of twin, met plek voor maximaal vier personen. Het park omschrijft ze zelf als eenvoudig en gezellig, en dat is een eerlijke omschrijving: dit is geen resort, wel een kamer waar je om zeven uur 's ochtends vanaf je terras het water ziet. Een bungalow gaat vanaf twee personen; daarom boek je deze reis ook met minimaal twee.
+Je kiest uit drie kamertypes, allemaal op het park en allemaal met een eigen badkamer. De prijs van deze reis is gebaseerd op een Base Room; een bungalow aan het meer boek je met een toeslag.
 
-- **Lakeside Bungalow** — 36 m², queensize bed of twin, buitenlounge, snel internet.
-- **Lakeside Pool Bungalow** — 54 m², eigen zwembad met terras, binnenlounge met airco, snel internet.
+- **Base Room** — De nieuwste kamers van het park, in een laag gebouw aan een tuin. Airco, een klein terras met zitje, een eigen badkamer en een werkhoek. Tweepersoonsbed of twin, voor maximaal twee personen.
+- **Lakeside Bungalow** — Direct aan het meer, met een grote glazen pui en een overdekte buitenlounge boven het water. Voor twee personen.
+- **Lakeside Pool Bungalow** — 54 m², met een binnenlounge met airco en schuifdeuren naar een eigen terras met plonsbad. Voor twee personen.
 
-Voor deze reis adviseren we de poolbungalow. Het verschil zit in de middaguren: met airco en een eigen zwembad is de hitte tussen twaalf en vier een pauze in plaats van een probleem.
-
-Als gast van het park krijg je 15% korting op alle tickets. Dat scheelt als je Aqua Land of paintball wilt doen, of iemand die niet rijdt een dagkaart wil.
+Wil je 's ochtends vanaf je bed het water zien, neem dan een bungalow. Wil je vooral een koele, nieuwe kamer en gaat de rest van je dag op aan de kabel, dan is de Base Room de slimme keuze.
 
 ## Inbegrepen
 
-- 7 nachten in een bungalow aan het meer, op basis van 2 personen
+- 7 nachten op het park, op basis van 2 personen per kamer
+- Volpension: ontbijt, lunch en diner, plus elke dag een barista-koffie
 - Weekpas voor de kabelbaan: onbeperkt rijden tijdens openingstijden, elke dag van 9:00 tot 21:00
-- Huurmateriaal: board, helm en zwemvest
-- Instructeur op je eerste kabeldag
+- Transfer van Siem Reap Angkor International Airport naar het park en terug
 - Reis gedekt via de garantieregeling van VZR Garant
 
 ## Niet inbegrepen
@@ -82,9 +89,31 @@ Als gast van het park krijg je 15% korting op alle tickets. Dat scheelt als je A
 - Vlucht (op aanvraag door ons bij te boeken)
 - Visum voor Cambodja
 - Reis- en annuleringsverzekering
-- Maaltijden en drankjes
+- Overige drankjes
+- Dagtrip naar Angkor
 - Aqua Land, paintball en andere activiteiten op het park
 - Fooien en persoonlijke uitgaven
+
+## Extra's
+
+- Lakeside Bungalow in plaats van Base Room | 49 | eenmalig | Aan het meer, met een overdekte buitenlounge boven het water. Toeslag per persoon voor de hele week.
+- Lakeside Pool Bungalow in plaats van Base Room | 139 | eenmalig | 54 m², met binnenlounge met airco en een eigen terras met plonsbad. Toeslag per persoon voor de hele week.
+
+## Galerij
+
+- /images/reizen/cambodja/park-luchtfoto.jpg | Luchtfoto van het park met de kabelbaan rond het eiland, Aqua Land en het strand
+- /images/reizen/cambodja/kabel-startsteiger.jpg | Rider bij de startsteiger van de kabelbaan
+- /images/reizen/cambodja/instructeur.jpg | Instructeur geeft uitleg aan riders voor hun eerste rondje
+- /images/reizen/cambodja/rail.jpg | Rider op een rail, met de bungalows aan het meer op de achtergrond
+- /images/reizen/cambodja/lakeside-bungalows.jpg | Lakeside Bungalows aan het meer, met de kabelmast erachter
+- /images/reizen/cambodja/lakeside-lounge.jpg | Overdekte buitenlounge van een Lakeside Bungalow boven het water
+- /images/reizen/cambodja/pool-bungalow-plonsbad.jpg | Plonsbad op het terras van een Lakeside Pool Bungalow met uitzicht over het meer
+- /images/reizen/cambodja/base-room-twin.jpg | Base Room ingericht als twin
+- /images/reizen/cambodja/base-room-terras.jpg | Terras van een Base Room met uitzicht op de tuin
+- /images/reizen/cambodja/strand-en-meer.jpg | Strand aan het natuurlijke zwemmeer op het park
+- /images/reizen/cambodja/restaurant-terras.jpg | Terras van het restaurant langs het water
+- /images/reizen/cambodja/eten.jpg | Salade uit de keuken van het park
+- /images/reizen/cambodja/zonsondergang-hut.jpg | Hut aan het water bij zonsondergang
 
 ## Sectie: Voor wie deze week werkt
 
@@ -92,19 +121,23 @@ Geen ervaring nodig. Op een kabel maak je in een uur veel meer starts dan achter
 
 Deze reis is minder geschikt als je slecht tegen hitte kunt, of als je een resort met service op elk moment verwacht. Het park is een sportplek met een goede keuken, geen hotelcomplex.
 
-Reis je met iemand die niet rijdt? Die heeft een zwembad, een strand, de stad en Angkor. Een week lang niets hoeven is hier ook een optie.
+Reis je met iemand die niet rijdt? Die heeft een strand, een zwemmeer, de stad en Angkor. Een week lang niets hoeven is hier ook een optie.
 
 ## Sectie: Wanneer je het beste gaat
 
-- **November t/m februari** — Droog seizoen en de koelste maanden van het jaar. De beste periode om te rijden, en precies wanneer het in Nederland het donkerst is.
-- **Maart t/m mei** — Droog, maar dit zijn de heetste maanden. Rijden doe je dan vroeg en laat.
-- **Juni t/m oktober** — Regenseizoen. Buien vallen meestal later op de dag, het landschap is groen en het is rustiger op het park.
+We bieden deze week aan van april tot en met december.
 
-Wij bieden deze week aan van november tot en met maart.
+- **April en mei** — De heetste maanden van het jaar. Rijden doe je vroeg en laat.
+- **Juni tot en met oktober** — Regenseizoen. Juli en augustus zijn volgens het park mooie maanden; in september valt de meeste regen en is het koeler, in oktober is het rustig met korte buien.
+- **November en december** — Droog, met in december het beste weer van het jaar.
+
+Januari tot en met maart zijn de drukste maanden op het park. Die periode bieden we niet aan.
 
 ## Sectie: Praktisch
 
 **Reistijd.** Er is geen directe vlucht van Amsterdam naar Siem Reap; je stapt onderweg over. Wij boeken je vlucht op aanvraag bij.
+
+**Inchecken en uitchecken.** Inchecken vanaf 14:00, uitchecken voor 10:00.
 
 **Geld.** De Amerikaanse dollar wordt naast de Cambodjaanse riel overal gebruikt. De prijzen op het park staan in dollars.
 
@@ -114,42 +147,46 @@ Wij bieden deze week aan van november tot en met maart.
 
 **Gezondheid.** Laat je ruim voor vertrek adviseren over vaccinaties, bijvoorbeeld bij de GGD.
 
-**Op het park betaal je in dollars.** Het restaurant is elke dag open van 9:00 tot 21:00. Aqua Land, paintball en de privéhutten op het strand kosten apart; op het strand geldt een minimale besteding per volwassene. Als gast van het park krijg je 15% korting op tickets. Die tarieven zijn van het park zelf en kunnen wijzigen.
+**Op het park.** Eten zit in de reis; drankjes buiten je dagelijkse koffie betaal je zelf, in dollars. Aqua Land, paintball en de privéhutten op het strand kosten apart, en op het strand geldt een minimale besteding per volwassene. Die tarieven zijn van het park zelf en kunnen wijzigen.
 
 ## FAQ
 
 ### Ik heb nog nooit gewakeboard. Kan ik mee?
 
-Ja. Je begint de eerste ochtend met een instructeur. Hoe snel het gaat verschilt per persoon, maar na een week op de kabel heb je meer starts gemaakt dan in een heel seizoen achter een boot.
+Ja. De kabel is geschikt voor alle niveaus en op een kabel maak je in korte tijd veel starts. Hoe snel het gaat verschilt per persoon, maar na een week heb je meer rondjes gereden dan in een heel seizoen achter een boot.
 
 ### Moet ik mijn eigen materiaal meenemen?
 
-Nee, board, helm en zwemvest liggen op het park. Rijd je al langer, dan is je eigen board de betere keuze: het huurmateriaal is een basismodel. Check bij je airline de regels voor sportbagage.
+Hoeft niet, maar rijd je al langer, dan is je eigen board de betere keuze. Een beter huurboard kost op het park vanaf $8 per twee uur. Check bij je airline de regels voor sportbagage.
+
+### Wat zit er in het eten?
+
+Ontbijt, lunch en diner in het restaurant van het park, plus elke dag een koffie van de barista. De keuken kookt Khmer en westers. Andere drankjes betaal je zelf.
 
 ### Hoe warm is het op het water?
 
-Warm genoeg om in het midden van de dag uit de zon te blijven. Daarom rijd je 's ochtends en aan het eind van de middag, en ligt de middag in het zwembad of in de schaduw.
+Warm genoeg om in het midden van de dag uit de zon te blijven. Daarom rijd je 's ochtends en aan het eind van de middag.
 
 ### Mijn partner wakeboardt niet. Is dit dan een goede reis?
 
-Ja. Er is een zwembad, een strand aan het meer, de stad op korte afstand, en de dag in Angkor rijdt iedereen mee.
+Ja. Er is een strand aan een zwemmeer, de stad en Angkor voor een dagtrip. De reisprijs is wel voor iedereen gelijk, want de weekpas zit erin.
+
+### Kan ik alleen reizen?
+
+De reisprijs is gebaseerd op twee personen per kamer. Reis je alleen, neem dan contact met ons op: dat kan, met een toeslag voor de kamer.
 
 ### Kan ik langer blijven dan een week?
 
-Ja. Het park heeft ook maandpassen. Geef het aan bij je aanvraag, dan maken we een voorstel.
+Ja. Geef het aan bij je aanvraag, dan maken we een voorstel.
 
 ### Wat is er nog meer te doen op het park?
 
-Een waterspeelpark (Aqua Land), paintball in een arena van 4.500 m², een strand aan een natuurlijk zwemmeer en een restaurant met Khmer en westerse gerechten. Die activiteiten zitten niet in de reissom; als gast van het park krijg je er 15% korting op.
-
-### Met hoeveel personen kunnen we in één bungalow?
-
-Twee tot vier. Een bungalow wordt vanaf twee personen verhuurd en is in te richten als tweepersoonskamer of twin.
+Een waterspeelpark (Aqua Land), paintball in een arena van 4.500 m² en een strand aan een natuurlijk zwemmeer. Die activiteiten zitten niet in de reissom.
 
 ### Kunnen jullie de vlucht regelen?
 
 Ja, op aanvraag. De reisprijs is exclusief vlucht zodat je zelf kunt kiezen, maar we boeken hem graag voor je bij.
 
-## CTA: Een week kabel, zeven nachten aan het meer
+## CTA: Een week kabel, zeven nachten op het park
 
-Kies je periode en je bungalow. Wij bevestigen de beschikbaarheid bij het park en laten het je weten.
+Kies je periode en je kamer. Wij bevestigen de beschikbaarheid bij het park en laten het je weten.

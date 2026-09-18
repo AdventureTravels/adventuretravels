@@ -1,6 +1,7 @@
 import type { Sport, Destination, Partner, Guide } from "@prisma/client";
 import { RichTextEditor } from "../../RichTextEditor";
 import { ImageUploadField } from "../../ImageUploadField";
+import { VideoUploadField } from "../../VideoUploadField";
 import { GalleryEditor } from "./GalleryEditor";
 import type { PublicTrip, GalleryImage } from "@/lib/content/trips";
 import { LEVELS, levelLabel } from "@/lib/levels";
@@ -194,6 +195,12 @@ export function TripForm({
           <input className={styles.input} id="heroImageAlt" name="heroImageAlt" defaultValue={trip?.heroImageAlt} required />
         </div>
       </div>
+      <VideoUploadField
+        name="heroVideoUrl"
+        label="Hero-video van deze reis"
+        hint="Stille, loopende mp4 (H.264, hou het onder de 10MB). Leeg = de sitebrede video uit Site-instellingen. De hero-foto blijft de fallback."
+        defaultValue={trip?.heroVideoUrl}
+      />
       <RichTextEditor name="heroSubtitle" label="Hero-subtitel" defaultValue={trip?.heroSubtitle} />
 
       <RichTextEditor name="introBody" label="Intro (boven het programma; leeg = geen intro)" defaultValue={trip?.introBody} />

@@ -26,9 +26,17 @@
  *   ## Inbegrepen / ## Niet inbegrepen   lijst met "- "
  *   ## FAQ                         "### vraag" + antwoord
  *   ## CTA: <titel>                tekst van het blok onderaan
+ *   ## Galerij                     "- /images/... | alt-tekst" per foto
+ *   ## Extra's                     "- Naam | prijs | eenmalig of per nacht | omschrijving"
+ *                                  (vervangt bij --update alle extra's van de reis)
+ *
+ * Beeld in de frontmatter (image, heroImage, heroVideo, stayImage + *Alt) en de
+ * galerij worden alleen gezet als ze in het bestand staan: foto's die in de
+ * admin zijn geüpload blijven anders staan. Paden onder /images/ moeten in
+ * public/ bestaan, anders weigert het script het bestand.
  */
 import { PrismaClient, type Prisma } from "@prisma/client";
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const prisma = new PrismaClient();
@@ -39,6 +47,17 @@ const UPDATE = process.argv.includes("--update");
 type Section = { title: string; bodyHtml: string; placement: "top" | "bottom" };
 type Faq = { question: string; answer: string };
 type ProgramStep = { day: string; text: string };
+type GalleryImage = { src: string; alt: string };
+type Extra = { name: string; pricePp: string; isPerNight: boolean; description: string | null; order: number };
+
+/** Lokale beeldpaden (/images/...) moeten echt in public/ staan. */
+function checkMedia(src: string, file: string) {
+  if (src.startsWith("/images/") && !existsSync(join(process.cwd(), "public", src))) {
+    throw new Error(`${file}: bestand ${src} bestaat niet in public/.`);
+  }
+  if (!/^(\/images\/|\/uploads\/|https:\/\/)/.test(src)) throw new Error(`${file}: ongeldig beeldpad ${src}.`);
+  return src;
+}
 
 function inline(text: string): string {
   return text
@@ -106,6 +125,8 @@ type Parsed = {
   faq: Faq[];
   ctaTitle: string;
   ctaBody: string;
+  gallery: GalleryImage[] | null;
+  extras: Extra[] | null;
 };
 
 function parse(raw: string, file: string): Parsed {
@@ -125,6 +146,8 @@ function parse(raw: string, file: string): Parsed {
     faq: [],
     ctaTitle: "",
     ctaBody: "",
+    gallery: null,
+    extras: null,
   };
 
   const chunks = body.split(/\n(?=## )/);
@@ -177,6 +200,21 @@ function parse(raw: string, file: string): Parsed {
         bodyLines.splice(bodyLines.indexOf(first), 1);
       }
       parsed.sections.push({ title, bodyHtml: blockHtml(bodyLines), placement });
+    } else if (heading === "Galerij") {
+      parsed.gallery = listItems().map((item) => {
+        const [src, ...alt] = item.split(" | ");
+        if (!alt.length) throw new Error(`${file}: galerijfoto zonder alt-tekst: ${item}`);
+        return { src: checkMedia(src.trim(), file), alt: alt.join(" | ").trim() };
+      });
+    } else if (heading === "Extra's") {
+      parsed.extras = listItems().map((item, order) => {
+        const [name, price, unit, ...description] = item.split(" | ").map((p) => p.trim());
+        const pricePp = money(price);
+        if (!name || !pricePp || !/^(eenmalig|per nacht)$/.test(unit ?? "")) {
+          throw new Error(`${file}: extra moet "Naam | prijs | eenmalig of per nacht | omschrijving" zijn: ${item}`);
+        }
+        return { name, pricePp, isPerNight: unit === "per nacht", description: description.join(" | ") || null, order };
+      });
     } else if (heading.startsWith("CTA:")) {
       parsed.ctaTitle = heading.slice("CTA:".length).trim();
       parsed.ctaBody = blockHtml(rest);
@@ -200,6 +238,25 @@ async function relationIds(meta: Record<string, string>, file: string) {
   if (meta.guide && !guide) missing.push(`gids "${meta.guide}" (maak aan in /admin/guides)`);
   if (missing.length) throw new Error(`${file}: ontbreekt in de database: ${missing.join(", ")}.`);
   return { sportId: sport!.id, destinationId: destination!.id, partnerId: partner!.id, guideId: guide?.id ?? null };
+}
+
+/** Beeldvelden uit de frontmatter; alleen wat er staat, zodat admin-uploads blijven staan. */
+function media(meta: Record<string, string>, file: string) {
+  const out: Record<string, string> = {};
+  const fields: [string, string][] = [
+    ["image", "image"],
+    ["imageAlt", "imageAlt"],
+    ["heroImage", "heroImage"],
+    ["heroImageAlt", "heroImageAlt"],
+    ["heroVideo", "heroVideoUrl"],
+    ["stayImage", "stayImage"],
+    ["stayImageAlt", "stayImageAlt"],
+  ];
+  for (const [key, column] of fields) {
+    if (!meta[key]) continue;
+    out[column] = key.endsWith("Alt") ? meta[key] : checkMedia(meta[key], file);
+  }
+  return out;
 }
 
 function money(value: string | undefined): string | null {
@@ -256,22 +313,28 @@ async function main() {
       minPersons: Number(meta.minPersons ?? 1),
       pricePpBase: money(meta.pricePpBase),
       pricePerExtraNight: money(meta.pricePerExtraNight),
+      ...media(meta, file),
+      ...(parsed.gallery ? { galleryImages: parsed.gallery as unknown as Prisma.InputJsonValue } : {}),
     };
 
-    const summary = `${parsed.sections.length} secties, ${parsed.program.length} programmadagen, ${parsed.faq.length} vragen, ${parsed.includes.length}/${parsed.excludes.length} in-/uitsluitingen`;
+    const summary = `${parsed.sections.length} secties, ${parsed.program.length} programmadagen, ${parsed.faq.length} vragen, ${parsed.includes.length}/${parsed.excludes.length} in-/uitsluitingen, ${parsed.gallery?.length ?? 0} galerijfoto's, ${parsed.extras?.length ?? 0} extra's`;
 
     if (!WRITE) {
       console.log(`✓ ${slug} — ${data.title} (${data.status}): ${summary}`);
       continue;
     }
 
-    if (existing) {
-      await prisma.trip.update({ where: { slug }, data: { ...data, ...ids! } });
-      console.log(`~ ${slug} bijgewerkt: ${summary}`);
-    } else {
-      await prisma.trip.create({ data: { ...data, ...ids! } });
-      console.log(`+ ${slug} aangemaakt (${data.status}): ${summary}`);
+    const trip = existing
+      ? await prisma.trip.update({ where: { slug }, data: { ...data, ...ids! } })
+      : await prisma.trip.create({ data: { ...data, ...ids! } });
+    if (parsed.extras) {
+      const extras = parsed.extras;
+      await prisma.$transaction([
+        prisma.tripExtra.deleteMany({ where: { tripId: trip.id } }),
+        prisma.tripExtra.createMany({ data: extras.map((e) => ({ ...e, tripId: trip.id })) }),
+      ]);
     }
+    console.log(existing ? `~ ${slug} bijgewerkt: ${summary}` : `+ ${slug} aangemaakt (${data.status}): ${summary}`);
   }
 
   if (!WRITE) console.log("\nDry-run: alleen de bestanden gecontroleerd, de database is niet geraakt. Draai met --write om weg te schrijven.");

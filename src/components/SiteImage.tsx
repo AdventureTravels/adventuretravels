@@ -4,7 +4,7 @@ import styles from "./SiteImage.module.css";
  * en geen leeg veld of oud placeholder-label. */
 export function isImageUrl(src: string | null | undefined): src is string {
   if (!src) return false;
-  return src.startsWith("/uploads/") || src.startsWith("https://") || src.startsWith("http://");
+  return src.startsWith("/uploads/") || src.startsWith("/images/") || src.startsWith("https://") || src.startsWith("http://");
 }
 
 /**

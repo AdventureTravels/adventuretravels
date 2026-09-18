@@ -3,7 +3,36 @@
 Wordt niet geïmporteerd (bestandsnaam begint met `_`).
 Bron: wakeparkcambodia.com, alle pagina's uit hun sitemap gelezen op 12 september 2026.
 
-## Bevestigd op hun eigen site
+## Update 18 september 2026 (afspraken bevestigd, zie Notion "Wake Park Cambodia (Leo Reuter)")
+
+De reispagina is herschreven op de bevestigde afspraken: volpension (ontbijt, lunch, diner, 1 barista-koffie
+per dag), 7-daagse baanpas, transfer luchthaven SAI heen en terug, drie kamertypes, minimaal 7 nachten.
+Websitecheck 18 sep: check-in 14:00, check-out 10:00 (Cloudbeds). Base Rooms staan alleen in Cloudbeds:
+tuinzicht, airco, terras, eigen badkamer, werkhoek, max. 2 volwassenen + 1 kind. "1 hour from Bangkok"
+staat er nog steeds.
+
+**Keuzes gemaakt in het bestand, door Wouter te bevestigen:**
+- Prijs: Base Room USD 465 p.p. (brochure, 2 pers.) → **€ 419** (koers 1,148 op 18 sep + ca. 3% koersbuffer;
+  nooit onder Leo's prijs, afspraak prijspariteit).
+- Toeslag Lakeside Bungalow USD 55 p.p. → **€ 49**; Pool Bungalow USD 155 p.p. → **€ 139** (extra's, eenmalig p.p.).
+- Seizoen **april t/m december**: kerst t/m maart koopt AdventureTravels in tegen brochureprijs, dus daar zit
+  geen marge in; jan/feb zijn bovendien vol. Kerstweek valt formeel in december: vertrek na 19 dec niet aannemen
+  zolang Leo daar geen kamers voor vasthoudt.
+- Minimaal 2 personen (prijs is op basis van 2 per kamer). Solo op aanvraag (Leo: 1 persoon Base USD 585).
+
+**Nog te doen in de admin (lokale .env heeft geen DATABASE_URL, dus niet door Claude gedaan):**
+1. Migratie `20260918120000_trip_hero_video` draaien (`npx prisma migrate deploy`).
+2. Annuleringsstaffel partner Wake Park Cambodia: kosteloos tot 30 dagen, 50% van 30 tot 14 dagen,
+   100% binnen 14 dagen voor aankomst.
+3. `npm run trips:import -- --write --update` (zet tekst, prijs, foto's, video en de twee extra's).
+
+**Nog open bij Leo:**
+- Horen instructeur en huurboard ook bij de weekpas? Staat daarom niet in "Inbegrepen".
+- Minimumleeftijd, zwemvaardigheid en waiver voor de kabel.
+- Stapelt de promocode op de langverblijfkorting (bepaalt of de marge ca. 13% of 3–5% is).
+- Echte foto's van de bungalows (Leo: booking engine toont nog renders).
+
+## Bevestigd op hun eigen site (12 september)
 
 **Het park.** Geopend in 2020 als ICF Wake Park, sinds juni 2023 Wake Park Cambodia onder twee Zwitserse
 families (Reuter en Wunderli). Nadia en Leo Reuter runnen het park, met 45 lokale medewerkers.

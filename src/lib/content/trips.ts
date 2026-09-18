@@ -104,6 +104,7 @@ export type TripInput = {
   text: string;
   heroImage: string;
   heroImageAlt: string;
+  heroVideoUrl: string;
   heroSubtitle: string;
   program: TripProgramStep[];
   stayTitle: string;
