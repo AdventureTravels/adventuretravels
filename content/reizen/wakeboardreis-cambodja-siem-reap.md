@@ -82,7 +82,6 @@ Wil je 's ochtends vanaf je bed het water zien, neem dan een bungalow. Wil je vo
 - Volpension: ontbijt, lunch en diner, plus elke dag een barista-koffie
 - Weekpas voor de kabelbaan: onbeperkt rijden tijdens openingstijden, elke dag van 9:00 tot 21:00
 - Transfer van Siem Reap Angkor International Airport naar het park en terug
-- Reis gedekt via de garantieregeling van VZR Garant
 
 ## Niet inbegrepen
 
