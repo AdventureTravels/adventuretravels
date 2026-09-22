@@ -15,7 +15,7 @@ import { TrackEvent } from "@/components/TrackEvent";
 import { amountToNumber } from "@/lib/format";
 import { minPersonsMessage } from "@/lib/pricing";
 import { ArrowIcon, CompassIcon } from "@/components/icons";
-import { getTripBySlug, tripFaq, tripSections } from "@/lib/content/trips";
+import { getTripBySlug, publishContext, tripFaq, tripSections } from "@/lib/content/trips";
 import type { TripProgramStep, GalleryImage } from "@/lib/content/trips";
 import { getOpenDeparturesWithAvailability } from "@/lib/content/departures";
 import { getSiteSettings } from "@/lib/content/settings";
@@ -23,7 +23,7 @@ import { stripHtml } from "@/lib/stripHtml";
 import { formatDate, formatNights, formatPrice, formatSeason } from "@/lib/format";
 import { levelLabel } from "@/lib/levels";
 import { renderCancellationPolicy } from "@/lib/cancellation";
-import { CHECKOUT_ENABLED } from "@/lib/flags";
+import { isBookable } from "@/lib/publish";
 import { SITE_URL } from "@/lib/siteUrl";
 import styles from "./page.module.css";
 
@@ -44,8 +44,11 @@ export async function generateMetadata({
 
 export default async function TripDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [trip, settings] = await Promise.all([getTripBySlug(slug), getSiteSettings()]);
+  const [trip, settings, ctx] = await Promise.all([getTripBySlug(slug), getSiteSettings(), publishContext()]);
   if (!trip) notFound();
+  // Online boeken kan alleen als de checkout aanstaat én het standaardinformatie-
+  // formulier er is; anders valt elke knop terug op bellen.
+  const bookable = isBookable(ctx);
 
   const program = trip.program as unknown as TripProgramStep[];
   const gallery = trip.galleryImages as unknown as GalleryImage[];
@@ -304,7 +307,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
                       volledige bedrag terug.
                     </div>
                     {d.seatsLeft > 0 &&
-                      (CHECKOUT_ENABLED ? (
+                      (bookable ? (
                         <Link href={`/boeken/${trip.slug}?departure=${d.id}`} className={styles.bookPrimary}>
                           Boek dit vertrek
                           <ArrowIcon size={15} />
@@ -318,7 +321,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
                   </div>
                 ))}
               </div>
-            ) : CHECKOUT_ENABLED ? (
+            ) : bookable ? (
               <Link href={`/boeken/${trip.slug}`} className={styles.bookPrimary}>
                 Boek deze reis
                 <ArrowIcon size={15} />
@@ -350,7 +353,7 @@ export default async function TripDetailPage({ params }: { params: Promise<{ slu
             <h2 className={styles.ctaTitle}>{trip.ctaTitle}</h2>
             <RichText html={trip.ctaBody} className={styles.ctaText} />
             <div className={styles.ctaActions}>
-              {CHECKOUT_ENABLED ? (
+              {bookable ? (
                 <Link href={`/boeken/${trip.slug}`} className={styles.bookPrimary}>
                   Boek deze reis
                   <ArrowIcon size={15} />

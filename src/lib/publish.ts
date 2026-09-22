@@ -16,10 +16,26 @@ export function openDepartures(departures: TripDeparture[], now = new Date()): T
  */
 export type PublishContext = { infoFormPdfUrl: string };
 
-export function publishProblems(trip: PublishableTripInput, ctx?: PublishContext): string[] {
+/**
+ * Boeken is iets anders dan tonen: een reis mag op de site staan terwijl er nog
+ * niet online geboekt kan worden. Dan valt de pagina terug op "Bel om te
+ * boeken". Zonder standaardinformatieformulier mag er niet geboekt worden: dat
+ * moet de klant wettelijk vóór het boeken krijgen, en het gaat als bijlage mee
+ * met de bevestigingsmail.
+ */
+export function bookingProblems(ctx?: PublishContext): string[] {
   const problems: string[] = [];
   if (!CHECKOUT_ENABLED) problems.push("Checkout is uitgeschakeld (CHECKOUT_ENABLED=false).");
   if (ctx && !isImageUrl(ctx.infoFormPdfUrl)) problems.push("Standaardinformatieformulier pakketreis ontbreekt (Site-instellingen); verplicht vóór boeking.");
+  return problems;
+}
+
+export function isBookable(ctx?: PublishContext): boolean {
+  return bookingProblems(ctx).length === 0;
+}
+
+export function publishProblems(trip: PublishableTripInput): string[] {
+  const problems: string[] = [];
   if (trip.status !== "published") problems.push(`Status is "${trip.status}", niet "published".`);
   if (!trip.partner.isActive) problems.push("Partner staat op inactief.");
   if (!isCancellationPolicyValid(trip.partner.cancellationPolicy)) problems.push("Partner heeft geen geldige annuleringsstaffel.");
@@ -38,6 +54,6 @@ export function publishProblems(trip: PublishableTripInput, ctx?: PublishContext
   return problems;
 }
 
-export function isTripPublishable(trip: PublishableTripInput, ctx?: PublishContext): boolean {
-  return publishProblems(trip, ctx).length === 0;
+export function isTripPublishable(trip: PublishableTripInput): boolean {
+  return publishProblems(trip).length === 0;
 }

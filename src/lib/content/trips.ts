@@ -25,15 +25,12 @@ export async function publishContext(): Promise<PublishContext> {
 }
 
 async function publishedWhere(where: Prisma.TripWhereInput = {}): Promise<PublicTrip[]> {
-  const [trips, ctx] = await Promise.all([
-    prisma.trip.findMany({
-      where: { ...where, status: "published" },
-      orderBy: { order: "asc" },
-      include: PUBLIC_TRIP_INCLUDE,
-    }),
-    publishContext(),
-  ]);
-  return trips.filter((t) => isTripPublishable(t, ctx));
+  const trips = await prisma.trip.findMany({
+    where: { ...where, status: "published" },
+    orderBy: { order: "asc" },
+    include: PUBLIC_TRIP_INCLUDE,
+  });
+  return trips.filter((t) => isTripPublishable(t));
 }
 
 export function getTrips() {
@@ -41,8 +38,8 @@ export function getTrips() {
 }
 
 export async function getTripBySlug(slug: string): Promise<PublicTrip | null> {
-  const [trip, ctx] = await Promise.all([prisma.trip.findUnique({ where: { slug }, include: PUBLIC_TRIP_INCLUDE }), publishContext()]);
-  if (!trip || !isTripPublishable(trip, ctx)) return null;
+  const trip = await prisma.trip.findUnique({ where: { slug }, include: PUBLIC_TRIP_INCLUDE });
+  if (!trip || !isTripPublishable(trip)) return null;
   return trip;
 }
 

@@ -8,7 +8,8 @@ import { PaymentMethods } from "@/components/PaymentMethods";
 import { Turnstile } from "@/components/Turnstile";
 import { TrackEvent } from "@/components/TrackEvent";
 import { turnstileSiteKey } from "@/lib/turnstile";
-import { getTripBySlug } from "@/lib/content/trips";
+import { getTripBySlug, publishContext } from "@/lib/content/trips";
+import { isBookable } from "@/lib/publish";
 import { getOpenDeparturesWithAvailability } from "@/lib/content/departures";
 import { getSiteSettings } from "@/lib/content/settings";
 import { readCheckoutDraft, type CheckoutStep1 } from "@/lib/checkoutSession";
@@ -37,6 +38,9 @@ export default async function CheckoutPage({
   const { step: stepParam, departure: departureParam, error } = await searchParams;
   const [trip, settings, draft] = await Promise.all([getTripBySlug(slug), getSiteSettings(), readCheckoutDraft(slug)]);
   if (!trip) notFound();
+  // Geen online checkout zolang de checkout uitstaat of het standaardinformatie-
+  // formulier ontbreekt: de reispagina wijst dan naar de telefoon.
+  if (!isBookable(await publishContext())) notFound();
 
   const isGroup = trip.type === "group";
   const departures = isGroup ? await getOpenDeparturesWithAvailability(trip.id, trip.departures) : [];

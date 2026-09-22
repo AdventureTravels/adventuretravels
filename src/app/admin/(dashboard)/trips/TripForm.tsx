@@ -6,7 +6,7 @@ import { GalleryEditor } from "./GalleryEditor";
 import type { PublicTrip, GalleryImage } from "@/lib/content/trips";
 import { LEVELS, levelLabel } from "@/lib/levels";
 import { monthName } from "@/lib/format";
-import { publishProblems, type PublishContext } from "@/lib/publish";
+import { bookingProblems, publishProblems, type PublishContext } from "@/lib/publish";
 import styles from "../../admin.module.css";
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -29,7 +29,8 @@ export function TripForm({
   publishContext: PublishContext;
 }) {
   const gallery = Array.isArray(trip?.galleryImages) ? (trip.galleryImages as unknown as GalleryImage[]) : [];
-  const problems = trip ? publishProblems(trip, publishContext) : [];
+  const problems = trip ? publishProblems(trip) : [];
+  const booking = bookingProblems(publishContext);
 
   return (
     <form action={action} className={styles.form}>
@@ -38,6 +39,11 @@ export function TripForm({
           {problems.length === 0
             ? "Deze reis is compleet en wordt getoond op de site."
             : `Niet zichtbaar op de site: ${problems.join(" ")}`}
+        </div>
+      )}
+      {trip && problems.length === 0 && booking.length > 0 && (
+        <div className={styles.notice}>
+          Online boeken staat uit, de pagina toont &quot;Bel om te boeken&quot;: {booking.join(" ")}
         </div>
       )}
 

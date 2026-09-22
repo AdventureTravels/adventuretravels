@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { getAllTrips, publishContext } from "@/lib/content/trips";
-import { publishProblems } from "@/lib/publish";
+import { bookingProblems, publishProblems } from "@/lib/publish";
 import { formatPrice } from "@/lib/format";
 import { deleteTripAction } from "./actions";
 import styles from "../../admin.module.css";
 
 export default async function AdminTripsPage() {
   const [trips, ctx] = await Promise.all([getAllTrips(), publishContext()]);
+  const booking = bookingProblems(ctx);
 
   return (
     <div>
@@ -14,6 +15,9 @@ export default async function AdminTripsPage() {
         <div>
           <h1 className={styles.pageTitle}>Reizen</h1>
           <p className={styles.pageSubtitle}>Een reis staat pas op de site als hij compleet is: gepubliceerd, actieve partner met staffel, prijs, inbegrepen/niet inbegrepen en echte foto&apos;s.</p>
+          {booking.length > 0 && (
+            <p className={styles.pageSubtitle}>Online boeken staat uit; reispagina&apos;s tonen &quot;Bel om te boeken&quot;. {booking.join(" ")}</p>
+          )}
         </div>
         <Link href="/admin/trips/new" className={styles.button}>
           Nieuwe reis
@@ -36,7 +40,7 @@ export default async function AdminTripsPage() {
           </thead>
           <tbody>
             {trips.map((trip) => {
-              const problems = publishProblems(trip, ctx);
+              const problems = publishProblems(trip);
               return (
                 <tr key={trip.id}>
                   <td>{trip.title}</td>
