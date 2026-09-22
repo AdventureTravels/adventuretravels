@@ -1,5 +1,5 @@
-import { SiteImage } from "./SiteImage";
-import { HeroVideo, isVideoUrl } from "./HeroVideo";
+import { SiteImage, isImageUrl } from "./SiteImage";
+import { HeroVideo } from "./HeroVideo";
 import { getSiteSettings } from "@/lib/content/settings";
 import { Nav } from "./Nav";
 import { RichText } from "./RichText";
@@ -38,7 +38,7 @@ export async function HeroBanner({
       <div className={styles.hero} style={{ ["--heroHeight" as string]: `${height}px` }}>
         <div className={styles.imageLayer}>
           <SiteImage src={image} alt={imageAlt} loading="eager" />
-          <HeroVideo src={isVideoUrl(video) ? video : heroVideoUrl} poster={image} />
+          <HeroVideo src={isImageUrl(video) ? video : heroVideoUrl} poster={image} />
         </div>
         <div className={styles.gradient} />
         <Nav variant="transparent" active={active} />
