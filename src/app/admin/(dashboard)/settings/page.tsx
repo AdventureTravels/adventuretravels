@@ -55,8 +55,8 @@ export default async function AdminSettingsPage({
           <ImageUploadField name="heroImage" label="Hero-foto" defaultValue={settings.heroImage} />
           <VideoUploadField
             name="heroVideoUrl"
-            label="Hero-video (sitebreed)"
-            hint="Stille, loopende mp4 (H.264, max. 60MB; hou het onder de 10MB). Speelt in de hero van de homepage én van alle binnenpagina's over de foto heen. De foto blijft de fallback (poster, trage verbinding, 'verminder beweging')."
+            label="Hero-video (homepage)"
+            hint="Stille, loopende mp4 (H.264, max. 60MB; hou het onder de 10MB). Speelt alleen in de hero van de homepage, over de hero-foto heen. Binnenpagina's tonen hun eigen foto; een reis kan een eigen video hebben. De foto blijft de fallback (poster, trage verbinding, 'verminder beweging')."
             defaultValue={settings.heroVideoUrl}
           />
 

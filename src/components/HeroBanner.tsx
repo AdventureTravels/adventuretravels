@@ -1,15 +1,15 @@
-import { SiteImage, isImageUrl } from "./SiteImage";
+import { SiteImage } from "./SiteImage";
 import { HeroVideo } from "./HeroVideo";
-import { getSiteSettings } from "@/lib/content/settings";
 import { Nav } from "./Nav";
 import { RichText } from "./RichText";
 import styles from "./HeroBanner.module.css";
 
 /** Full-bleed foto-hero bovenaan binnenpagina's: transparante nav over de
  * foto, eyebrow/titel/subtitel, optionele meta-regel, rode band eronder.
- * Een eigen video van de pagina (bv. een reis) gaat voor; anders speelt de
- * sitebrede hero-video uit SiteSettings over de paginafoto heen. Zonder video
- * blijft de foto, zonder foto alleen de donkere achtergrond. */
+ * Speelt alleen de video die de pagina zelf meegeeft (bv. de video van een
+ * reis): beeld van het ene park hoort niet achter de hero van het andere.
+ * Zonder video blijft de foto, zonder foto alleen de donkere achtergrond.
+ * De video uit Site-instellingen is alleen voor de homepage-hero. */
 export async function HeroBanner({
   active,
   height = 620,
@@ -32,13 +32,12 @@ export async function HeroBanner({
   meta?: string[];
 }) {
   const metaItems = meta?.filter(Boolean) ?? [];
-  const { heroVideoUrl } = await getSiteSettings();
   return (
     <>
       <div className={styles.hero} style={{ ["--heroHeight" as string]: `${height}px` }}>
         <div className={styles.imageLayer}>
           <SiteImage src={image} alt={imageAlt} loading="eager" />
-          <HeroVideo src={isImageUrl(video) ? video : heroVideoUrl} poster={image} />
+          <HeroVideo src={video} poster={image} />
         </div>
         <div className={styles.gradient} />
         <Nav variant="transparent" active={active} />
