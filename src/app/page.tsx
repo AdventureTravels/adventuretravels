@@ -57,7 +57,7 @@ export default async function Home() {
     icon: <PinIcon size={22} color="#FFFFFF" strokeWidth={2.6} />,
     name: destination.name,
     subLabel: reizenLabel(tripsPerDestination.get(destination.slug) ?? 0),
-    caption: `${destination.caption} · ${destination.bestPeriod}`,
+    caption: [destination.caption, destination.bestPeriod].filter(Boolean).join(" · "),
   }));
 
   const tripTypeTiles: TripTypeTile[] = tripTypes.map((type) => ({

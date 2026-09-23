@@ -49,7 +49,7 @@ export default async function BestemmingenPage() {
               nameSize={26}
               height={380}
               subLabel={sportNames || undefined}
-              caption={`${destination.caption} · ${destination.bestPeriod}`}
+              caption={[destination.caption, destination.bestPeriod].filter(Boolean).join(" · ")}
               ctaLabel="Bekijk bestemming"
             />
           );
