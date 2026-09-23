@@ -21,6 +21,15 @@
   letter-spacing: -0.02em;
 }
 
+.sectionText {
+  margin: 0;
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--departure-black);
+  opacity: 0.85;
+}
+
 .tripGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

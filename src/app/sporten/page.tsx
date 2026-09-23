@@ -10,7 +10,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Sporten — AdventureTravels",
-  description: "Wakeboarden. De rest volgt.",
+  description: "Wakeboarden nu, de rest volgt. Elke categorie gaat pas live als het park, het verblijf en de voorwaarden rond zijn.",
 };
 
 export default async function SportenPage() {
@@ -22,11 +22,12 @@ export default async function SportenPage() {
       <Nav variant="solid" active="sporten" />
 
       <div className={styles.intro}>
-        <span className={styles.eyebrow}>Onze sporten</span>
+        <span className={styles.eyebrow}>Onze categorieën</span>
         <h1 className={styles.heading}>Wakeboarden. De rest volgt.</h1>
         <p className={styles.subheading}>
-          We beginnen met de sport die AdventureTravels heeft laten ontstaan. Andere sporten
-          worden na lancering toegevoegd.
+          We beginnen met de sport die AdventureTravels heeft laten ontstaan. De categorieën waar nog
+          geen reis onder staat, zijn in voorbereiding: die komen online zodra het park, het verblijf
+          en de voorwaarden rond zijn.
         </p>
       </div>
 

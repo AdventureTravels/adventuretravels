@@ -260,6 +260,27 @@ export function CompassIcon({
   );
 }
 
+/** Bergtop met sneeuwlijn: categorie trekking en expedities. */
+export function MountainIcon({ size = 18, color = "currentColor", strokeWidth = 2.4, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 48 48"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M4 38 18 14l8 13 5-7 11 18z" />
+      <path d="M13 24h10" />
+    </svg>
+  );
+}
+
 export function MountainBikeIcon({
   size = 18,
   color = "currentColor",

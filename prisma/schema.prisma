@@ -23,6 +23,8 @@ model Sport {
   heroSubtitle      String // rich text (HTML)
   cardImage         String
   caption           String
+  forWhoBody        String  @default("") // rich text (HTML), "Voor wie" op de categoriepagina; leeg = blok verdwijnt
+  expectBody        String  @default("") // rich text (HTML), "Wat je kunt verwachten"; leeg = blok verdwijnt
   icon              String  @default("wave") // sleutel uit src/lib/iconLookup.tsx
   order             Int     @default(0)
   mailerliteGroupId String? // auto-created MailerLite group id for this sport's segment

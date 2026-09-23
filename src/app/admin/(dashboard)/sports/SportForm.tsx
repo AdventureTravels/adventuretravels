@@ -24,6 +24,8 @@ export function SportForm({ action, sport }: { action: (formData: FormData) => v
       <RichTextEditor name="heroSubtitle" label="Hero-subtitel" defaultValue={sport?.heroSubtitle} />
       <ImageUploadField name="heroImage" label="Hero-afbeelding" defaultValue={sport?.heroImage} />
       <ImageUploadField name="cardImage" label="Kaart-afbeelding" defaultValue={sport?.cardImage} />
+      <RichTextEditor name="forWhoBody" label="Voor wie (leeg = blok verdwijnt van de categoriepagina)" defaultValue={sport?.forWhoBody} />
+      <RichTextEditor name="expectBody" label="Wat je kunt verwachten (leeg = blok verdwijnt)" defaultValue={sport?.expectBody} />
       <div className={styles.field}>
         <label className={styles.label} htmlFor="caption">Bijschrift</label>
         <input className={styles.input} id="caption" name="caption" defaultValue={sport?.caption} required />

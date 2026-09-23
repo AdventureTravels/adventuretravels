@@ -20,6 +20,8 @@ export type SportInput = {
   heroSubtitle: string;
   cardImage: string;
   caption: string;
+  forWhoBody: string;
+  expectBody: string;
   icon: string;
   order: number;
 };

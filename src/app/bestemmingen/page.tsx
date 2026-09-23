@@ -11,7 +11,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Bestemmingen — AdventureTravels",
-  description: "We beginnen bij de Turkse kust.",
+  description: "Elke bestemming staat er om dezelfde reden: een goed park overdag, een verblijf waar je 's avonds graag bent.",
 };
 
 export default async function BestemmingenPage() {
@@ -27,10 +27,11 @@ export default async function BestemmingenPage() {
 
       <div className={styles.intro}>
         <span className={styles.eyebrow}>Waar we naartoe gaan</span>
-        <h1 className={styles.heading}>We beginnen bij de Turkse kust.</h1>
+        <h1 className={styles.heading}>Eén park per bestemming, zelf uitgezocht.</h1>
         <p className={styles.subheading}>
-          Bij lancering één bestemming, gekozen om dezelfde reden als altijd: een goed cable park
-          overdag, een verblijf waar je &apos;s avonds graag bent.
+          Elke bestemming staat er om dezelfde reden: een goed park overdag, een verblijf waar je
+          &apos;s avonds graag bent. Staat er nog geen reis bij een bestemming, dan zijn we er nog
+          mee bezig.
         </p>
       </div>
 

@@ -14,6 +14,8 @@ function fromForm(formData: FormData) {
     heroSubtitle: String(formData.get("heroSubtitle") ?? "").trim(),
     cardImage: String(formData.get("cardImage") ?? "").trim(),
     caption: String(formData.get("caption") ?? "").trim(),
+    forWhoBody: String(formData.get("forWhoBody") ?? "").trim(),
+    expectBody: String(formData.get("expectBody") ?? "").trim(),
     icon: String(formData.get("icon") ?? "wave").trim() || "wave",
     order: Number(formData.get("order") ?? 0),
   };

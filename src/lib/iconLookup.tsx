@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import {
   WaveIcon,
+  MountainIcon,
   MountainBikeIcon,
   LevelIcon,
   HouseIcon,
@@ -17,6 +18,7 @@ type IconComponent = (props: { size?: number; color?: string; strokeWidth?: numb
 
 export const ICONS: Record<string, IconComponent> = {
   wave: WaveIcon,
+  mountain: MountainIcon,
   mountainbike: MountainBikeIcon,
   level: LevelIcon,
   house: HouseIcon,

@@ -47,16 +47,26 @@ export default async function SportDetailPage({ params }: { params: Promise<{ sl
 
       <TwoColInfo
         items={[
-          {
-            title: "Voor wie",
-            text: "Van complete beginners tot riders die aan hun eerste kickers toe zijn. Geen ervaring nodig, wel motivatie.",
-          },
-          {
-            title: "Wat je kunt verwachten",
-            text: "Kleine groepen op de kabel, materiaal inbegrepen, en genoeg tijd op het water om echt vooruit te komen.",
-          },
+          { title: "Voor wie", html: sport.forWhoBody },
+          { title: "Wat je kunt verwachten", html: sport.expectBody },
         ]}
       />
+
+      {trips.length === 0 && (
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>De eerste reizen zijn in voorbereiding</h2>
+          <p className={styles.sectionText}>
+            We zetten pas een reis online als het park, het verblijf en de voorwaarden rond zijn. Wil je weten
+            wanneer deze reizen er zijn, of heb je zelf een plek in gedachten? Laat het ons weten.
+          </p>
+          <div className={styles.ctaRow}>
+            <Link href="/spreek-een-gids" className={styles.primaryCta}>
+              Spreek een gids
+              <ArrowIcon size={15} />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {trips.length > 0 && (
         <div className={styles.section}>
